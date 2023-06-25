@@ -5,10 +5,15 @@ import ac.dia.massms.repository.ServeTimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ServeTimeService {
     @Autowired
     private ServeTimeRepository serveTimeRepository;
+
+    // list all
+    public List<ServeTime> listAll() { return (List<ServeTime>) serveTimeRepository.findAll(); }
 
     // get by identifier name
     public ServeTime getByIdentifier(String identifier) { return serveTimeRepository.findServeTimeByIdentifier(identifier); }
