@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Product Manager</title>
+</head>
+<body>
+<div align="center">	
+	<div sec:authorize="isAuthenticated()">
+		Welcome <b><span sec:authentication="name">Username</span></b>
+		&nbsp;
+		<i><span sec:authentication="principal.authorities">Roles</span></i>
+	</div>
+		
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Logout" />
+	</form>
+	
+	<h1>Meal Time Manager</h1>
+	<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+		<a href="new">Create New Time</a>
+	</div>
+	
+	<br/><br/>
+	<table border="1" cellpadding="10">
+		<thead>
+			<tr>
+				<th>Time ID</th>
+				<th>Identifier</th>
+				<th>Start Time</th>
+				<th>End Time</th>
+				<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="mealtime : ${mealTimes}">
+				<td th:text="${mealtime.id}">Product ID</td>
+				<td th:text="${mealtime.identifier}">Identifier</td>
+				<td th:text="${mealtime.startTime}">Start Time</td>
+				<td th:text="${mealtime.endTime}">End Time</td>
+				
+				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+					<a th:href="@{'/edit/' + ${product.id}}">Edit</a>			
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/delete/' + ${product.id}}">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
