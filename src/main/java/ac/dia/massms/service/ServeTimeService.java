@@ -23,18 +23,20 @@ public class ServeTimeService {
 
 
     // update the element
-    public ServeTime update(ServeTime serveTime) {
+    public void update(ServeTime serveTime) {
         ServeTime newTime = getById(serveTime.getId());
         newTime.setEndTime(serveTime.getEndTime());
         newTime.setStartTime(serveTime.getStartTime());
         newTime.setIdentifier(serveTime.getIdentifier());
         newTime.setMealList(serveTime.getMealList());
-        return serveTimeRepository.save(newTime);
+        serveTimeRepository.save(newTime);
     }
 
 
     // Save the time
-    public ServeTime save(ServeTime serveTime) { return serveTimeRepository.save(serveTime); }
+    public void save(ServeTime serveTime) {
+        serveTimeRepository.save(serveTime);
+    }
 
     // Delete the time
     public void delete(String identifier) { serveTimeRepository.delete(getByIdentifier(identifier)); }

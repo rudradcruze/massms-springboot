@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Edit Edit Meal Time</title>
+</head>
+<body>
+	<div sec:authorize="hasAnyAuthority('EDITOR', 'ADMIN')" align="center" >
+		<h1>Edit Meal Time</h1>
+		<br/>
+		<div th:if = "${success}">
+			<p th:text="${success}"></p>
+		</div>
+
+		<div th:if = "${error}">
+			<p th:text="${error}"></p>
+		</div>
+		<form action="#" th:action="@{/meal/time/update}" th:object="${serveTime}" method="post">
+			<table border="0" cellpadding="10">
+				<tr>
+					<td>Product ID:</td>
+					<td><input type="text" th:field="*{id}" readonly="readonly" /></td>
+				</tr>			
+				<tr>
+					<td>Meal Time Identifier:</td>
+					<td><input type="text" th:field="*{identifier}" /></td>
+				</tr>
+				<tr>
+					<td>Meal Time Start Time:</td>
+					<td><input type="time" th:field="*{startTime}" /></td>
+				</tr>				
+				<tr>
+					<td>Meal Time End Time:</td>
+					<td><input type="time" th:field="*{endTime}" /></td>
+				</tr>
+				<tr>
+					<td colspan="2"><button type="submit">Save</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>

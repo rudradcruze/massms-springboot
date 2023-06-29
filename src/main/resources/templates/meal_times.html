@@ -9,10 +9,10 @@
 <div align="center">	
 	<div sec:authorize="isAuthenticated()">
 		Welcome <b><span sec:authentication="name">Username</span></b>
-		&nbsp;
+
 		<i><span sec:authentication="principal.authorities">Roles</span></i>
 	</div>
-		
+	
 	<form th:action="@{/logout}" method="post">
 		<input type="submit" value="Logout" />
 	</form>
@@ -49,9 +49,9 @@
 				<td th:text="${mealtime.endTime}">End Time</td>
 				
 				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
-					<a th:href="@{'/edit/' + ${product.id}}">Edit</a>			
+					<a th:href="@{'/meal/time/' + ${mealtime.identifier}}">Edit</a>
 					&nbsp;&nbsp;&nbsp;&nbsp;
-					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/delete/' + ${product.id}}">Delete</a>
+<!--					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/delete/' + ${product.id}}">Delete</a>-->
 				</td>
 			</tr>
 		</tbody>
