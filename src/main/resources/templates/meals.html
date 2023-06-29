@@ -3,7 +3,7 @@
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="ISO-8859-1">
-<title>Meal Time</title>
+<title>Meals</title>
 </head>
 <body>
 <div align="center">	
@@ -17,9 +17,9 @@
 		<input type="submit" value="Logout" />
 	</form>
 	
-	<h1>Meal Time Manager - <span th:text="${mealTimes.size()}"></span></h1>
+	<h1>Meal Manager - <span th:text="${meals.size()}"></span></h1>
 	<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
-		<a th:href="@{/meal/time/new}">Create New Time</a>
+		<a th:href="@{/meal/new}">Create New Time</a>
 	</div>
 
 	<div th:if = "${success}">
@@ -34,24 +34,30 @@
 	<table border="1" cellpadding="10">
 		<thead>
 			<tr>
-				<th>Time ID</th>
-				<th>Identifier</th>
-				<th>Start Time</th>
-				<th>End Time</th>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Allergens</th>
+				<th>Serving Size</th>
+				<th>Price</th>
+				<th>Serve Time</th>
 				<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="mealtime : ${mealTimes}">
-				<td th:text="${mealtime.id}">Product ID</td>
-				<td th:text="${mealtime.identifier}">Identifier</td>
-				<td th:text="${mealtime.startTime}">Start Time</td>
-				<td th:text="${mealtime.endTime}">End Time</td>
-				
+			<tr th:each="meal : ${meals}">
+				<td th:text="${meal.id}">Meal Id</td>
+				<td th:text="${meal.name}">Meal Name</td>
+				<td th:text="${meal.description}">Meal Description</td>
+				<td th:text="${meal.allergens}">Meal Allergens</td>
+				<td th:text="${meal.servingSize}">Meal Serving Size</td>
+				<td th:text="${meal.price}">Meal Price</td>
+				<td th:title="${meal.serveTime.startTime} + ' ' + ${meal.serveTime.endTime}" th:text="${meal.serveTime.identifier}">Serve Time</td>
+
 				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
-					<a th:href="@{'/meal/time/edit/' + ${mealtime.identifier}}">Edit</a>
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/meal/time/delete/' + ${mealtime.identifier}}">Delete</a>
+					<a th:href="@{'/meal/edit/' + ${meal.id}}">Edit</a>
+
+<!--					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/meal/delete/' + ${meal.id}}">Delete</a>-->
 				</td>
 			</tr>
 		</tbody>

@@ -9,7 +9,7 @@
 		<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')" align="center" >
 			<h1>Create New Meal</h1>
 			<br/>
-			<form action="#" th:action="@{/meal/time/new/save}" th:object="${meal}" method="post">
+			<form action="#" th:action="@{/meal/new/save}" th:object="${meal}" method="post">
 				<table border="0" cellpadding="10">
 					<tr>
 						<td>Meal Name:</td>
@@ -18,7 +18,7 @@
 					<tr>
 						<td>Description:</td>
 						<td>
-							<textarea placeholder="Description" th:field="*{description}" id="description" name="description"></textarea>
+							<textarea placeholder="Description" th:field="*{description}" required id="description" name="description"></textarea>
 						</td>
 					</tr>
 					<tr>
