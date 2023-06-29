@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Create New Meal Time</title>
+</head>
+	<body>
+		<div align="center">
+			<h1>Create New Meal Time</h1>
+			<br/>
+			<form action="#" th:action="@{/meal/time/new/save}" th:object="${serveTime}" method="post">
+				<table border="0" cellpadding="10">
+					<tr>
+						<td>Meal Identifier:</td>
+						<td><input type="text" th:field="*{identifier}" /></td>
+					</tr>
+					<tr>
+						<td>Start Time:</td>
+						<td><input type="time" id="startTime" name="startTime" th:field="*{startTime}" required></td>
+					</tr>
+					<tr>
+						<td>End Time:</td>
+						<td><input type="time" id="endTime" name="endTime" th:field="*{endTime}" required></td>
+					</tr>
+					<tr>
+						<td colspan="2"><button type="submit">Save</button></td>
+						<td colspan="2"><button type="reset">Clear</button></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</body>
+</html>

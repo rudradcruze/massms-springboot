@@ -28,19 +28,28 @@ public class ServeTimeController {
         return "meal_times";
     }
 
+    @GetMapping("/meal/time/new")
+    public String newServeTime(Model model, Principal principal) {
+        if(principal == null){ return "redirect:/login"; }
+        model.addAttribute("serveTime", new ServeTime());
+
+        return "new_meal_time";
+    }
+
     @PostMapping("/meal/time/new/save")
     public String saveServeTime(@ModelAttribute("serveTime") ServeTime serveTime, RedirectAttributes attributes, Principal principal) {
 
         if (principal == null) { return "redirect:/login"; }
 
-        String dbIdentifier = serveTimeService.getByIdentifier(serveTime.getIdentifier()).getIdentifier();
+        ServeTime dbServeTime = serveTimeService.getByIdentifier(serveTime.getIdentifier());
 
-        if (dbIdentifier.equals(serveTime.getIdentifier())) {
+        if (dbServeTime != null) {
             attributes.addFlashAttribute("error", "Can't insert. This Identifier is already exist!");
             return "redirect:/meal/time/new";
         }
-        else
-            attributes.addFlashAttribute("success", serveTime.getIdentifier() + " is successfully created.");
+
+        attributes.addFlashAttribute("success", serveTime.getIdentifier() + " is successfully created.");
+        serveTimeService.save(serveTime);
 
         return "redirect:/meal/time";
     }
