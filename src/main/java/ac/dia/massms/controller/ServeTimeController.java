@@ -58,8 +58,8 @@ public class ServeTimeController {
     }
 
     // Update page
-    @RequestMapping("/meal/time/{identifier}")
-    public ModelAndView showEditMealTimePage(@PathVariable("identifier") String identifier, Model model, Principal principal) {
+    @RequestMapping("/meal/time/edit/{identifier}")
+    public ModelAndView showEditMealTimePage(@PathVariable("identifier") String identifier, Model model) {
         ModelAndView modelAndView;
 
         modelAndView = new ModelAndView("edit_meal_time");
@@ -75,7 +75,7 @@ public class ServeTimeController {
     }
 
     // update
-    @PostMapping("/meal/time/update")
+    @PostMapping("/meal/time/edit/update")
     public String update(ServeTime serveTime, RedirectAttributes attributes, Principal principal){
 
         if(principal == null){ return "redirect:/login"; }
@@ -86,11 +86,26 @@ public class ServeTimeController {
         }catch (DataIntegrityViolationException e){
             e.printStackTrace();
             attributes.addFlashAttribute("error", "Failed to update because duplicate name");
-            return "redirect:/meal/time/" + serveTime.getIdentifier();
+            return "redirect:/meal/time/edit/" + serveTime.getIdentifier();
         }catch (Exception e){
             e.printStackTrace();
             attributes.addFlashAttribute("error", "Error server");
         }
+        return "redirect:/meal/time";
+    }
+
+    @RequestMapping("/meal/time/delete/{identifier}")
+    public String deleteCategory(@PathVariable("identifier") String identifier, RedirectAttributes attributes) {
+        System.out.println(identifier);
+        System.out.println(serveTimeService.getByIdentifier(identifier));
+        try {
+            serveTimeService.delete(identifier);
+            attributes.addFlashAttribute("success", "Delete successfully");
+        }catch (Exception e){
+            e.printStackTrace();
+            attributes.addFlashAttribute("failed", "Failed to delete");
+        }
+
         return "redirect:/meal/time";
     }
 }

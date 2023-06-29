@@ -16,7 +16,7 @@
 		<div th:if = "${error}">
 			<p th:text="${error}"></p>
 		</div>
-		<form action="#" th:action="@{/meal/time/update}" th:object="${serveTime}" method="post">
+		<form action="#" th:action="@{/meal/time/edit/update}" th:object="${serveTime}" method="post">
 			<table border="0" cellpadding="10">
 				<tr>
 					<td>Product ID:</td>
