@@ -1,11 +1,7 @@
 package ac.dia.massms.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.Date;
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +9,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class MemberMeal {
 
 	@Id

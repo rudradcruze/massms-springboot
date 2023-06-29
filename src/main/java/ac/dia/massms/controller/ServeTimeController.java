@@ -1,6 +1,5 @@
 package ac.dia.massms.controller;
 
-
 import ac.dia.massms.model.ServeTime;
 import ac.dia.massms.service.ServeTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,8 +95,6 @@ public class ServeTimeController {
 
     @RequestMapping("/meal/time/delete/{identifier}")
     public String deleteCategory(@PathVariable("identifier") String identifier, RedirectAttributes attributes) {
-        System.out.println(identifier);
-        System.out.println(serveTimeService.getByIdentifier(identifier));
         try {
             serveTimeService.delete(identifier);
             attributes.addFlashAttribute("success", "Delete successfully");

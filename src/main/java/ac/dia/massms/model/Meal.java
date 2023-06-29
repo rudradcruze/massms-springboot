@@ -20,8 +20,8 @@ public class Meal {
 	private String servingSize;
 	private String allergens;
 	private double price;
+	@Column(columnDefinition = "TEXT", length = 2000)
 	private String description;
-	private String time;
 
 	@OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
     private List<MealDate> dailyMeals;
