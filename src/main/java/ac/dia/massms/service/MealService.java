@@ -1,6 +1,7 @@
 package ac.dia.massms.service;
 
 import ac.dia.massms.model.Meal;
+import ac.dia.massms.model.ServeTime;
 import ac.dia.massms.repository.MealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ public class MealService {
 
     @Autowired
     private MealRepository mealRepository;
+
+    @Autowired ServeTimeService serveTimeService;
 
     public List<Meal> listAll() { return (List<Meal>) mealRepository.findAll();}
 
@@ -33,7 +36,7 @@ public class MealService {
     public void save(Meal meal) {
         mealRepository.save(meal);
     }
-//
-//    // Delete the time
-//    public void delete(long id) { mealRepository.delete(getById(id)); }
+
+    // Delete the time
+    public void delete(long id) { mealRepository.delete(getById(id)); }
 }

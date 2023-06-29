@@ -84,4 +84,19 @@ public class MealController {
 
         return "redirect:/meal";
     }
+
+    @RequestMapping("/meal/delete/{id}")
+    public String deleteMeal(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal) {
+        if(principal == null){ return "redirect:/login"; }
+
+        try {
+            mealService.delete(id);
+            attributes.addFlashAttribute("success", "Meal Delete successfully");
+        }catch (Exception e){
+            e.printStackTrace();
+            attributes.addFlashAttribute("failed", "Failed to delete");
+        }
+
+        return "redirect:/meal/";
+    }
 }
