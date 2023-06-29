@@ -4,6 +4,7 @@ import ac.dia.massms.model.Meal;
 import ac.dia.massms.service.MealService;
 import ac.dia.massms.service.ServeTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -65,4 +66,22 @@ public class MealController {
         return modelAndView;
     }
 
+    @PostMapping("/meal/edit/update")
+    public String updateMeal(Meal meal, RedirectAttributes attributes, Principal principal) {
+        if(principal == null){ return "redirect:/login"; }
+
+        try {
+            mealService.update(meal);
+            attributes.addFlashAttribute("success","Updated successfully");
+        }catch (DataIntegrityViolationException e){
+            e.printStackTrace();
+            attributes.addFlashAttribute("error", "Failed to update because duplicate.");
+            return "redirect:/meal/edit/" + meal.getId();
+        }catch (Exception e){
+            e.printStackTrace();
+            attributes.addFlashAttribute("error", "Error server");
+        }
+
+        return "redirect:/meal";
+    }
 }

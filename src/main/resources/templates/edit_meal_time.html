@@ -9,10 +9,6 @@
 	<div sec:authorize="hasAnyAuthority('EDITOR', 'ADMIN')" align="center" >
 		<h1>Edit Meal Time</h1>
 		<br/>
-		<div th:if = "${success}">
-			<p th:text="${success}"></p>
-		</div>
-
 		<div th:if = "${error}">
 			<p th:text="${error}"></p>
 		</div>

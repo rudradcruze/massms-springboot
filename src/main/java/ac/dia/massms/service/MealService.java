@@ -17,18 +17,18 @@ public class MealService {
 
     public Meal getById(long id) { return mealRepository.findById(id); }
 
-//    public void update(Meal meal) {
-//        Meal newMeal = getById(meal.getId());
-//        newMeal.setName(meal.getName());
-//        newMeal.setDescription(meal.getDescription());
-//        newMeal.setPrice(meal.getPrice());
-//        newMeal.setAllergens(meal.getAllergens());
-//        newMeal.setServingSize(meal.getServingSize());
-//        newMeal.setDailyMeals(meal.getDailyMeals());
-//        newMeal.setServeTime(meal.getServeTime());
-//        mealRepository.save(newMeal);
-//    }
-//
+    public void update(Meal meal) {
+        Meal newMeal = getById(meal.getId());
+        newMeal.setName(meal.getName());
+        newMeal.setDescription(meal.getDescription());
+        newMeal.setPrice(meal.getPrice());
+        newMeal.setAllergens(meal.getAllergens());
+        newMeal.setServingSize(meal.getServingSize());
+        newMeal.setDailyMeals(meal.getDailyMeals());
+        newMeal.setServeTime(meal.getServeTime());
+        mealRepository.save(newMeal);
+    }
+
     // Save the time
     public void save(Meal meal) {
         mealRepository.save(meal);
