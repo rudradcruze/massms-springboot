@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Meals</title>
+</head>
+<body>
+<div align="center">	
+	<div sec:authorize="isAuthenticated()">
+		Welcome <b><span sec:authentication="name">Username</span></b>
+
+		<i><span sec:authentication="principal.authorities">Roles</span></i>
+	</div>
+
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Logout" />
+	</form>
+	
+	<h1>Meal Manager - <span th:text="${mealDateList.size()}"></span></h1>
+	<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+		<a th:href="@{/meal/date/new}">Create New Meal Date</a>
+	</div>
+
+	<div th:if = "${success}">
+		<p th:text="${success}"></p>
+	</div>
+
+	<div th:if = "${error}">
+		<p th:text="${error}"></p>
+	</div>
+	
+	<br/><br/>
+	<table border="1" cellpadding="10">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Date</th>
+				<th>Meal Name</th>
+				<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="meal : ${mealDateList}">
+				<td th:text="${meal.id}">Meal Id</td>
+				<td th:text="${#dates.format(meal.mealDate, 'dd-MM-yyyy')}">Meal Date</td>
+				<td th:text="${meal.meal.name}">Meal Name</td>
+<!--				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">-->
+<!--					<a th:href="@{'/meal/edit/' + ${meal.id}}">Edit</a>-->
+<!--					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/meal/delete/' + ${meal.id}}">Delete</a>-->
+<!--				</td>-->
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
