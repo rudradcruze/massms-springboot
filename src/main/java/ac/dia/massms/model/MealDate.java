@@ -1,6 +1,7 @@
 package ac.dia.massms.model;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,5 +20,7 @@ public class MealDate {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "meal_id", nullable = false)
     private Meal meal;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date mealDate;
 }

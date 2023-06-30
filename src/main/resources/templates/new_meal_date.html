@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Create New Meal Time</title>
+</head>
+	<body>
+		<div align="center">
+			<h1>Create New Meal Time</h1>
+			<br/>
+			<form action="#" th:action="@{/meal/date/new/save}" th:object="${mealDate}" method="post">
+				<table border="0" cellpadding="10">
+					<tr>
+						<td><label for="mealDate">Meal Date:</label></td>
+						<td><input type="date" id="mealDate" name="str_mealDate" th:value="mealDate.mealDate" required/></td>
+					</tr>
+					<tr>
+						<td><label for="meal">Meal</label></td>
+						<td>
+							<select placeholder="Select Meal" required name="meal" id="meal" th:field="*{meal}" >
+								<option th:each="mealEach : ${meals}"
+										th:value="${mealEach.id}"
+										th:text="${mealEach.name}"></option>
+							</select>
+					</tr>
+					<tr>
+						<td colspan="2"><button type="submit">Save</button></td>
+						<td colspan="2"><button type="reset">Clear</button></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</body>
+</html>
