@@ -95,4 +95,13 @@ public class MealDateController {
 
         return "redirect:/meal/date";
     }
+
+    @RequestMapping("/meal/date/delete/{id}")
+    public String deleteMealDate(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal) {
+        if (principal == null) { return "redirect:/login"; }
+
+        mealDateService.delete(id);
+        attributes.addFlashAttribute("success", "Delete Successful!");
+        return "redirect:/meal/date/";
+    }
 }

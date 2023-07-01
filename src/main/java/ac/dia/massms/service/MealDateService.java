@@ -35,6 +35,10 @@ public class MealDateService {
     }
 
     public void delete(long id) {
-        mealDateRepository.delete(getById(id));
+        try {
+            mealDateRepository.delete(getById(id));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
