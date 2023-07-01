@@ -3,62 +3,37 @@
 	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="ISO-8859-1">
-<title>Edit Edit Meal Date</title>
+<title>Edit Meal Date</title>
 </head>
 <body>
 	<div sec:authorize="hasAnyAuthority('EDITOR', 'ADMIN')" align="center" >
-		<h1>Edit Meal Time</h1>
+		<h1>Edit Meal Time Date</h1>
 		<br/>
 		<div th:if = "${error}">
 			<p th:text="${error}"></p>
 		</div>
-		<form action="#" th:action="@{/meal/edit/update}" th:object="${meal}" method="post">
+		<form method="post" th:object="${mealDate}">
 			<table border="0" cellpadding="10">
 				<tr>
-					<td>Meal Id:</td>
-					<td><input type="text" th:field="*{id}" required /></td>
+					<td>Meal Date ID:</td>
+					<td><input type="text" th:field="*{id}" required readonly="readonly" /></td>
 				</tr>
 				<tr>
-					<td>Meal Name:</td>
-					<td><input type="text" th:field="*{name}" required /></td>
-				</tr>
-				<tr>
-					<td>Description:</td>
+					<td>Meal Date Meal Name:</td>
 					<td>
-						<textarea placeholder="Description" th:field="*{description}" required id="description" name="description"></textarea>
-					</td>
-				</tr>
-				<tr>
-					<td>Serving Size</td>
-					<td>
-						<select name="servingSize" id="servingSize" th:field="*{servingSize}" required>
-							<option value="1:1" selected>1:1</option>
-							<option value="1:2">1:2</option>
-							<option value="1:3">1:3</option>
+						<select required name="meal" th:field="*{meal.id}" >
+							<option th:each="mealEach : ${meals}"
+									th:value="${mealEach.id}"
+									th:text="${mealEach.name}"></option>
 						</select>
 					</td>
 				</tr>
 				<tr>
-					<td>Allergens:</td>
-					<td><input type="text" th:field="*{allergens}" required name="allergens" id="allergens"></td>
-				</tr>
-				<tr>
-					<td>Price:</td>
-					<td><input type="number" th:field="*{price}" name="price" required id="price" placeholder="$100"></td>
-				</tr>
-				<tr>
-					<td>Serve Time:</td>
-					<td>
-						<select name="serveTime" id="serveTime" th:field="*{serveTime}" required>
-							<option th:each="serveTime : ${serveTimes}"
-									th:value="${serveTime.id}"
-									th:text="${serveTime.identifier}"></option>
-						</select>
-					</td>
+					<td>Meal Date:</td>
+					<td><input type="date" th:field="*{mealDate}" required /></td>
 				</tr>
 				<tr>
 					<td colspan="2"><button type="submit">Update</button></td>
-					<td colspan="2"><button type="reset">Clear</button></td>
 				</tr>
 			</table>
 		</form>

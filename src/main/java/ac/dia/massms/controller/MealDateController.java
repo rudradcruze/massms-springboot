@@ -1,14 +1,15 @@
 package ac.dia.massms.controller;
 
+import ac.dia.massms.model.Meal;
 import ac.dia.massms.model.MealDate;
 import ac.dia.massms.service.MealDateService;
 import ac.dia.massms.service.MealService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
@@ -66,5 +67,15 @@ public class MealDateController {
 
         return "redirect:/meal/date/new";
 
+    }
+
+    @RequestMapping("/meal/date/edit/{id}")
+    public ModelAndView showEditMealDatePage(@PathVariable("id") long id, Model model) {
+
+        ModelAndView modelAndView;
+        modelAndView = new ModelAndView("edit_meal_date");
+        modelAndView.addObject("mealDate", mealDateService.getById(id));
+        model.addAttribute("meals", mealService.listAll());
+        return modelAndView;
     }
 }

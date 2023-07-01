@@ -21,7 +21,7 @@ public class MealDateService {
 
     }
 
-    public MealDate get(long id) {
+    public MealDate getById(long id) {
         return mealDateRepository.findMealDateById(id);
     }
 
@@ -30,6 +30,6 @@ public class MealDateService {
     }
 
     public void delete(long id) {
-        mealDateRepository.delete(get(id));
+        mealDateRepository.delete(getById(id));
     }
 }

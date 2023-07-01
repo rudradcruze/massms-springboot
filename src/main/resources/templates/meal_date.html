@@ -45,10 +45,10 @@
 				<td th:text="${meal.id}">Meal Id</td>
 				<td th:text="${#dates.format(meal.mealDate, 'dd-MM-yyyy')}">Meal Date</td>
 				<td th:text="${meal.meal.name}">Meal Name</td>
-<!--				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">-->
-<!--					<a th:href="@{'/meal/edit/' + ${meal.id}}">Edit</a>-->
+				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+					<a th:href="@{'/meal/date/edit/' + ${meal.id}}">Edit</a>
 <!--					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/meal/delete/' + ${meal.id}}">Delete</a>-->
-<!--				</td>-->
+				</td>
 			</tr>
 		</tbody>
 	</table>
