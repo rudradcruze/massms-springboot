@@ -1,11 +1,9 @@
 package ac.dia.massms.controller;
 
-import ac.dia.massms.model.Meal;
 import ac.dia.massms.model.MealDate;
 import ac.dia.massms.service.MealDateService;
 import ac.dia.massms.service.MealService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,10 +47,10 @@ public class MealDateController {
     @PostMapping("/meal/date/new/save")
     public String saveMealDate(@ModelAttribute("mealDate") MealDate mealDate, RedirectAttributes attributes, Principal principal, String str_mealDate) {
 
+        if (principal == null) { return "redirect:/login"; }
+
         if (mealDate == null)
             return "redirect:/meal/date/new";
-
-        if (principal == null) { return "redirect:/login"; }
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -66,7 +64,6 @@ public class MealDateController {
         attributes.addFlashAttribute("success", mealDate.getMeal().getName() + " is successfully created.");
 
         return "redirect:/meal/date/new";
-
     }
 
     @RequestMapping("/meal/date/edit/{id}")
@@ -77,5 +74,25 @@ public class MealDateController {
         modelAndView.addObject("mealDate", mealDateService.getById(id));
         model.addAttribute("meals", mealService.listAll());
         return modelAndView;
+    }
+
+    @PostMapping("/meal/date/edit/update")
+    public String updateMealDate(@ModelAttribute("mealDate") MealDate mealDate, RedirectAttributes attributes, Principal principal, String str_mealDate) {
+        if (principal == null) { return "redirect:/login"; }
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = dateFormat.parse(str_mealDate);
+            mealDate.setMealDate(date);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        mealDate.setMeal(mealService.getById(mealDate.getMeal().getId()));
+
+        mealDateService.update(mealDate);
+        attributes.addFlashAttribute("success", "Meal date update successfully!");
+
+        return "redirect:/meal/date";
     }
 }

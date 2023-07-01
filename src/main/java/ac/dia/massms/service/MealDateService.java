@@ -17,9 +17,7 @@ public class MealDateService {
     }
 
     // add customer self
-    public void addCustomerSel(long customerId, long mealId) {
-
-    }
+    public void addCustomerSel(long customerId, long mealId) { }
 
     public MealDate getById(long id) {
         return mealDateRepository.findMealDateById(id);
@@ -27,6 +25,13 @@ public class MealDateService {
 
     public void save(MealDate mealDate) {
         mealDateRepository.save(mealDate);
+    }
+
+    public void update(MealDate mealDate) {
+        MealDate newMealDate = mealDateRepository.findMealDateById(mealDate.getId());
+        newMealDate.setMeal(mealDate.getMeal());
+        newMealDate.setMealDate(mealDate.getMealDate());
+        mealDateRepository.save(newMealDate);
     }
 
     public void delete(long id) {
