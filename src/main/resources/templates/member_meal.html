@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Meals</title>
+</head>
+<body>
+<div align="center">	
+	<div sec:authorize="isAuthenticated()">
+		Welcome <b><span sec:authentication="name">Username</span></b>
+
+		<i><span sec:authentication="principal.authorities">Roles</span></i>
+	</div>
+
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Logout" />
+	</form>
+	
+	<h1>Meal Manager - <span th:text="${memberMealList.size()}"></span></h1>
+	<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+		<a th:href="@{/meal/date/new}">Create New Meal Date</a>
+	</div>
+
+	<div th:if = "${success}">
+		<p th:text="${success}"></p>
+	</div>
+
+	<div th:if = "${error}">
+		<p th:text="${error}"></p>
+	</div>
+	
+	<br/><br/>
+	<table border="1" cellpadding="10">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Quantity</th>
+				<th>User Name</th>
+				<th>Meal Name</th>
+				<th>Meal Size</th>
+				<th>Meal Price</th>
+				<th>Meal Date</th>
+				<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="member : ${memberMealList}">
+				<td th:text="${member.id}">Meal Id</td>
+				<td th:text="${member.quantity}">Meal Quantity</td>
+				<td th:text="${member.user.username}">Meal User Name</td>
+				<td th:text="${member.meal.meal.name}">Meal Name</td>
+				<td th:text="${member.meal.meal.servingSize}">Meal Size</td>
+				<td th:text="${member.meal.meal.price}">Meal Price</td>
+				<td th:text="${#dates.format(member.meal.mealDate, 'dd-MM-yyyy')}">Meal Date</td>
+<!--				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">-->
+<!--					<a th:href="@{'/meal/date/edit/' + ${meal.id}}">Edit</a>-->
+<!--					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/meal/date/delete/' + ${meal.id}}">Delete</a>-->
+<!--				</td>-->
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
