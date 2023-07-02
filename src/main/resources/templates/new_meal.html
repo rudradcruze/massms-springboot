@@ -9,7 +9,7 @@
 		<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')" align="center" >
 			<h1>Create New Meal</h1>
 			<br/>
-			<form action="#" th:action="@{/meal/new/save}" th:object="${meal}" method="post">
+			<form th:action="@{/meal/new/save}" th:object="${meal}" method="post">
 				<table border="0" cellpadding="10">
 					<tr>
 						<td>Meal Name:</td>
