@@ -31,13 +31,15 @@ public class MemberMealService {
         return memberMealRepository.getMemberMealById(id);
     }
 
-    // add customer self
+    // add customer
     public void addCustomerSel(long customerId, MemberMeal memberMeal, long mealDateId) {
         User user = userRepository.getUserById(customerId);
         MealDate mealDate = mealDateRepository.findMealDateById(mealDateId);
         memberMeal.setUser(user);
         memberMeal.setMeal(mealDate);
         memberMealRepository.save(memberMeal);
+        user.getMemberMealList().add(memberMeal);
+        userRepository.save(user);
     }
 
     public void save(MemberMeal meal) {

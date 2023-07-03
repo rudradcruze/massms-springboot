@@ -18,9 +18,6 @@
 	</form>
 	
 	<h1>Meal Manager - <span th:text="${memberMealList.size()}"></span></h1>
-	<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
-		<a th:href="@{/meal/date/new}">Create New Meal Date</a>
-	</div>
 
 	<div th:if = "${success}">
 		<p th:text="${success}"></p>
@@ -31,7 +28,7 @@
 	</div>
 	
 	<br/><br/>
-	<form th:action="@{/meal/member/update}" method="post" th:object="${newMemberMeal}">
+	<form th:action="@{/meal/member/add}" method="post" th:object="${newMemberMeal}">
 		<table border="0" cellpadding="10">
 				<tr>
 					<td><input type="number" name="quantity" th:field="*{quantity}"></td>
@@ -82,10 +79,10 @@
 				<td th:text="${member.meal.meal.price}">Meal Price</td>
 				<td th:text="${member.meal.meal.price} * ${member.quantity}">Meal Price</td>
 				<td th:text="${#dates.format(member.meal.mealDate, 'dd-MM-yyyy')}">Meal Date</td>
-<!--				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">-->
-<!--					<a th:href="@{'/meal/date/edit/' + ${meal.id}}">Edit</a>-->
+				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+					<a th:href="@{'/meal/member/edit/' + ${member.id}}">Edit</a>
 <!--					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/meal/date/delete/' + ${meal.id}}">Delete</a>-->
-<!--				</td>-->
+				</td>
 			</tr>
 		</tbody>
 	</table>
