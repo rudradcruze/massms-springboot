@@ -1,7 +1,6 @@
 package ac.dia.massms.controller;
 
 import ac.dia.massms.config.UserDetailsServiceImpl;
-import ac.dia.massms.model.MealDate;
 import ac.dia.massms.model.MemberMeal;
 import ac.dia.massms.service.MealDateService;
 import ac.dia.massms.service.MemberMealService;
