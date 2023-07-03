@@ -45,4 +45,6 @@ public class MemberMealService {
     public void save(MemberMeal meal) {
         memberMealRepository.save(meal);
     }
+
+    public void delete(long id) { memberMealRepository.delete(get(id)); }
 }

@@ -81,7 +81,7 @@
 				<td th:text="${#dates.format(member.meal.mealDate, 'dd-MM-yyyy')}">Meal Date</td>
 				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
 					<a th:href="@{'/meal/member/edit/' + ${member.id}}">Edit</a>
-<!--					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/meal/date/delete/' + ${meal.id}}">Delete</a>-->
+					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/meal/member/delete/' + ${member.id}}">Delete</a>
 				</td>
 			</tr>
 		</tbody>

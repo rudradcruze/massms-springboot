@@ -66,4 +66,13 @@ public class MemberMealController {
         attributes.addFlashAttribute("success", newMemberMeal.getUser().getUsername() + "'s meal is updated!");
         return "redirect:/meal/member/";
     }
+
+    @RequestMapping("/meal/member/delete/{id}")
+    public String deleteMealDate(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal) {
+        if (principal == null) { return "redirect:/login"; }
+
+        memberMealService.delete(id);
+        attributes.addFlashAttribute("success", "Delete Successful!");
+        return "redirect:/meal/member/";
+    }
 }
