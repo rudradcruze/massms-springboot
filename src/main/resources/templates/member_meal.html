@@ -31,19 +31,19 @@
 	</div>
 	
 	<br/><br/>
-	<form action="#" method="post" th:object="${newMemberMeal}">
+	<form th:action="@{/meal/member/update}" method="post" th:object="${newMemberMeal}">
 		<table border="0" cellpadding="10">
 				<tr>
 					<td><input type="number" name="quantity" th:field="*{quantity}"></td>
 					<td>
-						<select placeholder="Select Meal" required name="meal" id="meal" th:field="*{meal}" >
+						<select placeholder="Select Meal" required name="meal" id="meal" th:field="*{meal.id}" >
 							<option th:each="mealDateEach : ${mealDateService}"
 									th:value="${mealDateEach.id}"
 									th:text="${mealDateEach.meal.name} + ' - ' + ${#dates.format(mealDateEach.mealDate, 'dd-MM-yyyy')}"></option>
 						</select>
 					</td>
 					<td>
-						<select placeholder="Select User" required name="user" id="user" th:field="*{user}" >
+						<select placeholder="Select User" required name="user" id="user" th:field="*{user.id}" >
 							<option th:each="userEach : ${listUser}"
 									th:value="${userEach.id}"
 									th:text="${userEach.username}"></option>
@@ -67,6 +67,7 @@
 				<th>Meal Name</th>
 				<th>Meal Size</th>
 				<th>Meal Price</th>
+				<th>Meal Total Price</th>
 				<th>Meal Date</th>
 				<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
 			</tr>
@@ -79,6 +80,7 @@
 				<td th:text="${member.meal.meal.name}">Meal Name</td>
 				<td th:text="${member.meal.meal.servingSize}">Meal Size</td>
 				<td th:text="${member.meal.meal.price}">Meal Price</td>
+				<td th:text="${member.meal.meal.price} * ${member.quantity}">Meal Price</td>
 				<td th:text="${#dates.format(member.meal.mealDate, 'dd-MM-yyyy')}">Meal Date</td>
 <!--				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">-->
 <!--					<a th:href="@{'/meal/date/edit/' + ${meal.id}}">Edit</a>-->

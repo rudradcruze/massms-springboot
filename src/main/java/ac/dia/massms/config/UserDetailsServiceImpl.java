@@ -29,6 +29,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return new MyUserDetails(user);
 	}
 
+	public User getById(long id) {
+		return userRepository.getUserById(id);
+	}
+
 	public List<User> listALl() {
 		return (List<User>) userRepository.findAll();
 	}
