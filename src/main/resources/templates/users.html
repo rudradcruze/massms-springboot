@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Meals</title>
+</head>
+<body>
+<div align="center">	
+	<div sec:authorize="isAuthenticated()">
+		Welcome <b><span sec:authentication="name">Username</span></b>
+
+		<i><span sec:authentication="principal.authorities">Roles</span></i>
+	</div>
+
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Logout" />
+	</form>
+	
+	<h1>User - <span th:text="${userList.size()}"></span></h1>
+	<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+		<a th:href="@{/meal/new}">Create New Time</a>
+	</div>
+
+	<div th:if = "${success}">
+		<p th:text="${success}"></p>
+	</div>
+
+	<div th:if = "${error}">
+		<p th:text="${error}"></p>
+	</div>
+	
+	<br/><br/>
+	<table border="1" cellpadding="10">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Enabled</th>
+				<th>Roles</th>
+				<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="user : ${userList}">
+				<td th:text="${user.id}">User Id</td>
+				<td th:text="${user.username}">User Name</td>
+				<td>
+					<span th:if="${user.isEnabled()}">Yes</span>
+					<span th:if="${!user.isEnabled()}">No</span>
+				</td>
+				<td>
+					<ul>
+						<li th:each="role : ${user.getRoles()}"
+							th:text="${role.name}">User Roles</li>
+					</ul>
+				</td>
+
+				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+					<a th:href="@{'/user/edit/' + ${user.id}}">Edit</a>
+<!--					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/meal/delete/' + ${meal.id}}">Delete</a>-->
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>

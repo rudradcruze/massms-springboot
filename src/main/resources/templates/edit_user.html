@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Edit User</title>
+</head>
+<body>
+
+<div sec:authorize="hasAnyAuthority('EDITOR', 'ADMIN')" align="center" >
+	<h1>Edit User</h1>
+	<br/>
+	<div th:if = "${error}">
+		<p th:text="${error}"></p>
+	</div>
+	<form th:action="@{/user/edit/update}" th:object="${user}" method="post">
+		<table border="0" cellpadding="10">
+			<tr>
+				<td>User Id:</td>
+				<td><input type="text" th:field="*{id}" required readonly/></td>
+			</tr>
+			<tr>
+				<td>User Name:</td>
+				<td><input type="text" th:field="*{username}" required /></td>
+			</tr>
+			<tr>
+				<td>Enabled: </td>
+				<td><input type="checkbox" th:field="*{enabled}"></td>
+			</tr>
+			<tr>
+				<td>Roles:</td>
+				<td> <input type="checkbox" name="roles"
+							th:each="role : ${listRoles}"
+							th:text="${role.name}"
+							th:value="${role.id}"
+							th:field="*{roles}" />
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="submit">Update</button></td>
+				<td colspan="2"><button type="reset">Clear</button></td>
+			</tr>
+		</table>
+	</form>
+</div>
+</body>
+</html>

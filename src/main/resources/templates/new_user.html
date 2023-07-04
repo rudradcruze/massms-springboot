@@ -10,7 +10,7 @@
 	<div align="center">
 		<h1>Create New User</h1>
 		<br />
-		<form action="#" th:action="@{/saveUser}" th:object="${user}" method="post">
+		<form th:action="@{/user/new/save}" th:object="${user}" method="post">
 			<table border="0" cellpadding="10">
 				<tr>
 					<td>User Name:</td>
@@ -21,16 +21,12 @@
 					<td><input type="text" th:field="*{password}" /></td>
 				</tr>
 				<tr>
-					<td>enabled:</td>
-					<td><input type="checkbox" th:field="*{enabled}" /></td>
-				</tr>
-				<tr>
 					<td>Roles:</td>
-					<td> <input type="checkbox" name="roles" 
-						th:each="role : ${listRoles}" 
-						th:text="${role.name}"
-						th:value="${role.id}" 
-						th:field="*{roles}" />
+					<td> <input type="checkbox" name="roles"
+								th:each="role : ${listRoles}"
+								th:text="${role.name}"
+								th:value="${role.id}"
+								th:field="*{roles}" />
 					</td>
 				</tr>
 				<tr>
