@@ -13,11 +13,15 @@ public class Mass {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long massId;
-	private String massName;
+	private long id;
+	private String name;
 	private String address;
 	private String contact;
-	private String managerInfo;
+
+	@ManyToOne
+	@JoinColumn(name="users_id")
+	private User manager;
+
 	private String email;
 	private String url;
 }
