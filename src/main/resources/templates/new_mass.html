@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Create New Mass</title>
+</head>
+	<body>
+		<div sec:authorize="hasAnyAuthority('MANAGER', 'ADMIN')" align="center" >
+			<h1>Create New Mass</h1>
+			<br/>
+
+			<div th:if = "${error}">
+				<p th:text="${error}"></p>
+			</div>
+
+			<form th:action="@{/mass/new/save}" th:object="${newMass}" method="post">
+				<table border="0" cellpadding="10">
+					<tr>
+						<td>Name:</td>
+						<td><input type="text" name="name" id="name" th:field="*{name}" required /></td>
+					</tr>
+					<tr>
+						<td>Address:</td>
+						<td>
+							<textarea placeholder="address" th:field="*{address}" required id="description" name="address"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>Email:</td>
+						<td>
+							<input type="email" placeholder="email" th:field="*{email}" required id="email" name="email" />
+						</td>
+					</tr>
+					<tr>
+						<td>Contact:</td>
+						<td>
+							<input type="number" placeholder="contact number" th:field="*{contact}" required id="contact" name="contact" />
+						</td>
+					</tr>
+					<tr>
+						<td>Url:</td>
+						<td>
+							<input type="text" placeholder="url" th:field="*{url}" required id="url" name="url" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"><button type="submit">Save</button></td>
+						<td colspan="2"><button type="reset">Clear</button></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</body>
+</html>

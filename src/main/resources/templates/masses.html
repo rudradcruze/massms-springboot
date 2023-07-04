@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Mass</title>
+</head>
+<body>
+<div align="center">	
+	<div sec:authorize="isAuthenticated()">
+		Welcome <b><span sec:authentication="name">Username</span></b>
+
+		<i><span sec:authentication="principal.authorities">Roles</span></i>
+	</div>
+
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Logout" />
+	</form>
+	
+	<h1>Mass - <span th:text="${massList.size()}"></span></h1>
+	<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
+		<a th:href="@{/meal/new}">Create New Mass</a>
+	</div>
+
+	<div th:if = "${success}">
+		<p th:text="${success}"></p>
+	</div>
+
+	<div th:if = "${error}">
+		<p th:text="${error}"></p>
+	</div>
+	
+	<br/><br/>
+	<table border="1" cellpadding="10">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Address</th>
+				<th>Email</th>
+				<th>Url</th>
+				<th>Contact</th>
+				<th>Approved</th>
+				<th>Manager</th>
+				<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="mass : ${massList}">
+				<td th:text="${mass.id}">Mass Id</td>
+				<td th:text="${mass.name}">Mass Name</td>
+				<td th:text="${mass.address}">Mass Address</td>
+				<td th:text="${mass.email}">Mass Email</td>
+				<td th:text="${mass.url}">Mass url</td>
+				<td th:text="${mass.contact}">Mass Contact</td>
+				<td th:text="${mass.isApproved() ? 'Yes' : 'No'}">Mass Contact</td>
+				<td th:text="${mass.user.username}">Mass Manager</td>
+
+				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
+					<a th:href="@{'/mass/edit/' + ${mass.id}}">Edit</a>
+					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/mass/delete/' + ${mass.id}}">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>

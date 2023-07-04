@@ -20,6 +20,11 @@ public class Mass {
 	private String contact;
 	private String email;
 	private String url;
+	private boolean approved;
+
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
+	private User user;
 
 	@OneToMany(mappedBy = "mass")
 	private List<MassMember> messMemberList;
