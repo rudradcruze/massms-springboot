@@ -2,6 +2,7 @@ package ac.dia.massms.model;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,11 +18,9 @@ public class Mass {
 	private String name;
 	private String address;
 	private String contact;
-
-	@ManyToOne
-	@JoinColumn(name="users_id")
-	private User manager;
-
 	private String email;
 	private String url;
+
+	@OneToMany(mappedBy = "mass")
+	private List<MassMember> messMemberList;
 }

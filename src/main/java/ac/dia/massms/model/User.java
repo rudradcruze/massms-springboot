@@ -16,7 +16,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString
 public class User {
-
 	@Id
 	@Column(name = "user_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +35,4 @@ public class User {
 
 	@OneToMany(mappedBy = "user")
 	private List<MemberMeal> memberMealList;
-
-	@OneToMany(mappedBy = "user")
-	private List<Mass> massList;
 }
