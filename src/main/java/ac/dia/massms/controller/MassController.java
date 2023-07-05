@@ -63,6 +63,34 @@ public class MassController {
         return modelAndView;
     }
 
+    @PostMapping("mass/edit/update")
+    public String updateMass(@ModelAttribute("mass") Mass mass,
+                             RedirectAttributes attributes,
+                             Principal principal,
+                             Model model) {
+
+        if(principal == null) { return "redirect:/login"; }
+
+        Mass newMass = massService.getByUrl(mass.getUrl());
+
+        if(newMass == null) {
+            massService.update(mass);
+            attributes.addFlashAttribute("success", mass.getName() + "Mass is successfully updated");
+            return "redirect:/mass";
+        }
+        else {
+            if (newMass.getId() == mass.getId()) {
+                massService.update(mass);
+                attributes.addFlashAttribute("success", mass.getName() + "Mass is successfully updated");
+                return "redirect:/mass";
+            } else {
+                model.addAttribute("error", "This url is already exist! Please put another url");
+                model.addAttribute("mass", mass);
+                return "edit_mass";
+            }
+        }
+    }
+
     @RequestMapping("/mass/status/{id}")
     public String updateStatus(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal) {
         if(principal == null) { return "redirect:/login"; }
@@ -73,5 +101,4 @@ public class MassController {
 
         return "redirect:/mass";
     }
-
 }

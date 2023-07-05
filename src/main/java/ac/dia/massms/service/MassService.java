@@ -29,7 +29,9 @@ public class MassService {
         newMass.setAddress(mass.getAddress());
         newMass.setName(mass.getName());
         newMass.setContact(mass.getContact());
-        newMass.setEmail(mass.getUrl());
+        newMass.setEmail(mass.getEmail());
+        newMass.setUrl(mass.getUrl());
+        massRepository.save(newMass);
     }
 
     public boolean checkExistsUrl(String url) {
