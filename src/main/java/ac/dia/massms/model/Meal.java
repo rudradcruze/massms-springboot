@@ -12,7 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Meal {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -22,6 +21,10 @@ public class Meal {
 	private double price;
 	@Column(columnDefinition = "TEXT", length = 2000)
 	private String description;
+
+	@ManyToOne
+	@JoinColumn(name = "mass_id")
+	private Mass mass;
 
 	@OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
     private List<MealDate> dailyMeals;

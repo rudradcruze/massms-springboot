@@ -27,5 +27,8 @@ public class Mass {
 	private User user;
 
 	@OneToMany(mappedBy = "mass")
+	private List<Meal> mealList;
+
+	@OneToMany(mappedBy = "mass")
 	private List<MassMember> messMemberList;
 }
