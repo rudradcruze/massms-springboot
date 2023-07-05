@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Mass Members</title>
+</head>
+<body>
+<div align="center">	
+	<div sec:authorize="isAuthenticated()">
+		Welcome <b><span sec:authentication="name">Username</span></b>
+
+		<i><span sec:authentication="principal.authorities">Roles</span></i>
+	</div>
+
+	<form th:action="@{/logout}" method="post">
+		<input type="submit" value="Logout" />
+	</form>
+	
+	<h1>Mass "<span th:text="${session.mass.name}"></span>" - <span th:text="${massMemberList.size()}"></span></h1>
+	<p>Manager: <span th:text="${session.mass.user.username}"></span></p>
+	<div sec:authorize="hasAnyAuthority('MANAGER', 'CREATOR', 'ADMIN')">
+<!--		<a th:href="@{{url}/mass/member/new (url = ${massMemberList})}">Create New Member</a>-->
+	</div>
+
+	<div th:if = "${success}">
+		<p th:text="${success}"></p>
+	</div>
+
+	<div th:if = "${error}">
+		<p th:text="${error}"></p>
+	</div>
+	
+	<br/><br/>
+	<table border="1" cellpadding="10">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Mass Name</th>
+				<th>Mass Email</th>
+				<th>Mass Url</th>
+				<th>User Name</th>
+				<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="member : ${massMemberList}">
+				<td th:text="${member.id}">Mass Id</td>
+				<td th:text="${member.mass.name}">Mass Name</td>
+				<td th:text="${member.mass.email}">Mass Address</td>
+				<td th:text="${member.mass.url}">Mass Email</td>
+
+<!--				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">-->
+<!--					<a th:href="@{'/mass/edit/' + ${mass.id}}">Edit</a>-->
+<!--					<a th:href="@{{url}/mass/member/ (url = ${mass.url})}">Mass Members</a>-->
+<!--					<a sec:authorize="hasAuthority('ADMIN')" th:text="${mass.isApproved() ? 'Deactivate' : 'Activate'}" th:href="@{'/mass/status/' + ${mass.id}}"></a>-->
+<!--					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/mass/delete/' + ${mass.id}}">Delete</a>-->
+<!--				</td>-->
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
