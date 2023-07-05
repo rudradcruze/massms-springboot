@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Edit Mass</title>
+</head>
+<body>
+	<div sec:authorize="hasAnyAuthority('MANAGER', 'ADMIN')" align="center" >
+		<h1>Edit Meal Time</h1>
+		<br/>
+		<div th:if = "${error}">
+			<p th:text="${error}"></p>
+		</div>
+		<form action="#" th:action="@{/mass/edit/update}" th:object="${mass}" method="post">
+			<table border="0" cellpadding="10">
+				<tr>
+					<td>Mass Id:</td>
+					<td><input type="text" th:field="*{id}" readonly required /></td>
+				</tr>
+				<tr>
+					<td>Mass Name:</td>
+					<td><input type="text" th:field="*{name}" required /></td>
+				</tr>
+				<tr>
+					<td>Address:</td>
+					<td>
+						<textarea placeholder="Description" th:field="*{address}" required></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>Mass Url:</td>
+					<td><input type="text" th:field="*{url}" required /></td>
+				</tr>
+				<tr>
+					<td>Mass Email:</td>
+					<td><input type="email" th:field="*{email}" required /></td>
+				</tr>
+				<tr>
+					<td>Mass Contact:</td>
+					<td><input type="number" th:field="*{contact}" required /></td>
+				</tr>
+				<tr>
+					<td colspan="2"><button type="submit">Update</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>
