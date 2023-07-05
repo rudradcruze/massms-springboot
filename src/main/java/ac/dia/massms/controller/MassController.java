@@ -1,17 +1,13 @@
 package ac.dia.massms.controller;
 
-import ac.dia.massms.config.UserDetailsServiceImpl;
 import ac.dia.massms.model.Mass;
 import ac.dia.massms.model.User;
-import ac.dia.massms.model.UserService;
 import ac.dia.massms.repository.UserRepository;
 import ac.dia.massms.service.MassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
@@ -35,7 +31,6 @@ public class MassController {
     @GetMapping("/mass/new")
     public String newMassPage(Model model, Principal principal) {
         if(principal == null) { return "redirect:/login"; }
-        System.out.println(principal.getName());
         model.addAttribute("newMass", new Mass());
         return "new_mass";
     }
@@ -53,9 +48,21 @@ public class MassController {
             return "redirect:/mass";
         }
         else {
-            attributes.addFlashAttribute("error", "This url is already exist! Please put another url");
             model.addAttribute("newMass", newMass);
-            return "redirect:/mass/new";
+            model.addAttribute("error", "This url is already exist! Please put another url");
+            return "new_mass";
         }
     }
+
+    @RequestMapping("/mass/status/{id}")
+    public String updateStatus(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal) {
+        if(principal == null) { return "redirect:/login"; }
+        Mass newMass = massService.getById(id);
+        newMass.setApproved(!newMass.isApproved());
+        massService.save(newMass);
+        attributes.addFlashAttribute("success", "Mass status is successfully updated: Status = " + newMass.isApproved());
+
+        return "redirect:/mass";
+    }
+
 }
