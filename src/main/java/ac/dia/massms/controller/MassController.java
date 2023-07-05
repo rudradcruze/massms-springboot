@@ -101,4 +101,12 @@ public class MassController {
 
         return "redirect:/mass";
     }
+
+    @RequestMapping("/mass/delete/{id}")
+    public String deleteMass(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal) {
+        if(principal == null) { return "redirect:/login"; }
+        attributes.addFlashAttribute("success", massService.getById(id).getName() + " is successfully deleted.");
+        massService.delete(id);
+        return "redirect:/mass";
+    }
 }
