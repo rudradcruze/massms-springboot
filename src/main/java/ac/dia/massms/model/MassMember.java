@@ -21,4 +21,6 @@ public class MassMember {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    private boolean enabled;
 }
