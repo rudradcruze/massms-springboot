@@ -56,8 +56,9 @@
 				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">
 <!--					<a th:href="@{'/mass/edit/' + ${mass.id}}">Edit</a>-->
 <!--					<a th:href="@{{url}/mass/member/ (url = ${mass.url})}">Mass Members</a>-->
-<!--					<a sec:authorize="hasAuthority('ADMIN')" th:text="${mass.isApproved() ? 'Deactivate' : 'Activate'}" th:href="@{'/mass/status/' + ${mass.id}}"></a>-->
-					<a sec:authentication="hasAnyAuthority('ADMIN', 'MANAGER')" th:href="@{/mass/{url}/member/delete/ (url = ${member.mass.url})}">Delete</a>
+<!--					<a sec:authorize="hasAuthority('ADMIN')" th:text="${mass.isApproved()} ? 'Deactivate' : 'Activate'" th:href="@{'/mass/status/' + ${mass.id}}"></a>-->
+					<a sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:href="@{'/mass/' + ${member.mass.url} + '/member/status/' + ${member.id}}" th:text="${member.isEnabled()} ? 'Deactivate' : 'Activate'"></a>
+<!--					<a sec:authentication="hasAnyAuthority('ADMIN', 'MANAGER')" th:href="@{'/mass/' + ${member.mass.url} + '/member/delete/' + ${member.id}}">Delete</a>-->
 				</td>
 			</tr>
 		</tbody>

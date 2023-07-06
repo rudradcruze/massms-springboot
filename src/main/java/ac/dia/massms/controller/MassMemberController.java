@@ -76,4 +76,17 @@ public class MassMemberController {
             return "redirect:/mass/" + url + "/member";
         }
     }
+
+    @RequestMapping(value = "/mass/{url}/member/status/{id}")
+    public String updateStatus(@PathVariable("url") String url,
+                               @PathVariable("id") long id,
+                               RedirectAttributes attributes,
+                               Principal principal) {
+        if(principal == null){ return "redirect:/login"; }
+        MassMember massMember = massMemberService.getById(id);
+        massMember.setEnabled(!massMember.isEnabled());
+        massMemberService.save(massMember);
+        attributes.addFlashAttribute("success", "Mass member status is successfully updated: Status = " + massMember.isEnabled());
+        return "redirect:/mass/" + url + "/member/";
+    }
 }
