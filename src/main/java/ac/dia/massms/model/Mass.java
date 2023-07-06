@@ -22,7 +22,7 @@ public class Mass {
 	private String url;
 	private boolean approved;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
 	private User user;
 

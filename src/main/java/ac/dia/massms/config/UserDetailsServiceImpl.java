@@ -36,6 +36,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public List<User> listALl() {
 		return (List<User>) userRepository.findAll();
 	}
+
+	public List<User> listByRollName(String role) {
+		return userRepository.findByRolesName(role);
+	}
 }
 
 

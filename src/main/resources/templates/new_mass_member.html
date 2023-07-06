@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Create New Mass</title>
+</head>
+	<body>
+		<div sec:authorize="hasAnyAuthority('MANAGER', 'ADMIN')" align="center" >
+			<h1>Add Member Into The Mass</h1>
+			<br/>
+
+			<div th:if = "${error}">
+				<p th:text="${error}"></p>
+			</div>
+
+			<form th:action="@{/mass/new/save}" th:object="${massMember}" method="post">
+				<table border="0" cellpadding="10">
+					<tr>
+						<td><label for="mass">Mass: </label></td>
+						<td><input type="text" id="mass" th:value="${massMember.mass.name}" readonly></td>
+					</tr>
+					<tr>
+						<td><label for="user">User</label></td>
+						<td>
+							<select required name="user" id="user" th:field="*{user}" >
+								<option th:each="userEach : ${users}"
+										th:value="${userEach.id}"
+										th:text="${userEach.username}"></option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2"><button type="submit">Save</button></td>
+						<td colspan="2"><button type="reset">Clear</button></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</body>
+</html>

@@ -59,6 +59,7 @@
 				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
 					<a th:href="@{'/mass/edit/' + ${mass.id}}">Edit</a>
 					<a th:href="@{mass/{url}/member/ (url = ${mass.url})}">Mass Members</a>
+					<a th:href="@{mass/{url}/member/new (url = ${mass.url})}">New Mass Members</a>
 					<a sec:authorize="hasAuthority('ADMIN')" th:text="${mass.isApproved() ? 'Deactivate' : 'Activate'}" th:href="@{'/mass/status/' + ${mass.id}}"></a>
 					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/mass/delete/' + ${mass.id}}">Delete</a>
 				</td>
