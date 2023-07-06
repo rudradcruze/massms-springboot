@@ -41,6 +41,8 @@
 				<th>Serving Size</th>
 				<th>Price</th>
 				<th>Serve Time</th>
+				<th>Mass Name</th>
+				<th>Mass Url</th>
 				<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
 			</tr>
 		</thead>
@@ -53,6 +55,8 @@
 				<td th:text="${meal.servingSize}">Meal Serving Size</td>
 				<td th:text="${meal.price}">Meal Price</td>
 				<td th:title="${meal.serveTime.startTime} + ' ' + ${meal.serveTime.endTime}" th:text="${meal.serveTime.identifier}">Serve Time</td>
+				<td th:text="${meal.mass.name}">Meal Mass Name</td>
+				<td th:text="${meal.mass.url}">Meal Mass URL</td>
 
 				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
 					<a th:href="@{'/meal/edit/' + ${meal.id}}">Edit</a>

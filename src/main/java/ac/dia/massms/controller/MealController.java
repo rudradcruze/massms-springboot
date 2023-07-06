@@ -1,6 +1,8 @@
 package ac.dia.massms.controller;
 
+import ac.dia.massms.model.Mass;
 import ac.dia.massms.model.Meal;
+import ac.dia.massms.service.MassService;
 import ac.dia.massms.service.MealService;
 import ac.dia.massms.service.ServeTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
 
@@ -23,6 +26,9 @@ public class MealController {
     @Autowired
     private MealService mealService;
 
+    @Autowired
+    private MassService massService;
+
     @GetMapping("/meal")
     public String mealIndex(Model model) {
         List<Meal> allMeals = mealService.listAll();
@@ -30,19 +36,24 @@ public class MealController {
         return "meals";
     }
 
-    @GetMapping("/meal/new")
-    public String newMealPage(Model model, Principal principal) {
+    @RequestMapping(value = "/mass/{url}/meal/new")
+    public String newMassMealPage(Model model, Principal principal, @PathVariable String url, HttpSession session) {
         if(principal == null){ return "redirect:/login"; }
         model.addAttribute("meal", new Meal());
         model.addAttribute("serveTimes", serveTimeService.listAll());
+        session.setAttribute("mass", massService.getByUrl(url));
         return "new_meal";
     }
 
-    @PostMapping("/meal/new/save")
-    public String saveNewMeal(@ModelAttribute("meal") Meal meal, RedirectAttributes attributes, Principal principal) {
+    @RequestMapping(value = "/mass/{url}/meal/new/save", method = RequestMethod.POST)
+    public String saveNewMeal(@ModelAttribute("meal") Meal meal, RedirectAttributes attributes, Principal principal, @PathVariable String url) {
 
         if(principal == null){ return "redirect:/login"; }
 
+        Mass instanceofMass = massService.getByUrl(url);
+        meal.setMass(instanceofMass);
+        instanceofMass.getMealList().add(meal);
+        massService.update(instanceofMass);
         mealService.save(meal);
         attributes.addFlashAttribute("success", "Meal Successfully Created!");
         return "redirect:/meal";
