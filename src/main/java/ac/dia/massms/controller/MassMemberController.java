@@ -89,4 +89,16 @@ public class MassMemberController {
         attributes.addFlashAttribute("success", "Mass member status is successfully updated: Status = " + massMember.isEnabled());
         return "redirect:/mass/" + url + "/member/";
     }
+
+    @RequestMapping(value = "/mass/{url}/member/delete/{id}")
+    public String deleteMassMember(@PathVariable("url") String url,
+                               @PathVariable("id") long id,
+                               RedirectAttributes attributes,
+                               Principal principal) {
+
+        if(principal == null){ return "redirect:/login"; }
+        attributes.addFlashAttribute("success", massMemberService.getById(id).getUser().getUsername() + " is successfully deleted from " + massMemberService.getById(id).getMass().getName() + " mass");
+        massMemberService.delete(id);
+        return "redirect:/mass/" + url + "/member/";
+    }
 }
