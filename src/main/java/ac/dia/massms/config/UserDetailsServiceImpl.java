@@ -40,6 +40,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public List<User> listByRollName(String role) {
 		return userRepository.findByRolesName(role);
 	}
+
+	public void updateMassList(User user) {
+		User newUser = userRepository.getUserById(user.getId());
+		newUser.setMassList(user.getMassList());
+	}
 }
 
 

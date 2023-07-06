@@ -36,6 +36,6 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<MemberMeal> memberMealList;
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Mass> massList;
 }

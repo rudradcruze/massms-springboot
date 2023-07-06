@@ -9,10 +9,9 @@ import ac.dia.massms.service.MassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
@@ -31,7 +30,6 @@ public class MassMemberController {
 
     @RequestMapping("mass/{url}/member")
     public String listAllMassMember(@PathVariable("url") String url, Model model, HttpSession session) {
-        List<MassMember> massMemberList = massMemberService.listAll();
         Mass mass = massService.getByUrl(url);
         model.addAttribute("massMemberList", mass.getMessMemberList());
         session.setAttribute("mass", mass);
@@ -45,7 +43,37 @@ public class MassMemberController {
         massMember.setMass(massService.getByUrl(url));
         model.addAttribute("massMember", massMember);
         model.addAttribute("users", userDetailsService.listByRollName("USER"));
-         model.addAttribute("masses", massService.listAll());
         return "new_mass_member";
+    }
+
+    @RequestMapping(value = "/mass/{url}/member/new/save", method = RequestMethod.POST)
+    public String saveMassMember(@PathVariable("url") String url,
+                                 @ModelAttribute("massMember") MassMember massMember,
+                                 RedirectAttributes attributes,
+                                 Principal principal) {
+        if(principal == null){ return "redirect:/login"; }
+
+        massMember.setMass(massService.getByUrl(url));
+        List<MassMember> massList = massMemberService.massMemberListByUserName(massMember.getUser().getUsername());
+        boolean exist = false;
+
+        for (MassMember massMemberEach : massList) {
+            exist = (massMemberEach.getUser().getUsername().equals(massMember.getUser().getUsername()));
+            break;
+        }
+
+        if (exist) {
+            attributes.addFlashAttribute("error", massMember.getUser().getUsername() + " is already in " + massMember.getMass().getName() + " this mass.");
+            return "redirect:/mass/" + url + "/member/new";
+        } else {
+            User user = userDetailsService.getById(massMember.getUser().getId());
+            massMember.setEnabled(false);
+            massMemberService.save(massMember);
+            user.getMassList().add(massMember.getMass());
+            userDetailsService.updateMassList(user);
+
+            attributes.addFlashAttribute("success", massMember.getUser().getUsername() + " is successfully added to the " + massMember.getMass().getName() + " mass");
+            return "redirect:/mass/" + url + "/member";
+        }
     }
 }

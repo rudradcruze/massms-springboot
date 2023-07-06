@@ -14,7 +14,7 @@
 				<p th:text="${error}"></p>
 			</div>
 
-			<form th:action="@{/mass/new/save}" th:object="${massMember}" method="post">
+			<form th:action="@{/mass/{url}/member/new/save (url = ${massMember.mass.url})}" th:object="${massMember}" method="post">
 				<table border="0" cellpadding="10">
 					<tr>
 						<td><label for="mass">Mass: </label></td>
@@ -26,7 +26,8 @@
 							<select required name="user" id="user" th:field="*{user}" >
 								<option th:each="userEach : ${users}"
 										th:value="${userEach.id}"
-										th:text="${userEach.username}"></option>
+										th:text="${userEach.username}">
+								</option>
 							</select>
 						</td>
 					</tr>

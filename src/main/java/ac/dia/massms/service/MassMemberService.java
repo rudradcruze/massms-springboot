@@ -20,4 +20,8 @@ public class MassMemberService{
         massMember.setEnabled(!massMember.isEnabled());
         massMemberRepository.save(massMember);
     }
+
+    public List<MassMember> massMemberListByUserName(String username) {
+        return massMemberRepository.getMassMemberByUserUsername(username);
+    }
 }
