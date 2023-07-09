@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -57,12 +58,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/mass/new").hasAnyAuthority("ADMIN", "MANAGER")
 			.antMatchers("/mass/edit/**").hasAnyAuthority("ADMIN", "MANAGER")
 			.antMatchers("/mass/delete/**").hasAnyAuthority("ADMIN", "MANAGER")
-			.anyRequest().authenticated()
+			//.anyRequest().authenticated()
 			.and()
-			.formLogin().permitAll()
+			.exceptionHandling().accessDeniedPage("/403")
 			.and()
-			.logout().permitAll()
+			.formLogin()
+			.loginPage("/login")
+			.loginProcessingUrl("/do-login")
+			.defaultSuccessUrl("/")
 			.and()
-			.exceptionHandling().accessDeniedPage("/403");
+			.logout()
+			.invalidateHttpSession(true)
+			.clearAuthentication(true)
+			.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+			.logoutSuccessUrl("/login?logout")
+			.permitAll();
 	}
 }
