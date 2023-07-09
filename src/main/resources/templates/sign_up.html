@@ -56,16 +56,6 @@
                     <strong>Error - </strong> <span th:text="${password}"></span>
                   </div>
 
-                  <div th:if="${success}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
-                    <button
-                            type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="alert"
-                            aria-label="Close">
-                    </button>
-                    <strong>Error - </strong> <span th:text="${success}"></span>
-                  </div>
-
                   <div th:if="${firstName}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
                     <button
                             type="button"
@@ -143,7 +133,9 @@
                       <label for="confirmPassword" class="form-label">Confirm Password</label>
                       <input type="password" th:field="*{confirmPassword}" class="form-control" required name="confirmPassword" id="confirmPassword">
                     </div>
-                    <button class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign Up</button>
+                    <button class="btn btn-primary w-100 py-8 mb-4 rounded-2">
+                      <i class="ti ti-send fs-4 me-2"></i> Sign Up
+                    </button>
                     <div class="d-flex align-items-center">
                       <p class="fs-4 mb-0 text-dark">Already have an Account?</p>
                       <a class="text-primary fw-medium ms-2" th:href="@{/login}">Sign In</a>

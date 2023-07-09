@@ -45,6 +45,16 @@
                     <strong>Log Out - </strong> You have been logged out from MASSMS
                   </div>
 
+                  <div th:if="${success}" class="alert alert-success alert-dismissible bg-success text-white border-0 fade show">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Success - </strong> <span th:text="${success}"></span>
+                  </div>
+
                   <div class="position-relative text-center my-4">
                     <p class="mb-0 fs-4 px-3 d-inline-block bg-white text-dark z-index-5 position-relative">Sign In</p>
                     <span class="border-top w-100 position-absolute top-50 start-50 translate-middle"></span>
