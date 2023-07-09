@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -32,6 +31,49 @@ public class AuthController {
     public String register(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("title", "MASSMS - Register");
+        return "sign_up";
+    }
+
+    @PostMapping("/do-register")
+    public String processRegister(@Valid @ModelAttribute("user") User user,
+                                  BindingResult result,
+                                  Model model) {
+        try {
+            if (result.hasErrors()) {
+                model.addAttribute("user", user);
+                return "sign_up";
+            }
+            User userNew = userDetailsService.getByUserName(user.getUsername());
+            if(userNew != null){
+                model.addAttribute("username", "Username have been registered");
+                model.addAttribute("user", user);
+                return "sign_up";
+            }
+            if(user.getFirstName() == null){
+                model.addAttribute("firstName", "First name cannot be null");
+                model.addAttribute("user", user);
+                return "sign_up";
+            }
+            if(user.getLastName() == null){
+                model.addAttribute("lastName", "Last name cannot be null");
+                model.addAttribute("user", user);
+                return "sign_up";
+            }
+            if(user.getPassword().equals(user.getConfirmPassword())){
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setEnabled(false);
+                userDetailsService.save(user);
+                model.addAttribute("success", "User is successfully registered.");
+                return "sign_up";
+            }else{
+                model.addAttribute("password", "Password is not same");
+                model.addAttribute("user", user);
+                return "sign_up";
+            }
+        }catch (Exception e){
+            model.addAttribute("error", "Server have ran some problems");
+            model.addAttribute("user", user);
+        }
         return "sign_up";
     }
 }

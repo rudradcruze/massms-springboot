@@ -1,92 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <!--  Title -->
-  <title>MASSMS - Register</title>
-  <!--  Required Meta Tag -->
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="handheldfriendly" content="true" />
-  <meta name="MobileOptimized" content="width" />
-  <meta name="description"
-    content="Easy Solution for handling mess request for member and handel the meal complexities." />
-  <meta name="author" content="Francis Rudra D Cruze" />
-  <meta name="keywords" content="MASSMS" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!--  Favicon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="images/logo/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="images/logo/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="images/logo/favicon-16x16.png">
-  <link rel="manifest" href="images/logo/site.webmanifest">
-  <link rel="mask-icon" href="images/logo/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="theme-color" content="#ffffff">
-  <link rel="shortcut icon" href="images/logo/favicon.ico" type="image/x-icon">
-  <!-- Owl Carousel  -->
-  <link rel="stylesheet" href="libs/owl.carousel/dist/assets/owl.carousel.min.css">
-
-  <!-- Core Css -->
-  <link id="themeColors" rel="stylesheet" href="css/style.min.css" />
-</head>
-
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragmenta :: head_link_up"></head>
 <body>
-    <!-- Preloader -->
-    <div class="preloader">
-      <img src="images/logo/favicon.ico" alt="loader" class="lds-ripple img-fluid" />
-    </div>
+    <div th:replace="fragmenta :: preloader"></div>
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
-      <div class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
-        <div class="d-flex align-items-center justify-content-center w-100">
-          <div class="row justify-content-center w-100">
-            <div class="col-md-10 col-lg-10 col-xxl-4">
-              <div class="card mb-0">
-                <div class="card-body">
-                  <a href="index.html" class="text-nowrap logo-img text-center d-block mb-4 w-100">
-                    <img src="images/logo/dark-logo.svg" width="180" alt="MASSMS Logo">
-                  </a>
-                  <div class="position-relative text-center mb-4 mt-0">
-                    <p class="mb-0 fs-4 px-3 d-inline-block bg-white z-index-5 position-relative">Sign Up</p>
+      <div class="position-relative overflow-hidden radial-gradient min-vh-100">
+        <div class="position-relative z-index-5">
+          <div class="row">
+            <div class="col-xl-7 col-xxl-8">
+              <a th:href="@{/}" class="text-nowrap logo-img d-block px-4 py-9 w-100">
+                <img th:src="@{images/logo/dark-logo.svg}" width="180" alt="Logo">
+              </a>
+              <div class="d-none d-xl-flex align-items-center justify-content-center" style="height: calc(100vh - 80px);">
+                <img th:src="@{images/backgrounds/login-security.svg}" alt="" class="img-fluid" width="500">
+              </div>
+            </div>
+            <div class="col-xl-5 col-xxl-4">
+              <div class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
+                <div class="col-sm-8 col-md-6 col-xl-9">
+                  <h2 class="mb-3 fs-7 fw-bolder">Welcome to MASSMS</h2>
+                  <div class="position-relative text-start my-4">
+                    <p class="mb-0 fs-4 px-0 d-inline-block bg-white text-dark z-index-5 position-relative">Sign Up</p>
                     <span class="border-top w-100 position-absolute top-50 start-50 translate-middle"></span>
                   </div>
-                  <form>
-                    <div class="row">
-                      <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
-                        <label for="firstName" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="firstName" aria-describedby="textHelp">
-                      </div>
-                      <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="lastName" aria-describedby="textHelp">
+
+                  <div th:if="${error}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Error - </strong> <span th:text="${error}"></span>
+                  </div>
+
+                  <div th:if="${username}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Error - </strong> <span th:text="${username}"></span>
+                  </div>
+
+                  <div th:if="${password}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Error - </strong> <span th:text="${password}"></span>
+                  </div>
+
+                  <div th:if="${success}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Error - </strong> <span th:text="${success}"></span>
+                  </div>
+
+                  <div th:if="${firstName}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Error - </strong> <span th:text="${firstName}"></span>
+                  </div>
+
+                  <div th:if="${lastName}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Error - </strong> <span th:text="${lastName}"></span>
+                  </div>
+
+                  <form th:action="@{/do-register}" method="post" th:object="${user}">
+                    <div class="mb-4">
+                      <label for="firstName" class="form-label">First Name</label>
+                      <input type="text" th:field="*{firstName}" class="form-control" id="firstName" name="firstName" aria-describedby="textHelp" required>
+                      <div th:if="${#fields.hasErrors('firstName')}" class="alert customize-alert alert-dismissible alert-light-danger text-danger fade show remove-close-icon" role="alert">
+                        <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close">
+                        </button>
+                        <div class="d-flex align-items-center font-medium me-3 me-md-0">
+                          <i class="ti ti-info-circle fs-5 me-2 text-danger"></i>
+                          <span th:errors = "*{firstName}"></span>
+                        </div>
                       </div>
                     </div>
-                    <div class="form-group mb-4">
-                      <label for="gender" class="form-label">Gender</label>
-                      <select class="form-select mr-sm-2" id="gender">
-                        <option selected>Choose...</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Special">Special</option>
-                      </select>
-                    </div>
-                    <div class="mb-3">
-                      <label for="email" class="form-label">Email address</label>
-                      <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
-                    </div>
-                    <div class="row">
-                      <div class="mb-4 col-lg-6 col-md-6 col-sm-12">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password">
+                    <div class="mb-4">
+                      <label for="lastname" class="form-label">Last Name</label>
+                      <input type="text" class="form-control" th:field="*{lastName}" required id="lastname" name="lastname" aria-describedby="textHelp">
+                      <div th:if="${#fields.hasErrors('lastName')}" class="alert customize-alert alert-dismissible alert-light-danger text-danger fade show remove-close-icon" role="alert">
+                        <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close">
+                        </button>
+                        <div class="d-flex align-items-center font-medium me-3 me-md-0">
+                          <i class="ti ti-info-circle fs-5 me-2 text-danger"></i>
+                          <span th:errors = "*{lastName}"></span>
+                        </div>
                       </div>
-                      <div class="mb-4 col-lg-6 col-md-6 col-sm-12">
-                        <label for="repeatPassword" class="form-label">Repeat Password</label>
-                        <input type="password" class="form-control" id="repeatPassword">
+                    </div>
+                    <div class="mb-4">
+                      <label for="username" class="form-label">Email address</label>
+                      <input type="email" th:field="*{username}" class="form-control" required id="username" name="username" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-4">
+                      <label for="password" class="form-label">Password</label>
+                      <input type="password" th:field="*{password}" class="form-control" required name="password" id="password">
+                      <div th:if="${#fields.hasErrors('password')}" class="alert customize-alert alert-dismissible alert-light-danger text-danger fade show remove-close-icon" role="alert">
+                        <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close">
+                        </button>
+                        <div class="d-flex align-items-center font-medium me-3 me-md-0">
+                          <i class="ti ti-info-circle fs-5 me-2 text-danger"></i>
+                          <span th:errors = "*{password}"></span>
+                        </div>
                       </div>
-                    </div>                   
-                    <a href="" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign Up</a>
+                    </div>
+                    <div class="mb-4">
+                      <label for="confirmPassword" class="form-label">Confirm Password</label>
+                      <input type="password" th:field="*{confirmPassword}" class="form-control" required name="confirmPassword" id="confirmPassword">
+                    </div>
+                    <button class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign Up</button>
                     <div class="d-flex align-items-center">
                       <p class="fs-4 mb-0 text-dark">Already have an Account?</p>
-                      <a class="text-primary fw-medium ms-2" href="sign_in.html">Sign In</a>
+                      <a class="text-primary fw-medium ms-2" th:href="@{/login}">Sign In</a>
                     </div>
                   </form>
                 </div>
@@ -96,21 +156,6 @@
         </div>
       </div>
     </div>
-    
-  <!--  Customizer -->
-    <!--  Import Js Files -->
-    <script src="libs/jquery/dist/jquery.min.js"></script>
-    <script src="libs/simplebar/dist/simplebar.min.js"></script>
-    <script src="libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <!--  core files -->
-    <script src="js/app.min.js"></script>
-    <script src="js/app.init.js"></script>
-    <script src="js/app-style-switcher.js"></script>
-    <script src="js/sidebarmenu.js"></script>
-    <script src="js/custom.js"></script>
-    <!--  current page js files -->
-    <script src="libs/owl.carousel/dist/owl.carousel.min.js"></script>
-    <script src="libs/apexcharts/dist/apexcharts.min.js"></script>
-    <script src="js/dashboard.js"></script>
+    <div th:replace="fragmenta :: scripts"></div>
   </body>
 </html>

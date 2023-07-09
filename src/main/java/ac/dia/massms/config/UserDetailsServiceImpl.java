@@ -33,6 +33,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return userRepository.getUserById(id);
 	}
 
+	public void save(User user) {
+		userRepository.save(user);
+	}
+
+	public User getByUserName(String userName) {
+		return userRepository.getUserByUsername(userName);
+	}
+
 	public List<User> listALl() {
 		return (List<User>) userRepository.findAll();
 	}
