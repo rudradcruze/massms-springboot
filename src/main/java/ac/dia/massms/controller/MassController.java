@@ -75,13 +75,13 @@ public class MassController {
 
         if(newMass == null) {
             massService.update(mass);
-            attributes.addFlashAttribute("success", mass.getName() + "Mass is successfully updated");
+            attributes.addFlashAttribute("success", mass.getName() + " Mass is successfully updated");
             return "redirect:/mass";
         }
         else {
             if (newMass.getId() == mass.getId()) {
                 massService.update(mass);
-                attributes.addFlashAttribute("success", mass.getName() + "Mass is successfully updated");
+                attributes.addFlashAttribute("success", mass.getName() + " Mass is successfully updated");
                 return "redirect:/mass";
             } else {
                 model.addAttribute("error", "This url is already exist! Please put another url");

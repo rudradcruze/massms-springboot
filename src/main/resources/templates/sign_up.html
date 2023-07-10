@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragmenta :: head_link_up"></head>
+<head th:replace="fragment :: head_link_up"></head>
 <body>
-    <div th:replace="fragmenta :: preloader"></div>
+    <div th:replace="fragment :: preloader"></div>
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
       <div class="position-relative overflow-hidden radial-gradient min-vh-100">
@@ -148,6 +148,6 @@
         </div>
       </div>
     </div>
-    <div th:replace="fragmenta :: scripts"></div>
+    <div th:replace="fragment :: scripts"></div>
   </body>
 </html>
