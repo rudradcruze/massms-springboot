@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -23,15 +25,27 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
+    private void userSession(Model model, Principal principal, HttpSession session) {
+        if (principal != null) {
+            User user = userRepository.getUserByUsername(principal.getName());
+            session.setAttribute("user", user);
+            model.addAttribute("newUser", new User());
+        } else {
+            session.removeAttribute("user");
+        }
+    }
+
     @GetMapping("/user")
-    public String showAllUsers(Model model) {
+    public String showAllUsers(Model model, Principal principal, HttpSession session) {
+        userSession(model, principal, session);
         List<User> userList = (List<User>) userRepository.findAll();
         model.addAttribute("userList", userList);
-        return "users";
+        return "users_2";
     }
 
     @GetMapping("/user/new")
-    public String showNewUserForm(Model model) {
+    public String showNewUserForm(Model model, Principal principal, HttpSession session) {
+        userSession(model, principal, session);
         User user = new User();
         model.addAttribute("user", user);
         List<Role> listRoles = (List<Role>) roleRepository.findAll();
@@ -48,7 +62,8 @@ public class UserController {
     }
 
     @RequestMapping("user/edit/{id}")
-    public ModelAndView userEditPage(@PathVariable("id") long id, Model model) {
+    public ModelAndView userEditPage(@PathVariable("id") long id, Model model, Principal principal, HttpSession session) {
+        userSession(model, principal, session);
         ModelAndView modelAndView;
         modelAndView = new ModelAndView("edit_user");
         modelAndView.addObject(userRepository.getUserById(id));
@@ -58,7 +73,8 @@ public class UserController {
     }
 
     @PostMapping("/user/edit/update")
-    public String updateUser(@ModelAttribute("user") User user) {
+    public String updateUser(@ModelAttribute("user") User user, Model model, Principal principal, HttpSession session) {
+        userSession(model, principal, session);
         User newUser = userRepository.getUserById(user.getId());
         newUser.setEnabled(user.isEnabled());
         newUser.setUsername(user.getUsername());
