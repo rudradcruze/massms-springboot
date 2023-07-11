@@ -93,8 +93,8 @@
                                                             <i class="ti ti-dots fs-4"></i>
                                                         </a>
                                                         <ul class="dropdown-menu" aria-labelledby="nft2">
-                                                            <li class="edit">
-                                                                <a class="dropdown-item d-flex align-items-center edit2" th:href="@{/mass/get/ (id = ${mass.id})}">
+                                                            <li>
+                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{'/mass/edit/' + ${mass.id}}">
                                                                     <i class="ti ti-edit px-2"></i> <span> Edit</span>
                                                                 </a>
                                                             </li>
@@ -152,13 +152,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3 contact-name">
-                                        <input type="text" id="c-name" th:field="*{name}" class="form-control" placeholder="Name" />
+                                        <input type="text" id="c-name" th:field="*{name}" required class="form-control" placeholder="Name" />
                                         <span class="validation-text text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3 contact-email">
-                                        <input type="email" id="c-email" th:field="*{email}" class="form-control" placeholder="Email" />
+                                        <input type="email" id="c-email" th:field="*{email}" required class="form-control" placeholder="Email" />
                                         <span class="validation-text text-danger"></span>
                                     </div>
                                 </div>
@@ -166,12 +166,12 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3 contact-occupation">
-                                        <input type="text" id="c-occupation" th:field="*{url}" class="form-control" placeholder="url" />
+                                        <input type="text" id="c-occupation" th:field="*{url}" required class="form-control" placeholder="url" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3 contact-phone">
-                                        <input type="number" id="c-phone" th:field="*{contact}" class="form-control" placeholder="Phone" />
+                                        <input type="number" id="c-phone" th:field="*{contact}" required class="form-control" placeholder="Phone" />
                                         <span class="validation-text text-danger"></span>
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="mb-3 contact-location">
-                                        <textarea class="form-control" th:field="*{address}" rows="3" placeholder="Address..."></textarea>
+                                        <textarea class="form-control" th:field="*{address}" required rows="3" placeholder="Address..."></textarea>
                                     </div>
                                 </div>
                             </div>

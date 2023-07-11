@@ -23,11 +23,7 @@ public class MassController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/mass")
-    public String showMass(Model model, Principal principal, HttpSession session) {
-        List<Mass> massList = massService.listAll();
-        model.addAttribute("massList", massList);
-
+    private void messMethod(Model model, Principal principal, HttpSession session) {
         if (principal != null) {
             User user = userRepository.getUserByUsername(principal.getName());
             session.setAttribute("user", user);
@@ -35,20 +31,29 @@ public class MassController {
         } else {
             session.removeAttribute("user");
         }
+    }
+
+    @GetMapping("/mass")
+    public String showMass(Model model, Principal principal, HttpSession session) {
+        List<Mass> massList = massService.listAll();
+        model.addAttribute("massList", massList);
+        messMethod(model, principal, session);
         return "masses";
     }
 
     @GetMapping("/mass/new")
-    public String newMassPage(Model model, Principal principal) {
+    public String newMassPage(Model model, Principal principal, HttpSession session) {
         if(principal == null) { return "redirect:/login"; }
         model.addAttribute("newMass", new Mass());
+        messMethod(model, principal, session);
         return "new_mass";
     }
 
     @PostMapping("/mass/new/save")
-    public String saveMass(@ModelAttribute("newMass") Mass newMass, RedirectAttributes attributes, Principal principal, Model model) {
+    public String saveMass(@ModelAttribute("newMass") Mass newMass, RedirectAttributes attributes, Principal principal, Model model, HttpSession session) {
 
         if(principal == null) { return "redirect:/login"; }
+        messMethod(model, principal, session);
         if (!massService.checkExistsUrl(newMass.getUrl())) {
             newMass.setApproved(false);
             User user = userRepository.getUserByUsername(principal.getName());
@@ -63,10 +68,12 @@ public class MassController {
     }
 
     @RequestMapping("/mass/edit/{id}")
-    public ModelAndView newMassEditPage(@PathVariable("id") long id) {
+    public ModelAndView newMassEditPage(@PathVariable("id") long id, Model model, Principal principal, HttpSession session) {
         Mass mass = massService.getById(id);
-        ModelAndView modelAndView = new ModelAndView("edit_mass");
+        ModelAndView modelAndView = new ModelAndView("edit_mass_2");
         modelAndView.addObject("mass", mass);
+        messMethod(model, principal, session);
+        model.addAttribute("newMass", new Mass());
         return modelAndView;
     }
 
@@ -74,19 +81,20 @@ public class MassController {
     public String updateMass(@ModelAttribute("mass") Mass mass,
                              RedirectAttributes attributes,
                              Principal principal,
-                             Model model) {
+                             Model model,
+                             HttpSession session) {
 
         if(principal == null) { return "redirect:/login"; }
+        messMethod(model, principal, session);
+        Mass editMass = massService.getByUrl(mass.getUrl());
 
-        Mass newMass = massService.getByUrl(mass.getUrl());
-
-        if(newMass == null) {
+        if(editMass == null) {
             massService.update(mass);
             attributes.addFlashAttribute("success", mass.getName() + " Mass is successfully updated");
             return "redirect:/mass";
         }
         else {
-            if (newMass.getId() == mass.getId()) {
+            if (editMass.getId() == mass.getId()) {
                 massService.update(mass);
                 attributes.addFlashAttribute("success", mass.getName() + " Mass is successfully updated");
                 return "redirect:/mass";
@@ -99,8 +107,9 @@ public class MassController {
     }
 
     @RequestMapping("/mass/status/{id}")
-    public String updateStatus(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal) {
+    public String updateStatus(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal, Model model, HttpSession session) {
         if(principal == null) { return "redirect:/login"; }
+        messMethod(model, principal, session);
         Mass newMass = massService.getById(id);
         newMass.setApproved(!newMass.isApproved());
         massService.save(newMass);
