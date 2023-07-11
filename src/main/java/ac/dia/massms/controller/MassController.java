@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
 
@@ -23,9 +24,17 @@ public class MassController {
     private UserRepository userRepository;
 
     @GetMapping("/mass")
-    public String showMass(Model model) {
+    public String showMass(Model model, Principal principal, HttpSession session) {
         List<Mass> massList = massService.listAll();
         model.addAttribute("massList", massList);
+
+        if (principal != null) {
+            User user = userRepository.getUserByUsername(principal.getName());
+            session.setAttribute("user", user);
+            model.addAttribute("newMass", new Mass());
+        } else {
+            session.removeAttribute("user");
+        }
         return "masses";
     }
 
@@ -46,13 +55,11 @@ public class MassController {
             newMass.setUser(user);
             massService.save(newMass);
             attributes.addFlashAttribute("success", "Mass is successfully created, Please wait for admin approval");
-            return "redirect:/mass";
         }
         else {
-            model.addAttribute("newMass", newMass);
-            model.addAttribute("error", "This url is already exist! Please put another url");
-            return "new_mass";
+            attributes.addFlashAttribute("error", "This url is already exist! Please put another url");
         }
+        return "redirect:/mass";
     }
 
     @RequestMapping("/mass/edit/{id}")

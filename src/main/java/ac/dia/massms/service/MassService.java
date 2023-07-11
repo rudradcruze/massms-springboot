@@ -14,6 +14,10 @@ public class MassService {
 
     public List<Mass> listAll() { return (List<Mass>) massRepository.findAll(); }
 
+    public Mass findById(Long id) {
+        return massRepository.findById(id).get();
+    }
+
     public Mass getById(long id) {
         return massRepository.getMassById(id);
     }
