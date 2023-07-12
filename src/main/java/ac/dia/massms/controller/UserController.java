@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
@@ -58,9 +59,10 @@ public class UserController {
     }
 
     @PostMapping( "/user/new/save")
-    public String saveUser(@ModelAttribute("user") User user) {
+    public String saveUser(@ModelAttribute("user") User user, RedirectAttributes attributes) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+        attributes.addFlashAttribute("success", user.getFirstName() + ' ' + user.getLastName() + " date is successfully updated");
         return "redirect:/";
     }
 
@@ -77,7 +79,7 @@ public class UserController {
     }
 
     @PostMapping("/user/edit/update")
-    public String updateUser(@ModelAttribute("user") User user, Model model, Principal principal, HttpSession session) {
+    public String updateUser(@ModelAttribute("user") User user, Model model, Principal principal, HttpSession session, RedirectAttributes attributes) {
         userSession(model, principal, session);
         User newUser = userRepository.getUserById(user.getId());
         newUser.setEnabled(user.isEnabled());
@@ -86,6 +88,31 @@ public class UserController {
         newUser.setLastName(user.getLastName());
         newUser.setRoles(user.getRoles());
         userRepository.save(newUser);
+        attributes.addFlashAttribute("success", newUser.getFirstName() + ' ' + newUser.getLastName() + " date is successfully updated");
+        return "redirect:/user";
+    }
+
+    @RequestMapping("/user/status/{id}")
+    public String updateStatus(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal, Model model, HttpSession session) {
+        if(principal == null) { return "redirect:/login"; }
+        userSession(model, principal, session);
+        User newUser = userRepository.getUserById(id);
+        newUser.setEnabled(!newUser.isEnabled());
+        userRepository.save(newUser);
+        attributes.addFlashAttribute("success", newUser.getFirstName() + ' ' + newUser.getLastName() + " status is successfully updated: Status = " + newUser.isEnabled());
+
+        return "redirect:/user";
+    }
+
+    @RequestMapping("/user/delete/{id}")
+    public String deleteUser(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal, Model model, HttpSession session) {
+        if(principal == null) { return "redirect:/login"; }
+        try {
+            userRepository.delete(userRepository.getUserById(id));
+            attributes.addFlashAttribute("success", "User is successfully deleted.");
+        } catch (Exception e) {
+            attributes.addFlashAttribute("error", "Internal Server Problem");
+        }
 
         return "redirect:/user";
     }

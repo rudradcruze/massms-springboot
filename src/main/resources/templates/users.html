@@ -109,16 +109,17 @@
 <!--                                                                    <i class="ti ti-users px-2"></i> <span>Mass Members</span>-->
 <!--                                                                </a>-->
 <!--                                                            </li>-->
-<!--                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">-->
-<!--                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{'/mass/status/' + ${mass.id}}">-->
-<!--                                                                    <i class="ti ti-status-change px-2"></i> <span th:text="${' ' + mass.isApproved() ? 'Deactivate' : 'Activate'}"></span>-->
-<!--                                                                </a>-->
-<!--                                                            </li>-->
-<!--                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">-->
-<!--                                                                <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/delete/' + ${mass.id}}">-->
-<!--                                                                    <i class="ti ti-trash px-2"></i> <span> Delete</span>-->
-<!--                                                                </a>-->
-<!--                                                            </li>-->
+
+                                                            <li sec:authorize="hasAnyAuthority('ADMIN')">
+                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{'/user/status/' + ${user.id}}">
+                                                                    <i class="ti ti-status-change px-2"></i> <span th:text="${' ' + user.isEnabled() ? 'Deactivate' : 'Activate'}"></span>
+                                                                </a>
+                                                            </li>
+                                                            <li sec:authorize="hasAnyAuthority('ADMIN')" th:each="roleEach : ${user.getRoles()}">
+                                                                <a class="dropdown-item d-flex text-danger align-items-center" th:if="${!roleEach.name.equals('ADMIN')}">
+                                                                    <i class="ti ti-trash px-2"></i> <span> Delete</span>
+                                                                </a>
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </td>
