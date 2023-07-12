@@ -1,68 +1,430 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-<meta charset="ISO-8859-1">
-<title>Meals</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragment :: head_link_up"></head>
+
 <body>
-<div align="center">	
-	<div sec:authorize="isAuthenticated()">
-		Welcome <b><span sec:authentication="name">Username</span></b>
+    <div th:replace="fragment :: preloader"></div>
 
-		<i><span sec:authentication="principal.authorities">Roles</span></i>
-	</div>
+<!-- Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar -->
+    <aside th:replace="fragment :: sidebar" class="left-sidebar"></aside>
+    <!-- Main Wrapper -->
+    <div class="body-wrapper">
+        <!-- Header Start -->
+        <header th:replace="fragment :: header" class="app-header"></header>
 
-	<form th:action="@{/logout}" method="post">
-		<input type="submit" value="Logout" />
-	</form>
-	
-	<h1>User - <span th:text="${userList.size()}"></span></h1>
-	<div sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')">
-		<a th:href="@{/meal/new}">Create New Time</a>
-	</div>
+        <div class="container-fluid">
+            <div class="card bg-light-info shadow-none position-relative overflow-hidden mb-2">
+                <div class="card-body px-4 py-3">
+                    <div class="row align-items-center">
+                        <div class="col-9">
+                            <h4 class="fw-semibold mb-8">All Users - <span th:text="${userList.size()}"></span></h4>
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/}">Dashboard</a></li>
+                                    <li class="breadcrumb-item" aria-current="page">All Mass</li>
+                                </ol>
+                            </nav>
+                        </div>
+                        <div class="col-3">
+                            <div class="text-center mb-n5">
+                                <img th:src="@{../../images/breadcrumb/ChatBc.png}" alt="..." class="img-fluid mb-n4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 px-4 py-3" th:if="${success}">
+                <div th:replace="fragment :: successAlertBg"></div>
+            </div>
+            <div class="mt-3 px-4 py-3" th:if="${error}">
+                <div th:replace="fragment :: errorAlertBg"></div>
+            </div>
+            <!-- Add new -->
+            <div class="card card-body mt-9" sec:authorize="isAuthenticated()">
+                <div class="row">
+                    <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
+                        <a href="javascript:void(0)" id="btn-add-contact" class="btn btn-info d-flex align-items-center">
+                            <i class="ti ti-user-plus text-white me-1 fs-5"></i> Add New User
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
+            <section class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive pb-5">
+                                    <table id="default_order" class="table border table-striped table-bordered display text-nowrap"
+                                           style="width: 100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Sl</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Email</th>
+                                            <th>Url</th>
+                                            <th>Roles</th>
+                                            <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="user, iterator : ${userList}">
+                                                <td th:text="${iterator.index}+1">User Sl</td>
+                                                <td th:text="${user.firstName}">First Name</td>
+                                                <td th:text="${user.lastName}">Last Name</td>
+                                                <td><a th:href="${'mailto:' + user.username}" th:text="${user.username}"></a></td>
+                                                <td th:text="${user.isEnabled()} ? 'Enabled' : 'Deactivate'">Mass url</td>
+                                                <td>
+                                                    <ul>
+                                                        <li th:each="role : ${user.getRoles()}"
+                                                            th:text="${role.name}">User Roles</li>
+                                                    </ul>
+                                                </td>
 
-	<div th:if = "${success}">
-		<p th:text="${success}"></p>
-	</div>
-
-	<div th:if = "${error}">
-		<p th:text="${error}"></p>
-	</div>
-	
-	<br/><br/>
-	<table border="1" cellpadding="10">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>Name</th>
-				<th>Enabled</th>
-				<th>Roles</th>
-				<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="user : ${userList}">
-				<td th:text="${user.id}">User Id</td>
-				<td th:text="${user.username}">User Name</td>
-				<td>
-					<span th:if="${user.isEnabled()}">Yes</span>
-					<span th:if="${!user.isEnabled()}">No</span>
-				</td>
-				<td>
-					<ul>
-						<li th:each="role : ${user.getRoles()}"
-							th:text="${role.name}">User Roles</li>
-					</ul>
-				</td>
-
-				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
-					<a th:href="@{'/user/edit/' + ${user.id}}">Edit</a>
-<!--					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/meal/delete/' + ${meal.id}}">Delete</a>-->
-				</td>
-			</tr>
-		</tbody>
-	</table>
+                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">
+                                                    <div class="dropdown">
+                                                        <a class="text-decoration-none" href="javascript:void(0)" id="nft2" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="ti ti-dots fs-4"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu" aria-labelledby="nft2">
+                                                            <li>
+                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{'/user/edit/' + ${user.id}}">
+                                                                    <i class="ti ti-edit px-2"></i> <span> Edit</span>
+                                                                </a>git add
+                                                            </li>
+<!--                                                            <li>-->
+<!--                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{/mass/{url}/member/new (url = ${mass.url})}">-->
+<!--                                                                    <i class="ti ti-user-plus px-2"></i> <span> Add Mess Member</span>-->
+<!--                                                                </a>-->
+<!--                                                            </li>-->
+<!--                                                            <li>-->
+<!--                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{/mass/{url}/member/ (url = ${mass.url})}">-->
+<!--                                                                    <i class="ti ti-users px-2"></i> <span>Mass Members</span>-->
+<!--                                                                </a>-->
+<!--                                                            </li>-->
+<!--                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">-->
+<!--                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{'/mass/status/' + ${mass.id}}">-->
+<!--                                                                    <i class="ti ti-status-change px-2"></i> <span th:text="${' ' + mass.isApproved() ? 'Deactivate' : 'Activate'}"></span>-->
+<!--                                                                </a>-->
+<!--                                                            </li>-->
+<!--                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">-->
+<!--                                                                <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/delete/' + ${mass.id}}">-->
+<!--                                                                    <i class="ti ti-trash px-2"></i> <span> Delete</span>-->
+<!--                                                                </a>-->
+<!--                                                            </li>-->
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
 </div>
+
+<div th:replace="fragment :: mobilenav"></div>
+
+<!-- Create Modal -->
+<div class="modal fade" sec:authorize="isAuthenticated()" id="addContactModal" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h5 class="modal-title">New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="add-contact-box">
+                    <div class="add-contact-content">
+                        <form th:action="@{/user/new/save}" th:object="${user}" method="post" id="addContactModalTitle">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3 contact-name">
+                                        <input type="text" id="firstName" th:field="*{firstName}" required class="form-control" placeholder="First Name" />
+                                        <span class="validation-text text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3 contact-phone">
+                                        <input type="number" id="lastName" th:field="*{lastName}" required class="form-control" placeholder="Last Name" />
+                                        <span class="validation-text text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-3 contact-email">
+                                        <input type="email" id="c-email" th:field="*{username}" required class="form-control" placeholder="Email" />
+                                        <span class="validation-text text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3 contact-phone">
+                                        <input type="number" id="password" th:field="*{password}" required class="form-control" placeholder="password" />
+                                        <span class="validation-text text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3 contact-phone">
+                                        <input type="number" id="confirmPassword" th:field="*{confirmPassword}" required class="form-control" placeholder="Confirm Password" />
+                                        <span class="validation-text text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3 contact-location">
+                                        <h5>Roles</h5>
+                                        <div class="form-check" th:each="role : ${listRoles}">
+                                            <input class="form-check-input" type="checkbox" th:value="${role.id}" th:field="*{roles}" th:id="${role.name}">
+                                            <label class="form-check-label" th:for="${role.name}" th:text="${role.name}"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3 contact-location">
+                                        <h5>Activate</h5>
+                                        <div class="form-check" >
+                                            <input class="form-check-input" type="checkbox" th:field="*{enabled}" id="activate">
+                                            <label class="form-check-label" for="activate">Activate</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-6">
+                                <div class="modal-footer">
+                                    <button id="btn-add" type="submit" class="btn btn-primary rounded-pill px-4">Add</button>
+                                    <button type="reset" class="btn btn-danger rounded-pill px-4" aria-label="Close" data-bs-dismiss="modal"> Discard </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  Search Bar -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content rounded-1">
+            <div class="modal-header border-bottom">
+                <input type="search" class="form-control fs-3" placeholder="Search here" id="search" />
+                <span data-bs-dismiss="modal" class="lh-1 cursor-pointer">
+                    <i class="ti ti-x fs-5 ms-3"></i>
+                </span>
+            </div>
+            <div class="modal-body message-body" data-simplebar="">
+                <h5 class="mb-0 fs-5 p-1">Quick Page Links</h5>
+                <ul class="list mb-0 py-2">
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Modern</span>
+                            <span class="fs-3 text-muted d-block">/dashboards/dashboard1</span>
+                        </a>
+                    </li>
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Dashboard</span>
+                            <span class="fs-3 text-muted d-block">/dashboards/dashboard2</span>
+                        </a>
+                    </li>
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Contacts</span>
+                            <span class="fs-3 text-muted d-block">/apps/contacts</span>
+                        </a>
+                    </li>
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Posts</span>
+                            <span class="fs-3 text-muted d-block">/apps/blog/posts</span>
+                        </a>
+                    </li>
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Detail</span>
+                            <span class="fs-3 text-muted d-block">/apps/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow</span>
+                        </a>
+                    </li>
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Shop</span>
+                            <span class="fs-3 text-muted d-block">/apps/ecommerce/shop</span>
+                        </a>
+                    </li>
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Modern</span>
+                            <span class="fs-3 text-muted d-block">/dashboards/dashboard1</span>
+                        </a>
+                    </li>
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Dashboard</span>
+                            <span class="fs-3 text-muted d-block">/dashboards/dashboard2</span>
+                        </a>
+                    </li>
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Contacts</span>
+                            <span class="fs-3 text-muted d-block">/apps/contacts</span>
+                        </a>
+                    </li>
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Posts</span>
+                            <span class="fs-3 text-muted d-block">/apps/blog/posts</span>
+                        </a>
+                    </li>
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Detail</span>
+                            <span class="fs-3 text-muted d-block">/apps/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow</span>
+                        </a>
+                    </li>
+                    <li class="p-1 mb-1 bg-hover-light-black">
+                        <a href="#">
+                            <span class="fs-3 text-black fw-normal d-block">Shop</span>
+                            <span class="fs-3 text-muted d-block">/apps/ecommerce/shop</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+    <i class="ti ti-settings fs-7" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Settings"></i>
+</button>
+<div class="offcanvas offcanvas-end customizer" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" data-simplebar="">
+    <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+        <h4 class="offcanvas-title fw-semibold" id="offcanvasExampleLabel">Settings</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-4">
+        <div class="theme-option pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Theme Option</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a href="javascript:void(0)"  onclick="toggleTheme('../../css/style.min.css')"  class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 light-theme text-dark">
+                    <i class="ti ti-brightness-up fs-7 text-primary"></i>
+                    <span class="text-dark">Light</span>
+                </a>
+                <a href="javascript:void(0)" onclick="toggleTheme('../../css/style-dark.min.css')" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 dark-theme text-dark">
+                    <i class="ti ti-moon fs-7 "></i>
+                    <span class="text-dark">Dark</span>
+                </a>
+            </div>
+        </div>
+        <div class="theme-direction pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Theme Direction</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a href="product.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">
+                    <i class="ti ti-text-direction-ltr fs-6 text-primary"></i>
+                    <span class="text-dark">LTR</span>
+                </a>
+                <a href="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/html/rtl/index.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">
+                    <i class="ti ti-text-direction-rtl fs-6 text-dark"></i>
+                    <span class="text-dark">RTL</span>
+                </a>
+            </div>
+        </div>
+        <div class="theme-colors pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Theme Colors</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <ul class="list-unstyled mb-0 d-flex gap-3 flex-wrap change-colors">
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin1-bluetheme-primary active-theme " onclick="toggleTheme('../../css/style.min.css')"  data-color="blue_theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="BLUE_THEME"><i class="ti ti-check text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)"  class="rounded-circle position-relative d-block customizer-bgcolor skin2-aquatheme-primary " onclick="toggleTheme('../../css/style-aqua.min.css')"  data-color="aqua_theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="AQUA_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin3-purpletheme-primary" onclick="toggleTheme('../../css/style-purple.min.css')"  data-color="purple_theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="PURPLE_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin4-greentheme-primary" onclick="toggleTheme('../../css/style-green.min.css')"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="GREEN_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin5-cyantheme-primary" onclick="toggleTheme('../../css/style-cyan.min.css')"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="CYAN_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin6-orangetheme-primary" onclick="toggleTheme('../../css/style-orange.min.css')"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="ORANGE_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="layout-type pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Layout Type</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a href="product.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">
+                    <i class="ti ti-layout-sidebar fs-6 text-primary"></i>
+                    <span class="text-dark">Vertical</span>
+                </a>
+                <a href="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/html/horizontal/index.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">
+                    <i class="ti ti-layout-navbar fs-6 text-dark"></i>
+                    <span class="text-dark">Horizontal</span>
+                </a>
+            </div>
+        </div>
+        <div class="container-option pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Container Option</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 boxed-width text-dark">
+                    <i class="ti ti-layout-distribute-vertical fs-7 text-primary"></i>
+                    <span class="text-dark">Boxed</span>
+                </a>
+                <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 full-width text-dark">
+                    <i class="ti ti-layout-distribute-horizontal fs-7"></i>
+                    <span class="text-dark">Full</span>
+                </a>
+            </div>
+        </div>
+        <div class="sidebar-type pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Sidebar Type</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a  href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 fullsidebar">
+                    <i class="ti ti-layout-sidebar-right fs-7"></i>
+                    <span class="text-dark">Full</span>
+                </a>
+                <a  href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center text-dark sidebartoggler gap-2">
+                    <i class="ti ti-layout-sidebar fs-7"></i>
+                    <span class="text-dark">Collapse</span>
+                </a>
+            </div>
+        </div>
+        <div class="card-with pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Card With</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 text-dark cardborder">
+                    <i class="ti ti-border-outer fs-7"></i>
+                    <span class="text-dark">Border</span>
+                </a>
+                <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 cardshadow">
+                    <i class="ti ti-border-none fs-7"></i>
+                    <span class="text-dark">Shadow</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+    <div th:replace="fragment :: scripts"></div>
 </body>
 </html>

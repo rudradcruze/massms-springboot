@@ -38,9 +38,13 @@ public class UserController {
     @GetMapping("/user")
     public String showAllUsers(Model model, Principal principal, HttpSession session) {
         userSession(model, principal, session);
+        User user = new User();
+        model.addAttribute("user", user);
+        List<Role> listRoles = (List<Role>) roleRepository.findAll();
+        model.addAttribute("listRoles", listRoles);
         List<User> userList = (List<User>) userRepository.findAll();
         model.addAttribute("userList", userList);
-        return "users_2";
+        return "users";
     }
 
     @GetMapping("/user/new")
@@ -56,7 +60,6 @@ public class UserController {
     @PostMapping( "/user/new/save")
     public String saveUser(@ModelAttribute("user") User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(false);
         userRepository.save(user);
         return "redirect:/";
     }

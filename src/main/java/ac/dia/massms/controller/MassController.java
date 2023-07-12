@@ -41,14 +41,6 @@ public class MassController {
         return "masses";
     }
 
-    @GetMapping("/mass/new")
-    public String newMassPage(Model model, Principal principal, HttpSession session) {
-        if(principal == null) { return "redirect:/login"; }
-        model.addAttribute("newMass", new Mass());
-        messMethod(model, principal, session);
-        return "new_mass";
-    }
-
     @PostMapping("/mass/new/save")
     public String saveMass(@ModelAttribute("newMass") Mass newMass, RedirectAttributes attributes, Principal principal, Model model, HttpSession session) {
 
