@@ -49,8 +49,11 @@
             <div class="card card-body mt-9" sec:authorize="isAuthenticated()">
                 <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR', 'MANAGER')">
                     <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
+                        <a th:href="@{/mass/edit/{id} (id = ${session.mass.id})}" class="btn btn-info d-flex align-items-center mx-7">
+                            <i class="ti ti-edit text-white me-1 fs-5"></i> Edit <span class="px-2" th:text="${session.mass.name}"></span>
+                        </a>
                         <a th:href="@{/mass/{url}/member/new (url = ${session.mass.url})}" class="btn btn-primary d-flex align-items-center">
-                            <i class="ti ti-home-plus text-white me-1 fs-5"></i> Create New Member
+                            <i class="ti ti-user-plus text-white me-1 fs-5"></i> Add New Member
                         </a>
                     </div>
                 </div>
