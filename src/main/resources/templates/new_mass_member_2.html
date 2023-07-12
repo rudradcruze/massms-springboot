@@ -21,88 +21,65 @@
                 <div class="card-body px-4 py-3">
                     <div class="row align-items-center">
                         <div class="col-9">
-                            <h4 class="fw-semibold mb-8">Edit - <span th:text="${mass.name + ' Mass'}"></span></h4>
+                            <h4 class="fw-semibold mb-8">Add Member Into - <span th:text="${massMember.mass.name + ' Mass'}"></span></h4>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a class="text-muted " th:href="@{/}">Dashboard</a></li>
                                     <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass}">All Mass</a></li>
-                                    <li class="breadcrumb-item" aria-current="page">Edit <span th:text="${mass.name + ' Mass'}"></span></li>
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass/{url}/member (url = ${massMember.mass.url})}" th:text="${massMember.mass.name + ' Mass Members'}">All Mass</a></li>
+                                    <li class="breadcrumb-item" aria-current="page">Add Member</li>
                                 </ol>
                             </nav>
                         </div>
                         <div class="col-3">
                             <div class="text-center mb-n5">
-                                <img th:src="@{../../images/breadcrumb/ChatBc.png}" alt="..." class="img-fluid mb-n4">
+                                <img th:src="@{../../../../images/breadcrumb/ChatBc.png}" alt="..." class="img-fluid mb-n4">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="mt-3 px-4 py-3" th:if="${success}">
+                <div th:replace="fragment :: successAlertBg"></div>
+            </div>
             <div class="mt-3 px-4 py-3" th:if="${error}">
                 <div th:replace="fragment :: errorAlertBg"></div>
-            </div>
-
-            <!-- Add new -->
-            <div class="card card-body mt-9" sec:authorize="isAuthenticated()">
-                <div class="row">
-                    <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
-                        <a href="javascript:void(0)" id="btn-add-contact" class="btn btn-info d-flex align-items-center">
-                            <i class="ti ti-users text-white me-1 fs-5"></i> Add New Mass
-                        </a>
-                    </div>
-                </div>
             </div>
             <section class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form th:action="@{/mass/edit/update}" th:object="${mass}" method="post">
+                                <form th:action="@{/mass/{url}/member/new/save (url = ${massMember.mass.url})}" th:object="${massMember}" method="post">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="mb-3 contact-name">
-                                                <input type="text" id="c-id" th:field="*{id}" readonly required class="form-control" placeholder="Name" />
-                                                <span class="validation-text text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="mb-3 contact-name">
-                                                <input type="text" id="c-name" th:field="*{name}" required class="form-control" placeholder="Name" />
-                                                <span class="validation-text text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3 contact-email">
-                                                <input type="email" id="c-email" th:field="*{email}" required class="form-control" placeholder="Email" />
-                                                <span class="validation-text text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="mb-3 contact-occupation">
-                                                <input type="text" id="c-url" th:field="*{url}" required class="form-control" placeholder="url" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3 contact-phone">
-                                                <input type="number" id="c-phone" th:field="*{contact}" required class="form-control" placeholder="Phone" />
-                                                <span class="validation-text text-danger"></span>
+                                                <h5><label for="mass">Mass</label></h5>
+                                                <input type="text" id="mass" th:value="${massMember.mass.name}" readonly required class="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="mb-3 contact-location">
-                                                <textarea class="form-control" th:field="*{address}" required rows="3" placeholder="Address..."></textarea>
+                                            <div class="mb-3 contact-occupation">
+                                                <h5><label for="user">Select User</label></h5>
+                                                <select th:field="*{user}"
+                                                        id="user"
+                                                        class="select2 form-control"
+                                                        style="width: 100%; height: 36px"
+                                                >
+                                                    <option th:each="userEach : ${users}"
+                                                            th:value="${userEach.id}"
+                                                            th:text="${userEach.username}">
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row my-6">
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary rounded-pill px-4">Save</button>
+                                            <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="ti ti-user-plus mx-2"></i> Add Member</button>
                                             <a th:href="@{/mass}" class="btn btn-danger rounded-pill px-4"><i class="ti ti-arrow-back mx-2"></i> Discard </a>
                                         </div>
                                     </div>
@@ -117,69 +94,6 @@
 </div>
 
 <div th:replace="fragment :: mobilenav"></div>
-
-
-<!-- Create Modal -->
-<div class="modal fade" sec:authorize="isAuthenticated()" id="addContactModal" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header d-flex align-items-center">
-                    <h5 class="modal-title">New Mass</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="add-contact-box">
-                        <div class="add-contact-content">
-                            <form th:action="@{/mass/new/save}" th:object="${newMass}" method="post" id="addContactModalTitle">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3 contact-name">
-                                            <input type="text" id="id" th:field="*{name}" required class="form-control" placeholder="Name" />
-                                            <span class="validation-text text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3 contact-email">
-                                            <input type="email" id="email" th:field="*{email}" required class="form-control" placeholder="Email" />
-                                            <span class="validation-text text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3 contact-occupation">
-                                            <input type="text" id="c-occupation" th:field="*{url}" required class="form-control" placeholder="url" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3 contact-phone">
-                                            <input type="number" id="phone" th:field="*{contact}" required class="form-control" placeholder="Phone" />
-                                            <span class="validation-text text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="mb-3 contact-location">
-                                            <textarea class="form-control" th:field="*{address}" required rows="3" placeholder="Address..."></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row my-6">
-                                    <div class="modal-footer">
-                                        <button id="btn-add" type="submit" class="btn btn-primary rounded-pill px-4">Add</button>
-                                        <button type="reset" class="btn btn-danger rounded-pill px-4" aria-label="Close" data-bs-dismiss="modal"> Discard </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <!--  Search Bar -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">

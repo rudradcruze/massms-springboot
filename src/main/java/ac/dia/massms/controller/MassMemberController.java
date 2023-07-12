@@ -42,8 +42,9 @@ public class MassMemberController {
         MassMember massMember = new MassMember();
         massMember.setMass(massService.getByUrl(url));
         model.addAttribute("massMember", massMember);
+        model.addAttribute("title", massMember.getMass().getName() + " - Add Member");
         model.addAttribute("users", userDetailsService.listByRollName("USER"));
-        return "new_mass_member";
+        return "new_mass_member_2";
     }
 
     @RequestMapping(value = "/mass/{url}/member/new/save", method = RequestMethod.POST)

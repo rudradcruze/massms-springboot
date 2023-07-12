@@ -1,6 +1,7 @@
 package ac.dia.massms.controller;
 
 import ac.dia.massms.model.Mass;
+import ac.dia.massms.model.MassMember;
 import ac.dia.massms.model.User;
 import ac.dia.massms.repository.UserRepository;
 import ac.dia.massms.service.MassService;
