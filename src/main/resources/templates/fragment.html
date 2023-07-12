@@ -49,8 +49,8 @@
     <div>
       <div class="brand-logo d-flex align-items-center justify-content-between">
         <a th:href="@{/}" class="text-nowrap logo-img">
-          <img th:src="@{../../../../images/logo/dark-logo.svg}" class="dark-logo" width="180" alt="MASSMS" />
-          <img th:src="@{../../../../images/logo/light-logo.svg}" class="light-logo"  width="180" alt="MASSMS" />
+          <img th:src="@{../../../../../../images/logo/dark-logo.svg}" class="dark-logo" width="180" alt="MASSMS" />
+          <img th:src="@{../../../../../../images/logo/light-logo.svg}" class="light-logo"  width="180" alt="MASSMS" />
         </a>
         <div class="close-btn d-lg-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
           <i class="ti ti-x fs-8 text-muted"></i>
@@ -69,7 +69,7 @@
           <li class="sidebar-item">
             <a class="sidebar-link" th:href="@{/}" aria-expanded="false">
                   <span>
-                    <i class="ti ti-app-window"></i>
+                    <i class="ti ti-home-2"></i>
                   </span>
               <span class="hide-menu">Dashboard</span>
             </a>
@@ -159,7 +159,7 @@
   <div th:fragment="mobilenav" class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="mobilenavbar" aria-labelledby="offcanvasWithBothOptionsLabel">
     <nav class="sidebar-nav scroll-sidebar">
       <div class="offcanvas-header justify-content-between">
-        <img th:src="@{../../../../images/logos/favicon.ico}" alt="Favicon" class="img-fluid">
+        <img th:src="@{../../../../../../images/logos/favicon.ico}" alt="Favicon" class="img-fluid">
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body profile-dropdown mobile-navbar" data-simplebar="">
@@ -175,7 +175,7 @@
               <li class="sidebar-item py-2">
                 <a href="#" class="d-flex align-items-center">
                   <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                    <img th:src="@{../../../../images/svgs/icon-dd-chat.svg}" alt="Chat" class="img-fluid" width="24" height="24">
+                    <img th:src="@{../../../../../../images/svgs/icon-dd-chat.svg}" alt="Chat" class="img-fluid" width="24" height="24">
                   </div>
                   <div class="d-inline-block">
                     <h6 class="mb-1 bg-hover-primary">Chat Application</h6>
@@ -571,7 +571,7 @@
               <a class="nav-link pe-0" href="javascript:void(0)" id="drop1" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="d-flex align-items-center">
                   <div class="user-profile-img">
-                    <img th:src="@{../../../../images/profile/user-1.jpg}" class="rounded-circle" width="35" height="35" alt="User" />
+                    <img th:src="@{../../../../../../images/profile/user-1.jpg}" class="rounded-circle" width="35" height="35" alt="User" />
                   </div>
                 </div>
               </a>
@@ -581,7 +581,7 @@
                     <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
                   </div>
                   <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                    <img th:src="@{../../../../images/profile/user-1.jpg}" class="rounded-circle" width="80" height="80" alt="User" />
+                    <img th:src="@{../../../../../../images/profile/user-1.jpg}" class="rounded-circle" width="80" height="80" alt="User" />
                     <div class="ms-3" sec:authorize="isAuthenticated()">
                       <h5 class="mb-1 fs-3" th:text="${session.user.firstName + ' ' + session.user.lastName}"></h5>
                       <span class="mb-1 d-block text-dark" th:each="role : ${session.user.roles}"
@@ -624,12 +624,12 @@
                     <div class="upgrade-plan bg-light-primary position-relative overflow-hidden rounded-4 p-4 mb-9" sec:authorize="!isAuthenticated()">
                         <div class="row">
                           <div class="col-6">
-                            <h5 class="fs-4 mb-3 w-50 fw-semibold text-dark">Get Unlimited Access</h5>
+                            <h5 class="fs-4 mb-3 w-50 fw-semibold text-dark">Unlimited Access</h5>
                             <a th:href="@{/register}" class="btn btn-primary text-white">Sign Up</a>
                           </div>
                           <div class="col-6">
                             <div class="m-n4">
-                              <img th:src="@{../../../../images/backgrounds/unlimited-bg.png}" alt="Sign Up" class="w-100">
+                              <img th:src="@{../../../../../../images/backgrounds/unlimited-bg.png}" alt="Sign Up" class="w-100">
                             </div>
                           </div>
                         </div>
@@ -697,28 +697,28 @@
 
   <div th:fragment="scripts">
     <!--  Import Js Files -->
-    <script th:src="@{../../../../libs/jquery/dist/jquery.min.js}"></script>
-    <script th:src="@{../../../../libs/simplebar/dist/simplebar.min.js}"></script>
-    <script th:src="@{../../../../libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{../../../../../../libs/jquery/dist/jquery.min.js}"></script>
+    <script th:src="@{../../../../../../libs/simplebar/dist/simplebar.min.js}"></script>
+    <script th:src="@{../../../../../../libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
     <!--  core files -->
-    <script th:src="@{../../../../js/app.min.js}"></script>
-    <script th:src="@{../../../../js/app.init.js}"></script>
-    <script th:src="@{../../../../js/app-style-switcher.js}"></script>
-    <script th:src="@{../../../../js/sidebarmenu.js}"></script>
+    <script th:src="@{../../../../../../js/app.min.js}"></script>
+    <script th:src="@{../../../../../../js/app.init.js}"></script>
+    <script th:src="@{../../../../../../js/app-style-switcher.js}"></script>
+    <script th:src="@{../../../../../../js/sidebarmenu.js}"></script>
 
-    <script th:src="@{../../../../js/custom.js}"></script>
-    <script th:src="@{../../../../libs/prismjs/prism.js}"></script>
+    <script th:src="@{../../../../../../js/custom.js}"></script>
+    <script th:src="@{../../../../../../libs/prismjs/prism.js}"></script>
 
     <!--    Extra Js-->
-    <script th:src="@{../../../../libs/datatables.net/js/jquery.dataTables.min.js}"></script>
-    <script th:src="@{../../../../js/datatable/datatable-basic.init.js}"></script>
-    <script th:src="@{../../../../libs/owl.carousel/dist/owl.carousel.min.js}"></script>
-    <script th:src="@{../../../../libs/apexcharts/dist/apexcharts.min.js}"></script>
-    <script th:src="@{../../../../js/dashboard.js}"></script>
-    <script th:src="@{../../../../js/apps/contact.js}"></script>
-    <script th:src="@{../../../../libs/select2/dist/js/select2.full.min.js}"></script>
-    <script th:src="@{../../../../libs/select2/dist/js/select2.min.js}"></script>
-    <script th:src="@{../../../../js/forms/select2.init.js}"></script>
+    <script th:src="@{../../../../../../libs/datatables.net/js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{../../../../../../js/datatable/datatable-basic.init.js}"></script>
+    <script th:src="@{../../../../../../libs/owl.carousel/dist/owl.carousel.min.js}"></script>
+    <script th:src="@{../../../../../../libs/apexcharts/dist/apexcharts.min.js}"></script>
+    <script th:src="@{../../../../../../js/dashboard.js}"></script>
+    <script th:src="@{../../../../../../js/apps/contact.js}"></script>
+    <script th:src="@{../../../../../../libs/select2/dist/js/select2.full.min.js}"></script>
+    <script th:src="@{../../../../../../libs/select2/dist/js/select2.min.js}"></script>
+    <script th:src="@{../../../../../../js/forms/select2.init.js}"></script>
   </div>
 </body>
 </html>

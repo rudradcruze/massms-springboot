@@ -2,7 +2,6 @@ package ac.dia.massms.controller;
 
 import ac.dia.massms.model.Mass;
 import ac.dia.massms.model.ServeTime;
-import ac.dia.massms.model.User;
 import ac.dia.massms.repository.UserRepository;
 import ac.dia.massms.service.MassService;
 import ac.dia.massms.service.ServeTimeService;
@@ -46,7 +45,7 @@ public class ServeTimeController {
         Mass mass = massService.getByUrl(url);
         serveTime.setMass(mass);
         model.addAttribute("serveTime", serveTime);
-        return "new_meal_time_2";
+        return "new_meal_time";
     }
 
     // Save new
@@ -59,7 +58,7 @@ public class ServeTimeController {
 
         if (dbServeTime != null) {
             attributes.addFlashAttribute("error", "Can't insert. This Identifier is already exist!");
-            return "redirect:/meal/time/new";
+            return "redirect:/mass/"+ url +"meal/time/new";
         }
 
         Mass mass = massService.getByUrl(url);
@@ -69,12 +68,13 @@ public class ServeTimeController {
         mass.getServeTimeList().add(serveTime);
         massService.save(mass);
 
-        return "redirect:/mass/" + mass.getUrl() + "/meal/time";
+        return "redirect:/mass/" + mass.getUrl();
     }
 
     // Update page
-    @RequestMapping("/meal/time/edit/{identifier}")
-    public ModelAndView showEditMealTimePage(@PathVariable("identifier") String identifier, Model model) {
+    @RequestMapping("/mass/{url}/meal/time/edit/{identifier}")
+    public ModelAndView showEditMealTimePage(@PathVariable("identifier") String identifier, Model model, @PathVariable String url) {
+
         ModelAndView modelAndView;
 
         modelAndView = new ModelAndView("edit_meal_time");
@@ -90,35 +90,36 @@ public class ServeTimeController {
     }
 
     // update
-    @PostMapping("/meal/time/edit/update")
-    public String update(ServeTime serveTime, RedirectAttributes attributes, Principal principal){
+    @PostMapping("/mass/{url}/meal/time/edit/update")
+    public String update(@ModelAttribute("serveTime") ServeTime serveTime, RedirectAttributes attributes, Principal principal, @PathVariable String url){
 
         if(principal == null){ return "redirect:/login"; }
 
         try {
+            serveTime.setMass(massService.getByUrl(url));
             serveTimeService.update(serveTime);
-            attributes.addFlashAttribute("success","Updated successfully");
+            attributes.addFlashAttribute("success","Meal Time is successfully updated");
         }catch (DataIntegrityViolationException e){
             e.printStackTrace();
             attributes.addFlashAttribute("error", "Failed to update because duplicate name");
-            return "redirect:/meal/time/edit/" + serveTime.getIdentifier();
+            return "redirect:/mass/" + url + "/meal/time/edit/" + serveTime.getIdentifier();
         }catch (Exception e){
             e.printStackTrace();
             attributes.addFlashAttribute("error", "Error server");
         }
-        return "redirect:/meal/time";
+        return "redirect:/mass/" + url;
     }
 
-    @RequestMapping("/meal/time/delete/{identifier}")
-    public String deleteCategory(@PathVariable("identifier") String identifier, RedirectAttributes attributes) {
+    @RequestMapping("/mass/{url}/meal/time/delete/{identifier}")
+    public String deleteCategory(@PathVariable("identifier") String identifier, RedirectAttributes attributes, @PathVariable String url) {
         try {
             serveTimeService.delete(identifier);
-            attributes.addFlashAttribute("success", "Delete successfully");
+            attributes.addFlashAttribute("success", "Meal time is Delete successfully!");
         }catch (Exception e){
             e.printStackTrace();
-            attributes.addFlashAttribute("failed", "Failed to delete");
+            attributes.addFlashAttribute("failed", "Failed to delete meal time.");
         }
 
-        return "redirect:/meal/time";
+        return "redirect:/mass/"+ url;
     }
 }

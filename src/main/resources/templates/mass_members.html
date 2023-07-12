@@ -21,7 +21,7 @@
                 <div class="card-body px-4 py-3">
                     <div class="row align-items-center">
                         <div class="col-9">
-                            <h4 class="fw-semibold mb-8 text-capitalize"><span th:text="${session.mass.name}"></span> - <span th:text="${massMemberList.size()}"></span></h4>
+                            <h4 class="fw-semibold mb-8 text-capitalize"><span th:text="${session.mass.name}"></span></h4>
                             <h4 class="fw-semibold mb-8">Mass Manager - <span th:text="${session.mass.user.firstName + ' ' + session.mass.user.lastName}"></span></h4>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
@@ -69,7 +69,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="mb-2">
-                                    <h5 class="mb-0">Serve Time</h5>
+                                    <h5 class="mb-0">Serve Time - <span th:text="${serveTimeList.size()}"></span></h5>
                                 </div>
                                 <div class="table-responsive">
                                     <table id="zero_config"
@@ -95,16 +95,21 @@
                                                             <i class="ti ti-dots fs-4"></i>
                                                         </a>
                                                         <ul class="dropdown-menu" aria-labelledby="nft3">
+                                                            <li>
+                                                                <a class="dropdown-item d-flex align-items-center" sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:href="@{/mass/{url}/meal/time/edit/{identifier} (url = ${serveTime.mass.url}, identifier = ${serveTime.identifier})}">
+                                                                    <i class="ti ti-edit px-2"></i> <span> Edit</span>
+                                                                </a>
+                                                            </li>
 <!--                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">-->
 <!--                                                                <a class="dropdown-item d-flex align-items-center" sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:href="@{'/mass/' + ${member.mass.url} + '/status/' + ${member.id}}">-->
 <!--                                                                    <i class="ti ti-status-change px-2"></i> <span th:text="${member.isEnabled()} ? 'Deactivate' : 'Activate'"></span>-->
 <!--                                                                </a>-->
 <!--                                                            </li>-->
-<!--                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:if="${!member.isEnabled()}">-->
-<!--                                                                <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/' + ${member.mass.url} + '/delete/' + ${member.id}}">-->
-<!--                                                                    <i class="ti ti-trash px-2"></i> <span> Delete</span>-->
-<!--                                                                </a>-->
-<!--                                                            </li>-->
+                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">
+                                                                <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/' + ${serveTime.mass.url} + '/meal/time/delete/' + ${serveTime.identifier}}">
+                                                                    <i class="ti ti-trash px-2"></i> <span> Delete</span>
+                                                                </a>
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </td>
@@ -121,7 +126,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="mb-2">
-                                    <h5 class="mb-0">Mass Members</h5>
+                                    <h5 class="mb-0">Mass Members - <span th:text="${massMemberList.size()}"></span></h5>
                                 </div>
                                 <div class="table-responsive pb-5">
                                     <table id="default_order" class="table border table-striped table-bordered display text-nowrap"
