@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -32,8 +31,9 @@ public class MassMemberController {
     public String listAllMassMember(@PathVariable("url") String url, Model model, HttpSession session) {
         Mass mass = massService.getByUrl(url);
         model.addAttribute("massMemberList", mass.getMessMemberList());
+        model.addAttribute("title", mass.getName() + " Mass Members");
         session.setAttribute("mass", mass);
-        return "mass_members";
+        return "mass_members_2";
     }
 
     @RequestMapping("/mass/{url}/member/new")
@@ -44,7 +44,7 @@ public class MassMemberController {
         model.addAttribute("massMember", massMember);
         model.addAttribute("title", massMember.getMass().getName() + " - Add Member");
         model.addAttribute("users", userDetailsService.listByRollName("USER"));
-        return "new_mass_member_2";
+        return "new_mass_member";
     }
 
     @RequestMapping(value = "/mass/{url}/member/new/save", method = RequestMethod.POST)
