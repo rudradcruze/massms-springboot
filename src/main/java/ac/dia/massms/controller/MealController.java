@@ -47,6 +47,14 @@ public class MealController {
         return "new_meal_2";
     }
 
+    @GetMapping(value = "/mass/{url}/meal")
+    public String getMassByMeal(@PathVariable String url, Model model, Principal principal) {
+        Mass mass = massService.getByUrl(url);
+        model.addAttribute("mealListByMass", mass.getMealList());
+        System.out.println(mass.getMealList());
+        return "Hi";
+    }
+
     @PostMapping(value = "/mass/{url}/meal/new/save")
     public String saveNewMeal(@ModelAttribute("meal") Meal meal, RedirectAttributes attributes, Principal principal, @PathVariable String url) {
 
