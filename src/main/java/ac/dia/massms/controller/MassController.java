@@ -62,7 +62,7 @@ public class MassController {
     @RequestMapping("/mass/edit/{id}")
     public ModelAndView newMassEditPage(@PathVariable("id") long id, Model model, Principal principal, HttpSession session) {
         Mass mass = massService.getById(id);
-        ModelAndView modelAndView = new ModelAndView("edit_mass_2");
+        ModelAndView modelAndView = new ModelAndView("edit_mass");
         modelAndView.addObject("mass", mass);
         messMethod(model, principal, session);
         model.addAttribute("newMass", new Mass());

@@ -68,10 +68,11 @@ public class UserController {
     public ModelAndView userEditPage(@PathVariable("id") long id, Model model, Principal principal, HttpSession session) {
         userSession(model, principal, session);
         ModelAndView modelAndView;
-        modelAndView = new ModelAndView("edit_user");
+        modelAndView = new ModelAndView("edit_user_2");
         modelAndView.addObject(userRepository.getUserById(id));
         List<Role> listRoles = (List<Role>) roleRepository.findAll();
         model.addAttribute("listRoles", listRoles);
+        model.addAttribute("newUser", new User());
         return modelAndView;
     }
 
@@ -81,6 +82,8 @@ public class UserController {
         User newUser = userRepository.getUserById(user.getId());
         newUser.setEnabled(user.isEnabled());
         newUser.setUsername(user.getUsername());
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
         newUser.setRoles(user.getRoles());
         userRepository.save(newUser);
 

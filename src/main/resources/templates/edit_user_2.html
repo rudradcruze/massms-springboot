@@ -21,12 +21,12 @@
                 <div class="card-body px-4 py-3">
                     <div class="row align-items-center">
                         <div class="col-9">
-                            <h4 class="fw-semibold mb-8">Edit - <span th:text="${mass.name + ' Mass'}"></span></h4>
+                            <h4 class="fw-semibold mb-8">Edit - <span th:text="${user.firstName + ' ' + user.lastName}"></span></h4>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a class="text-muted " th:href="@{/}">Dashboard</a></li>
-                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass}">All Mass</a></li>
-                                    <li class="breadcrumb-item" aria-current="page">Edit <span th:text="${mass.name + ' Mass'}"></span></li>
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/user}">All Users</a></li>
+                                    <li class="breadcrumb-item" aria-current="page">Edit <span th:text="${user.firstName + ' ' + user.lastName}"></span></li>
                                 </ol>
                             </nav>
                         </div>
@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
                         <a href="javascript:void(0)" id="btn-add-contact" class="btn btn-info d-flex align-items-center">
-                            <i class="ti ti-users text-white me-1 fs-5"></i> Add New Mass
+                            <i class="ti ti-user-plus text-white me-1 fs-5"></i> Add New Mass
                         </a>
                     </div>
                 </div>
@@ -57,53 +57,59 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form th:action="@{/mass/edit/update}" th:object="${mass}" method="post">
+                                <form th:action="@{/user/edit/update}" th:object="${user}" method="post">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-3 contact-name">
-                                                <input type="text" id="c-id" th:field="*{id}" readonly required class="form-control" placeholder="Name" />
+                                                <input type="text" id="u-firstName" th:field="*{firstName}" required class="form-control" placeholder="First Name" />
+                                                <span class="validation-text text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3 contact-phone">
+                                                <input type="text" id="u-lastName" th:field="*{lastName}" required class="form-control" placeholder="Last Name" />
                                                 <span class="validation-text text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <div class="mb-3 contact-name">
-                                                <input type="text" id="c-name" th:field="*{name}" required class="form-control" placeholder="Name" />
+                                            <div class="mb-3 contact-email">
+                                                <input type="text" readonly id="u-c-id" th:field="*{id}" required class="form-control" placeholder="Id" />
                                                 <span class="validation-text text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-3 contact-email">
-                                                <input type="email" id="c-email" th:field="*{email}" required class="form-control" placeholder="Email" />
+                                                <input type="email" id="u-c-email" th:field="*{username}" required class="form-control" placeholder="Email" />
                                                 <span class="validation-text text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <div class="mb-3 contact-occupation">
-                                                <input type="text" id="c-url" th:field="*{url}" required class="form-control" placeholder="url" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3 contact-phone">
-                                                <input type="number" id="c-phone" th:field="*{contact}" required class="form-control" placeholder="Phone" />
-                                                <span class="validation-text text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
                                             <div class="mb-3 contact-location">
-                                                <textarea class="form-control" th:field="*{address}" required rows="3" placeholder="Address..."></textarea>
+                                                <h5>Roles</h5>
+                                                <div class="form-check" th:each="role : ${listRoles}">
+                                                    <input class="form-check-input" type="checkbox" th:value="${role.id}" th:field="*{roles}" th:id="${'u' + role.name}">
+                                                    <label class="form-check-label" th:for="${'u' + role.name}" th:text="${role.name}"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3 contact-location">
+                                                <h5>Activate</h5>
+                                                <div class="form-check" >
+                                                    <input class="form-check-input" type="checkbox" th:field="*{enabled}" id="u-activate">
+                                                    <label class="form-check-label" for="u-activate">Activate</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row my-6">
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-primary rounded-pill px-4">Save</button>
-                                            <a th:href="@{/mass}" class="btn btn-danger rounded-pill px-4"> Discard </a>
+                                            <a th:href="@{/user}" class="btn btn-danger rounded-pill px-4"> Discard </a>
                                         </div>
                                     </div>
                                 </form>
@@ -131,38 +137,60 @@
                 <div class="modal-body">
                     <div class="add-contact-box">
                         <div class="add-contact-content">
-                            <form th:action="@{/mass/new/save}" th:object="${newMass}" method="post" id="addContactModalTitle">
+                            <form th:action="@{/user/new/save}" th:object="${newUser}" method="post" id="addContactModalForm">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3 contact-name">
-                                            <input type="text" id="id" th:field="*{name}" required class="form-control" placeholder="Name" />
+                                            <input type="text" id="firstName" th:field="*{firstName}" required class="form-control" placeholder="First Name" />
                                             <span class="validation-text text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3 contact-email">
-                                            <input type="email" id="email" th:field="*{email}" required class="form-control" placeholder="Email" />
-                                            <span class="validation-text text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3 contact-occupation">
-                                            <input type="text" id="c-occupation" th:field="*{url}" required class="form-control" placeholder="url" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3 contact-phone">
-                                            <input type="number" id="phone" th:field="*{contact}" required class="form-control" placeholder="Phone" />
+                                            <input type="number" id="lastName" th:field="*{lastName}" required class="form-control" placeholder="Last Name" />
                                             <span class="validation-text text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
+                                        <div class="mb-3 contact-email">
+                                            <input type="email" id="c-email" th:field="*{username}" required class="form-control" placeholder="Email" />
+                                            <span class="validation-text text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3 contact-phone">
+                                            <input type="number" id="password" th:field="*{password}" required class="form-control" placeholder="password" />
+                                            <span class="validation-text text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3 contact-phone">
+                                            <input type="number" id="confirmPassword" th:field="*{confirmPassword}" required class="form-control" placeholder="Confirm Password" />
+                                            <span class="validation-text text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
                                         <div class="mb-3 contact-location">
-                                            <textarea class="form-control" th:field="*{address}" required rows="3" placeholder="Address..."></textarea>
+                                            <h5>Roles</h5>
+                                            <div class="form-check" th:each="role : ${listRoles}">
+                                                <input class="form-check-input" type="checkbox" th:value="${role.id}" th:field="*{roles}" th:id="${role.name}">
+                                                <label class="form-check-label" th:for="${role.name}" th:text="${role.name}"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3 contact-location">
+                                            <h5>Activate</h5>
+                                            <div class="form-check" >
+                                                <input class="form-check-input" type="checkbox" th:field="*{enabled}" id="activate">
+                                                <label class="form-check-label" for="activate">Activate</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
