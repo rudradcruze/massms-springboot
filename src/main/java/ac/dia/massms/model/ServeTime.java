@@ -25,4 +25,8 @@ public class ServeTime {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Meal> mealList;
+
+    @ManyToOne
+    @JoinColumn(name = "mass_id")
+    private Mass mass;
 }

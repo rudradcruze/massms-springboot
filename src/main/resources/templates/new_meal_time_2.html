@@ -21,97 +21,75 @@
                 <div class="card-body px-4 py-3">
                     <div class="row align-items-center">
                         <div class="col-9">
-                            <h4 class="fw-semibold mb-8 text-capitalize"><span th:text="${session.mass.name}"></span> - <span th:text="${massMemberList.size()}"></span></h4>
-                            <h4 class="fw-semibold mb-8">Mass Manager - <span th:text="${session.mass.user.firstName + ' ' + session.mass.user.lastName}"></span></h4>
+                            <h4 class="fw-semibold mb-8">Add Meal Time Into - <span th:text="${serveTime.mass.name + ' Mass'}"></span></h4>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a class="text-muted " th:href="@{/}">Dashboard</a></li>
                                     <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass}">All Mass</a></li>
-                                    <li class="breadcrumb-item" aria-current="page" th:text="${session.mass.name + ' Mass Members'}"></li>
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass/{url}/meal (url = ${serveTime.mass.url})}">Meals</a></li>
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass/{url}/meal/time (url = ${serveTime.mass.url})}">Meal Times</a></li>
+                                    <li class="breadcrumb-item" aria-current="page">Add Meal Time</li>
                                 </ol>
                             </nav>
                         </div>
                         <div class="col-3">
                             <div class="text-center mb-n5">
-                                <img th:src="@{../../../images/breadcrumb/ChatBc.png}" alt="..." class="img-fluid mb-n4">
+                                <img th:src="@{../../../../images/breadcrumb/ChatBc.png}" alt="..." class="img-fluid mb-n4">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="mt-3 px-4 py-3" th:if="${success}">
                 <div th:replace="fragment :: successAlertBg"></div>
             </div>
             <div class="mt-3 px-4 py-3" th:if="${error}">
                 <div th:replace="fragment :: errorAlertBg"></div>
             </div>
-            <!-- Add new -->
-            <div class="card card-body mt-9" sec:authorize="isAuthenticated()">
-                <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR', 'MANAGER')">
-                    <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
-                        <a th:href="@{/mass/edit/{id} (id = ${session.mass.id})}" class="btn btn-info d-flex align-items-center mx-7">
-                            <i class="ti ti-edit text-white me-1 fs-5"></i> Edit <span class="px-2" th:text="${session.mass.name}"></span>
-                        </a>
-                        <a th:href="@{/mass/{url}/new (url = ${session.mass.url})}" class="btn btn-primary d-flex align-items-center">
-                            <i class="ti ti-user-plus text-white me-1 fs-5"></i> Add New Member
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
             <section class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="table-responsive pb-5">
-                                    <table id="default_order" class="table border table-striped table-bordered display text-nowrap"
-                                           style="width: 100%">
-                                        <thead>
-                                        <tr>
-                                            <th>Sl</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Mass Url</th>
-                                            <th>User Name</th>
-                                            <th>Member Status</th>
-                                            <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">Actions</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="member : ${massMemberList}">
-                                                <td th:text="${member.id}">Mass Id</td>
-                                                <td th:text="${member.mass.name}">Mass Name</td>
-                                                <td th:text="${member.mass.email}">Mass Address</td>
-                                                <td th:text="${member.mass.url}">Mass Email</td>
-                                                <td th:text="${member.user.username}">Mass Email</td>
-                                                <td th:text="${member.isEnabled()} ? 'Activated' : 'Deactivated'">Mass Member Status</td>
-
-
-                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">
-                                                    <div class="dropdown">
-                                                        <a class="text-decoration-none" href="javascript:void(0)" id="nft2" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ti ti-dots fs-4"></i>
-                                                        </a>
-                                                        <ul class="dropdown-menu" aria-labelledby="nft2">
-                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">
-                                                                <a class="dropdown-item d-flex align-items-center" sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:href="@{'/mass/' + ${member.mass.url} + '/status/' + ${member.id}}">
-                                                                    <i class="ti ti-status-change px-2"></i> <span th:text="${member.isEnabled()} ? 'Deactivate' : 'Activate'"></span>
-                                                                </a>
-                                                            </li>
-                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:if="${!member.isEnabled()}">
-                                                                <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/' + ${member.mass.url} + '/delete/' + ${member.id}}">
-                                                                    <i class="ti ti-trash px-2"></i> <span> Delete</span>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <form th:action="@{/mass/{url}/meal/time/new/save (url = ${serveTime.mass.url})}" th:object="${serveTime}" method="post">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3 contact-name">
+                                                <h5><label for="mass">Mass</label></h5>
+                                                <input type="text" id="mass" th:value="${serveTime.mass.name}" readonly required class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3 contact-occupation">
+                                                <h5><label for="identifier">Identifier</label></h5>
+                                                <input class="form-control" type="text" required id="identifier" th:field="*{identifier}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3 contact-occupation">
+                                                <h5><label for="startTime">Start Time</label></h5>
+                                                <input class="form-control" type="time" required id="startTime" th:field="*{startTime}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3 contact-occupation">
+                                                <h5><label for="endTime">End Time</label></h5>
+                                                <input class="form-control" type="time" required id="endTime" th:field="*{endTime}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row my-6">
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary rounded-pill px-4 mx-3"><i class="ti ti-clock-plus mx-2"></i> Add Meal Time</button>
+                                            <a th:href="@{/mass/{url}/meal/time (url = ${serveTime.mass.url})}" class="btn btn-danger rounded-pill px-4"><i class="ti ti-arrow-back mx-2"></i> Discard </a>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -123,7 +101,7 @@
 
 <div th:replace="fragment :: mobilenav"></div>
 
-<!--  Search Bar -->
+    <!--  Search Bar -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content rounded-1">

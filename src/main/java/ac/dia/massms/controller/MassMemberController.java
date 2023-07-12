@@ -6,6 +6,7 @@ import ac.dia.massms.model.MassMember;
 import ac.dia.massms.model.User;
 import ac.dia.massms.service.MassMemberService;
 import ac.dia.massms.service.MassService;
+import ac.dia.massms.service.ServeTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,13 +28,17 @@ public class MassMemberController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private ServeTimeService serveTimeService;
+
     @RequestMapping("mass/{url}")
     public String listAllMassMember(@PathVariable("url") String url, Model model, HttpSession session) {
         Mass mass = massService.getByUrl(url);
         model.addAttribute("massMemberList", mass.getMessMemberList());
         model.addAttribute("title", mass.getName() + " Mass Members");
+        model.addAttribute("serveTimeList", serveTimeService.listAll());
         session.setAttribute("mass", mass);
-        return "mass_members_2";
+        return "mass_members";
     }
 
     @RequestMapping("/mass/{url}/new")

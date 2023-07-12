@@ -1,6 +1,10 @@
 package ac.dia.massms.controller;
 
+import ac.dia.massms.model.Mass;
 import ac.dia.massms.model.ServeTime;
+import ac.dia.massms.model.User;
+import ac.dia.massms.repository.UserRepository;
+import ac.dia.massms.service.MassService;
 import ac.dia.massms.service.ServeTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,27 +23,35 @@ public class ServeTimeController {
     @Autowired
     private ServeTimeService serveTimeService;
 
+    @Autowired
+    private MassService massService;
+
+    @Autowired
+    private UserRepository userRepository;
+
     // list of meals
-    @GetMapping("/meal/time")
-    public String mealTimes(Model model) {
+    @RequestMapping(value = "/mass/{url}/meal/time")
+    public String mealTimes(Model model, @PathVariable String url) {
         List<ServeTime> mealTimes = serveTimeService.listAll();
         model.addAttribute("mealTimes", mealTimes);
-
+        model.addAttribute("mass", massService.getByUrl(url));
         return "meal_times";
     }
 
     // Get new creating page
-    @GetMapping("/meal/time/new")
-    public String newServeTime(Model model, Principal principal) {
+    @RequestMapping(value = "/mass/{url}/meal/time/new")
+    public String newServeTime(Model model, Principal principal, @PathVariable String url) {
         if(principal == null){ return "redirect:/login"; }
-        model.addAttribute("serveTime", new ServeTime());
-
-        return "new_meal_time";
+        ServeTime serveTime = new ServeTime();
+        Mass mass = massService.getByUrl(url);
+        serveTime.setMass(mass);
+        model.addAttribute("serveTime", serveTime);
+        return "new_meal_time_2";
     }
 
     // Save new
-    @PostMapping("/meal/time/new/save")
-    public String saveServeTime(@ModelAttribute("serveTime") ServeTime serveTime, RedirectAttributes attributes, Principal principal) {
+    @PostMapping("/mass/{url}/meal/time/new/save")
+    public String saveServeTime(@ModelAttribute("serveTime") ServeTime serveTime, RedirectAttributes attributes, Principal principal, @PathVariable String url) {
 
         if (principal == null) { return "redirect:/login"; }
 
@@ -50,10 +62,14 @@ public class ServeTimeController {
             return "redirect:/meal/time/new";
         }
 
+        Mass mass = massService.getByUrl(url);
+        serveTime.setMass(mass);
         attributes.addFlashAttribute("success", serveTime.getIdentifier() + " is successfully created.");
         serveTimeService.save(serveTime);
+        mass.getServeTimeList().add(serveTime);
+        massService.save(mass);
 
-        return "redirect:/meal/time";
+        return "redirect:/mass/" + mass.getUrl() + "/meal/time";
     }
 
     // Update page

@@ -82,7 +82,9 @@
                                                 <td th:text="${mass.name}">Mass Name</td>
                                                 <td th:text="${mass.address}">Mass Address</td>
                                                 <td><a th:href="${'mailto:' + mass.email}" th:text="${mass.email}"></a></td>
-                                                <td th:text="${mass.url}">Mass url</td>
+                                                <td>
+                                                    <a th:href="${'/mass/' + mass.url}" th:text="${mass.url}"></a>
+                                                </td>
                                                 <td th:text="${mass.contact}">Mass Contact</td>
                                                 <td th:text="${mass.isApproved() ? 'Yes' : 'No'}">Mass Contact</td>
                                                 <td th:text="${mass.user.username}">Mass Manager</td>

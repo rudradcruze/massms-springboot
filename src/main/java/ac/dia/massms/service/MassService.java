@@ -36,6 +36,7 @@ public class MassService {
         newMass.setEmail(mass.getEmail());
         newMass.setUrl(mass.getUrl());
         newMass.setMealList(mass.getMealList());
+        newMass.setServeTimeList(mass.getServeTimeList());
         massRepository.save(newMass);
     }
 
