@@ -41,11 +41,13 @@ public class MealController {
         if(principal == null){ return "redirect:/login"; }
         model.addAttribute("meal", new Meal());
         model.addAttribute("serveTimes", serveTimeService.listAll());
-        session.setAttribute("mass", massService.getByUrl(url));
-        return "new_meal";
+        Mass mass = massService.getByUrl(url);
+        session.setAttribute("mass", mass);
+        model.addAttribute("title", mass.getName() + " New Meal");
+        return "new_meal_2";
     }
 
-    @RequestMapping(value = "/mass/{url}/meal/new/save", method = RequestMethod.POST)
+    @PostMapping(value = "/mass/{url}/meal/new/save")
     public String saveNewMeal(@ModelAttribute("meal") Meal meal, RedirectAttributes attributes, Principal principal, @PathVariable String url) {
 
         if(principal == null){ return "redirect:/login"; }
@@ -53,8 +55,8 @@ public class MealController {
         Mass instanceofMass = massService.getByUrl(url);
         meal.setMass(instanceofMass);
         instanceofMass.getMealList().add(meal);
-        massService.update(instanceofMass);
         mealService.save(meal);
+        massService.update(instanceofMass);
         attributes.addFlashAttribute("success", "Meal Successfully Created!");
         return "redirect:/meal";
     }
