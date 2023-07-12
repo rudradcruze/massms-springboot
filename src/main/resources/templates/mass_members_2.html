@@ -52,7 +52,7 @@
                         <a th:href="@{/mass/edit/{id} (id = ${session.mass.id})}" class="btn btn-info d-flex align-items-center mx-7">
                             <i class="ti ti-edit text-white me-1 fs-5"></i> Edit <span class="px-2" th:text="${session.mass.name}"></span>
                         </a>
-                        <a th:href="@{/mass/{url}/member/new (url = ${session.mass.url})}" class="btn btn-primary d-flex align-items-center">
+                        <a th:href="@{/mass/{url}/new (url = ${session.mass.url})}" class="btn btn-primary d-flex align-items-center">
                             <i class="ti ti-user-plus text-white me-1 fs-5"></i> Add New Member
                         </a>
                     </div>
@@ -96,12 +96,12 @@
                                                         </a>
                                                         <ul class="dropdown-menu" aria-labelledby="nft2">
                                                             <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">
-                                                                <a class="dropdown-item d-flex align-items-center" sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:href="@{'/mass/' + ${member.mass.url} + '/member/status/' + ${member.id}}">
+                                                                <a class="dropdown-item d-flex align-items-center" sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:href="@{'/mass/' + ${member.mass.url} + '/status/' + ${member.id}}">
                                                                     <i class="ti ti-status-change px-2"></i> <span th:text="${member.isEnabled()} ? 'Deactivate' : 'Activate'"></span>
                                                                 </a>
                                                             </li>
                                                             <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:if="${!member.isEnabled()}">
-                                                                <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/' + ${member.mass.url} + '/member/delete/' + ${member.id}}">
+                                                                <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/' + ${member.mass.url} + '/delete/' + ${member.id}}">
                                                                     <i class="ti ti-trash px-2"></i> <span> Delete</span>
                                                                 </a>
                                                             </li>

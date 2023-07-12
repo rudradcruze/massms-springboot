@@ -27,7 +27,7 @@ public class MassMemberController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    @RequestMapping("mass/{url}/member")
+    @RequestMapping("mass/{url}")
     public String listAllMassMember(@PathVariable("url") String url, Model model, HttpSession session) {
         Mass mass = massService.getByUrl(url);
         model.addAttribute("massMemberList", mass.getMessMemberList());
@@ -36,7 +36,7 @@ public class MassMemberController {
         return "mass_members_2";
     }
 
-    @RequestMapping("/mass/{url}/member/new")
+    @RequestMapping("/mass/{url}/new")
     public String addNewMemberIntoMass(@PathVariable("url") String url, Model model, Principal principal) {
         if(principal == null){ return "redirect:/login"; }
         MassMember massMember = new MassMember();
@@ -47,7 +47,7 @@ public class MassMemberController {
         return "new_mass_member";
     }
 
-    @RequestMapping(value = "/mass/{url}/member/new/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/mass/{url}/new/save", method = RequestMethod.POST)
     public String saveMassMember(@PathVariable("url") String url,
                                  @ModelAttribute("massMember") MassMember massMember,
                                  RedirectAttributes attributes,
@@ -65,7 +65,7 @@ public class MassMemberController {
 
         if (exist) {
             attributes.addFlashAttribute("error", massMember.getUser().getUsername() + " is already in " + massMember.getMass().getName() + " this mass.");
-            return "redirect:/mass/" + url + "/member/new";
+            return "redirect:/mass/" + url + "/new";
         } else {
             User user = userDetailsService.getById(massMember.getUser().getId());
             massMember.setEnabled(false);
@@ -74,11 +74,11 @@ public class MassMemberController {
             userDetailsService.updateMassList(user);
 
             attributes.addFlashAttribute("success", massMember.getUser().getUsername() + " is successfully added to the " + massMember.getMass().getName() + " mass");
-            return "redirect:/mass/" + url + "/member";
+            return "redirect:/mass/" + url + "";
         }
     }
 
-    @RequestMapping(value = "/mass/{url}/member/status/{id}")
+    @RequestMapping(value = "/mass/{url}/status/{id}")
     public String updateStatus(@PathVariable("url") String url,
                                @PathVariable("id") long id,
                                RedirectAttributes attributes,
@@ -88,10 +88,10 @@ public class MassMemberController {
         massMember.setEnabled(!massMember.isEnabled());
         massMemberService.save(massMember);
         attributes.addFlashAttribute("success", "Mass member status is successfully updated: Status = " + massMember.isEnabled());
-        return "redirect:/mass/" + url + "/member/";
+        return "redirect:/mass/" + url + "/";
     }
 
-    @RequestMapping(value = "/mass/{url}/member/delete/{id}")
+    @RequestMapping(value = "/mass/{url}/delete/{id}")
     public String deleteMassMember(@PathVariable("url") String url,
                                @PathVariable("id") long id,
                                RedirectAttributes attributes,
@@ -100,6 +100,6 @@ public class MassMemberController {
         if(principal == null){ return "redirect:/login"; }
         attributes.addFlashAttribute("success", massMemberService.getById(id).getUser().getUsername() + " is successfully deleted from " + massMemberService.getById(id).getMass().getName() + " mass");
         massMemberService.delete(id);
-        return "redirect:/mass/" + url + "/member/";
+        return "redirect:/mass/" + url + "/";
     }
 }

@@ -26,7 +26,7 @@
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a class="text-muted " th:href="@{/}">Dashboard</a></li>
                                     <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass}">All Mass</a></li>
-                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass/{url}/member (url = ${massMember.mass.url})}" th:text="${massMember.mass.name + ' Mass Members'}"></a></li>
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass/{url} (url = ${massMember.mass.url})}" th:text="${massMember.mass.name + ' Mass Members'}"></a></li>
                                     <li class="breadcrumb-item" aria-current="page">Add Member</li>
                                 </ol>
                             </nav>
@@ -51,7 +51,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <form th:action="@{/mass/{url}/member/new/save (url = ${massMember.mass.url})}" th:object="${massMember}" method="post">
+                                <form th:action="@{/mass/{url}/new/save (url = ${massMember.mass.url})}" th:object="${massMember}" method="post">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="mb-3 contact-name">
