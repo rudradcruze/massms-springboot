@@ -105,6 +105,32 @@
               </li>
             </ul>
           </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
+                  <span class="d-flex">
+                    <i class="ti ti-users-group"></i>
+                  </span>
+              <span class="hide-menu">Mass Management</span>
+            </a>
+            <ul aria-expanded="false" class="collapse first-level">
+              <li class="sidebar-item">
+                <a th:href="@{/user}" class="sidebar-link">
+                  <div class="round-16 d-flex align-items-center justify-content-center">
+                    <i class="ti ti-circle"></i>
+                  </div>
+                  <span class="hide-menu">User List</span>
+                </a>
+              </li>
+              <li class="sidebar-item" >
+                <a th:href="@{/user/new}" sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR')" class="sidebar-link">
+                  <div class="round-16 d-flex align-items-center justify-content-center">
+                    <i class="ti ti-circle"></i>
+                  </div>
+                  <span class="hide-menu">New User</span>
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
 

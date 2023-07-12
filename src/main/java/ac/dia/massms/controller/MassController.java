@@ -37,6 +37,7 @@ public class MassController {
     public String showMass(Model model, Principal principal, HttpSession session) {
         List<Mass> massList = massService.listAll();
         model.addAttribute("massList", massList);
+        model.addAttribute("title", "MASSMS - Mass");
         messMethod(model, principal, session);
         return "masses";
     }
@@ -66,6 +67,7 @@ public class MassController {
         modelAndView.addObject("mass", mass);
         messMethod(model, principal, session);
         model.addAttribute("newMass", new Mass());
+        model.addAttribute("title", "Edit " + mass.getName() + " Mass");
         return modelAndView;
     }
 

@@ -45,17 +45,8 @@ public class UserController {
         model.addAttribute("listRoles", listRoles);
         List<User> userList = (List<User>) userRepository.findAll();
         model.addAttribute("userList", userList);
+        model.addAttribute("title", "MASSMS - Users");
         return "users";
-    }
-
-    @GetMapping("/user/new")
-    public String showNewUserForm(Model model, Principal principal, HttpSession session) {
-        userSession(model, principal, session);
-        User user = new User();
-        model.addAttribute("user", user);
-        List<Role> listRoles = (List<Role>) roleRepository.findAll();
-        model.addAttribute("listRoles", listRoles);
-        return "new_user";
     }
 
     @PostMapping( "/user/new/save")
@@ -70,11 +61,13 @@ public class UserController {
     public ModelAndView userEditPage(@PathVariable("id") long id, Model model, Principal principal, HttpSession session) {
         userSession(model, principal, session);
         ModelAndView modelAndView;
-        modelAndView = new ModelAndView("edit_user_2");
-        modelAndView.addObject(userRepository.getUserById(id));
+        modelAndView = new ModelAndView("edit_user");
+        User user = userRepository.getUserById(id);
+        modelAndView.addObject("user", user);
         List<Role> listRoles = (List<Role>) roleRepository.findAll();
         model.addAttribute("listRoles", listRoles);
         model.addAttribute("newUser", new User());
+        model.addAttribute("title", "Edit " + user.getFirstName()  + " User");
         return modelAndView;
     }
 
