@@ -39,4 +39,8 @@ public class MealDateService {
             throw new RuntimeException(e);
         }
     }
+
+    public List<MealDate> getMealDateByMassUrl(String url) {
+        return mealDateRepository.getMealDatesByMassUrl(url);
+    }
 }

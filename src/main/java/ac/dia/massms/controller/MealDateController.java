@@ -1,7 +1,6 @@
 package ac.dia.massms.controller;
 
 import ac.dia.massms.model.Mass;
-import ac.dia.massms.model.Meal;
 import ac.dia.massms.model.MealDate;
 import ac.dia.massms.service.MassService;
 import ac.dia.massms.service.MealDateService;
@@ -34,9 +33,10 @@ public class MealDateController {
     private MassService massService;
 
     @GetMapping("/mass/{url}/meal/date")
-    public String mealDateList(Model model, @PathVariable String url) {
-        List<MealDate> mealDateList = mealDateService.listAll();
+    public String mealDateList(Model model, @PathVariable String url, HttpSession session) {
+        List<MealDate> mealDateList = mealDateService.getMealDateByMassUrl(url);
         model.addAttribute("mealDateList", mealDateList);
+        session.setAttribute("mass", massService.getByUrl(url));
 
         return "meal_date";
     }
@@ -50,7 +50,7 @@ public class MealDateController {
         model.addAttribute("mealDate", mealDate);
         model.addAttribute("meals", mealService.listAll());
 
-        return "new_meal_date_2";
+        return "new_meal_date";
     }
 
 
