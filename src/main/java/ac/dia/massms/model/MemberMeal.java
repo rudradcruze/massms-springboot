@@ -20,7 +20,7 @@ public class MemberMeal {
 
 	@ManyToOne
 	@JoinColumn(name="meal_date_id")
-	private MealDate meal;
+	private MealDate mealDate;
 
 	@ManyToOne
 	@JoinColumn(name="users_id")

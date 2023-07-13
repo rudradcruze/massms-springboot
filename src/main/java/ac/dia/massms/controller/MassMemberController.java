@@ -38,6 +38,8 @@ public class MassMemberController {
         model.addAttribute("title", mass.getName() + " Mass Members");
         model.addAttribute("serveTimeList", serveTimeService.listAll());
         session.setAttribute("mass", mass);
+        MassMember massMember = new MassMember();
+        model.addAttribute("massMember", massMember);
         return "mass_members";
     }
 

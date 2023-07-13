@@ -27,7 +27,7 @@
       </div>
 
       <div class="row">
-        <div class="col-md-6 col-lg-4" th:each="massEach : ${massList}">
+        <div class="col-md-6 col-lg-4" th:each="massEach : ${massList}" th:if="${massEach.isApproved()}">
           <div class="card rounded-2 overflow-hidden hover-img">
             <div class="position-relative">
               <a href="javascript:void(0)"><img th:src="@{../../images/blog/mass-home.jpg}" class="card-img-top rounded-0" alt="Mass Image"></a>

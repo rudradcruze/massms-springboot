@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberMealRepository extends CrudRepository<MemberMeal, Long> {
     MemberMeal getMemberMealById(long id);
+
+    MemberMeal getMemberMealByMealDateIdAndUserUsername(long id, String username);
 }

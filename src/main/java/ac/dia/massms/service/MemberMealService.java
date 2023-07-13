@@ -32,14 +32,22 @@ public class MemberMealService {
     }
 
     // add customer
-    public void addCustomerSel(long customerId, MemberMeal memberMeal, long mealDateId) {
+    public void addCustomerSel(long customerId, int quantity, long mealDateId) {
         User user = userRepository.getUserById(customerId);
         MealDate mealDate = mealDateRepository.findMealDateById(mealDateId);
+        MemberMeal memberMeal = new MemberMeal();
         memberMeal.setUser(user);
-        memberMeal.setMeal(mealDate);
+        memberMeal.setQuantity(quantity);
+        memberMeal.setMealDate(mealDate);
         memberMealRepository.save(memberMeal);
         user.getMemberMealList().add(memberMeal);
         userRepository.save(user);
+    }
+
+    public void updateCustomerSelfQuantity(MemberMeal memberMeal) {
+        MemberMeal newMemberMeal = memberMealRepository.getMemberMealById(memberMeal.getId());
+        newMemberMeal.setQuantity(memberMeal.getQuantity() + 1);
+        memberMealRepository.save(newMemberMeal);
     }
 
     public void save(MemberMeal meal) {
@@ -47,4 +55,8 @@ public class MemberMealService {
     }
 
     public void delete(long id) { memberMealRepository.delete(get(id)); }
+
+    public MemberMeal getMemberByMealDateIdAndUserUserName(long id, String username) {
+        return memberMealRepository.getMemberMealByMealDateIdAndUserUsername(id, username);
+    }
 }

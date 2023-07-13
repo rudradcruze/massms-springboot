@@ -81,7 +81,7 @@
                                                 <th>Date</th>
                                                 <th>Meal Name</th>
                                                 <th>Meal Time</th>
-                                                <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">Actions</th>
+                                                <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER', 'USER')">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -90,7 +90,7 @@
                                                 <td th:text="${#dates.format(mealDate.mealDate, 'dd-MM-yyyy')}">Meal Date</td>
                                                 <td th:text="${mealDate.meal.name}">Meal Name</td>
                                                 <td th:title="${mealDate.meal.serveTime.startTime} + ' ' + ${mealDate.meal.serveTime.endTime}" th:text="${mealDate.meal.serveTime.identifier}"></td>
-                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">
+                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER', 'USER', 'MEMBER')">
                                                     <div class="dropdown">
                                                         <a class="text-decoration-none" href="javascript:void(0)" id="nft3" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="ti ti-dots fs-4"></i>
@@ -99,6 +99,11 @@
                                                             <li>
                                                                 <a class="dropdown-item d-flex align-items-center" sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:href="@{/mass/{url}/meal/date/edit/{id} (url = ${session.mass.url}, id = ${mealDate.id})}">
                                                                     <i class="ti ti-edit px-2"></i> <span> Edit</span>
+                                                                </a>
+                                                            </li>
+                                                            <li sec:authorize="hasAnyAuthority('USER', 'MEMBER')">
+                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{'/mass/' + ${session.mass.url} + '/meal/date/' + ${mealDate.id} + '/member/new'}">
+                                                                    <i class="ti ti-user-share px-2"></i> <span> Add Myself</span>
                                                                 </a>
                                                             </li>
                                                             <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">
