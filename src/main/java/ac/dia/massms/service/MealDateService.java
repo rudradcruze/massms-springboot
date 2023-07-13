@@ -33,11 +33,7 @@ public class MealDateService {
     }
 
     public void delete(long id) {
-        try {
-            mealDateRepository.delete(getById(id));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        mealDateRepository.delete(getById(id));
     }
 
     public List<MealDate> getMealDateByMassUrl(String url) {

@@ -109,12 +109,20 @@ public class MealDateController {
         return "redirect:/mass/" + url + "/meal/date/";
     }
 
-    @RequestMapping("/meal/date/delete/{id}")
-    public String deleteMealDate(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal) {
+    @RequestMapping("/mass/{url}/meal/date/delete/{id}")
+    public String deleteMealDate(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal, @PathVariable String url) {
         if (principal == null) { return "redirect:/login"; }
 
-        mealDateService.delete(id);
-        attributes.addFlashAttribute("success", "Delete Successful!");
-        return "redirect:/meal/date/";
+        Mass mass = massService.getByUrl(url);
+        mass.getMealDateList().remove(mealDateService.getById(id));
+
+        try {
+            mealDateService.delete(id);
+            attributes.addFlashAttribute("success", "Delete Successful!");
+        }catch (Exception e) {
+            attributes.addFlashAttribute("error", "Internal Server Error");
+        }
+
+        return "redirect:/mass/"+ url + "/meal/date/";
     }
 }
