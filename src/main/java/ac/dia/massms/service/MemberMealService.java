@@ -59,4 +59,8 @@ public class MemberMealService {
     public MemberMeal getMemberByMealDateIdAndUserUserName(long id, String username) {
         return memberMealRepository.getMemberMealByMealDateIdAndUserUsername(id, username);
     }
+
+    public List<MemberMeal> getMemberMealListByUser(String username) {
+        return memberMealRepository.getMemberMealsByUserUsername(username);
+    }
 }

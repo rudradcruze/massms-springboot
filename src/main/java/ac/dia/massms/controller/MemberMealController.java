@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,6 +45,29 @@ public class MemberMealController {
         model.addAttribute("listUser", userDetailsService.listALl());
 
         return "member_meal";
+    }
+
+    @RequestMapping(value = "/mass/{url}/member/{userId}/meal")
+    public String listMealsByMemberAndMass(Model model, @PathVariable String url, @PathVariable String userId, Principal principal, HttpSession session) {
+
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        List<MemberMeal> getAllMealListByUser = memberMealService.getMemberMealListByUser(String.valueOf(userDetailsService.getById(Long.parseLong(userId)).getUsername()));
+        List<MemberMeal> memberMealList = new ArrayList<>();
+
+        for (MemberMeal meal : getAllMealListByUser) {
+            if (Objects.equals(meal.getMealDate().getMass().getUrl(), url)) {
+                memberMealList.add(meal);
+            }
+        }
+
+        session.setAttribute("user", userDetailsService.getById(Long.parseLong(userId)));
+        session.setAttribute("mass", massService.getByUrl(url));
+
+        model.addAttribute("memberMealList", memberMealList);
+        return "member_meal_2";
     }
 
     public boolean activateCheck(String massUrl, String userName) {

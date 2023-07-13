@@ -17,39 +17,25 @@
         <header th:replace="fragment :: header" class="app-header"></header>
 
         <div class="container-fluid">
-            <div class="card bg-light-info shadow-none position-relative overflow-hidden mb-4">
+            <div class="card bg-light-info shadow-none position-relative overflow-hidden mb-2">
                 <div class="card-body px-4 py-3">
                     <div class="row align-items-center">
                         <div class="col-9">
-                            <h4 class="fw-semibold mb-8 text-capitalize"><span th:text="${session.mass.name}"></span></h4>
-                            <h4 class="fw-semibold mb-8">Mass Manager - <span th:text="${session.mass.user.firstName + ' ' + session.mass.user.lastName}"></span></h4>
+                            <h4 class="fw-semibold mb-8 text-capitalize"><span th:text="${session.mass.name}"></span> - Meals - <span th:text="${memberMealList.size()}"></span></h4>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a class="text-muted " th:href="@{/}">Dashboard</a></li>
-                                    <li sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'CREATOR')" class="breadcrumb-item"><a class="text-muted " th:href="@{/mass}">All Mass</a></li>
-                                    <li class="breadcrumb-item" aria-current="page" th:text="${session.mass.name + ' Mass Members'}"></li>
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass}">All Mass</a></li>
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass/{url} (url = ${session.mass.url})}" th:text="${session.mass.name  + ' Mass'}"></a></li>
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass/{url}/meal (url = ${session.mass.url})}" th:text="${session.mass.name  + ' Mass Meal'}"></a></li>
+                                    <li class="breadcrumb-item" aria-current="page">Meals List</li>
                                 </ol>
                             </nav>
                         </div>
                         <div class="col-3">
                             <div class="text-center mb-n5">
-                                <img th:src="@{../../../images/breadcrumb/ChatBc.png}" alt="..." class="img-fluid mb-n4">
+                                <img th:src="@{../../../../../images/breadcrumb/ChatBc.png}" alt="..." class="img-fluid mb-n4">
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card bg-light-gray shadow-none position-relative overflow-hidden mb-2">
-                <div class="card-body px-4 py-3">
-                    <div class="row align-items-center">
-                        <div class="col-12">
-                            <h4 class="mb-0 fs-5 mb-3">Mass Information</h4>
-                            <p>Address: <span th:text="${session.mass.address}"></span></p>
-                            <p>Contact Number: <a th:href="${'tel:+88' + session.mass.contact}" th:text="${session.mass.contact}"></a></p>
-                            <p>Mass Email Address: <a th:href="${'mailto:' + session.mass.email}" th:text="${session.mass.email}"></a></p>
-                            <p>Manager Email Address: <a th:href="${'mailto:' + session.mass.user.username}" th:text="${session.mass.user.username}"></a></p>
-                            <p>Total Meals: <span th:text="${session.mass.getMealList().size()}"></span></p>
-                            <p>Total Members: <span th:text="${session.mass.getMessMemberList().size()}"></span></p>
                         </div>
                     </div>
                 </div>
@@ -64,20 +50,14 @@
             <div class="card card-body mt-9" sec:authorize="isAuthenticated()">
                 <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR', 'MANAGER')">
                     <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
-                        <a th:href="@{/mass/edit/{id} (id = ${session.mass.id})}" class="btn btn-info d-flex align-items-center me-7">
-                            <i class="ti ti-edit text-white me-1 fs-5"></i> Edit <span class="px-2" th:text="${session.mass.name}"></span>
-                        </a>
-                        <a th:href="@{/mass/{url}/meal/time/new (url = ${session.mass.url})}" class="btn btn-secondary d-flex align-items-center me-7">
-                            <i class="ti ti-clock-plus text-white me-1 fs-5"></i> Add Meal Time
-                        </a>
-                        <a th:href="@{/mass/{url}/meal (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-7">
-                            <i class="ti ti-checkup-list text-white me-1 fs-5"></i> Meal List
-                        </a>
                         <a th:href="@{/mass/{url}/meal/new (url = ${session.mass.url})}" class="btn btn-success d-flex align-items-center me-7">
                             <i class="ti ti-brand-deliveroo text-white me-1 fs-5"></i> Add Meal
                         </a>
-                        <a th:href="@{/mass/{url}/new (url = ${session.mass.url})}" class="btn btn-primary d-flex align-items-center">
-                            <i class="ti ti-user-plus text-white me-1 fs-5"></i> Add New Member
+                        <a th:href="@{/mass/{url}/meal/date/new (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-7">
+                            <i class="ti ti-file-time text-white me-1 fs-5"></i> Add Meal Date
+                        </a>
+                        <a th:href="@{/mass/{url}/meal/time/new (url = ${session.mass.url})}" class="btn btn-success d-flex align-items-center me-7">
+                            <i class="ti ti-clock-plus text-white me-1 fs-5"></i> Add Meal Time
                         </a>
                     </div>
                 </div>
@@ -94,21 +74,18 @@
                         <a th:href="@{/mass/{url}/meal/date (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-7">
                             <i class="ti ti-calendar-stats text-white me-1 fs-5"></i> Meal Date List
                         </a>
-                        <a th:href="@{/mass/{url}/member/{userId}/meal (url = ${session.mass.url}, userId = ${session.user.id})}" class="btn btn-info d-flex align-items-center me-7">
-                            <i class="ti ti-brand-deliveroo text-white me-1 fs-5"></i> Meal Taken List
-                        </a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
             <section class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
-                <div class="row" sec:authorize="isAuthenticated()">
+                <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
                                 <div class="mb-2">
-                                    <h5 class="mb-0">Serve Time - <span th:text="${serveTimeList.size()}"></span></h5>
+                                    <h5 class="mb-0">All Meals</h5>
                                 </div>
                                 <div class="table-responsive">
                                     <table id="zero_config"
@@ -116,91 +93,39 @@
                                         <thead>
                                             <tr>
                                                 <th>Sl</th>
-                                                <th>Identifier</th>
-                                                <th>Start Time</th>
-                                                <th>End Time</th>
-                                                <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">Actions</th>
+                                                <th>Quantity</th>
+                                                <th>User Name</th>
+                                                <th>Meal Name</th>
+                                                <th>Meal Size</th>
+                                                <th>Meal Price</th>
+                                                <th>Meal Total Price</th>
+                                                <th>Meal Date</th>
+                                                <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER', 'USER', 'MEMBER')">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr th:each="serveTime, iterator : ${serveTimeList}">
+                                            <tr th:each="member, iterator : ${memberMealList}">
                                                 <td th:text="${iterator.index + 1}"></td>
-                                                <td th:text="${serveTime.identifier}"></td>
-                                                <td th:text="${serveTime.startTime}">Start Time</td>
-                                                <td th:text="${serveTime.endTime}">End Time</td>
-                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">
+                                                <td th:text="${member.quantity}">Meal Quantity</td>
+                                                <td th:text="${member.user.username}">Meal User Name</td>
+                                                <td th:text="${member.mealDate.meal.name}">Meal Name</td>
+                                                <td th:text="${member.mealDate.meal.servingSize}">Meal Size</td>
+                                                <td th:text="${member.mealDate.meal.price}">Meal Price</td>
+                                                <td th:text="${member.mealDate.meal.price} * ${member.quantity}">Meal Price</td>
+                                                <td th:text="${#dates.format(member.mealDate.mealDate, 'dd-MM-yyyy')}">Meal Date</td>
+                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER', 'USER', 'MEMBER')">
                                                     <div class="dropdown">
                                                         <a class="text-decoration-none" href="javascript:void(0)" id="nft3" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="ti ti-dots fs-4"></i>
                                                         </a>
                                                         <ul class="dropdown-menu" aria-labelledby="nft3">
                                                             <li>
-                                                                <a class="dropdown-item d-flex align-items-center" sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:href="@{/mass/{url}/meal/time/edit/{identifier} (url = ${serveTime.mass.url}, identifier = ${serveTime.identifier})}">
+                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{'/mass/' + ${session.mass.url} + '/member/' + ${session.user.id} + '/meal/edit/' + ${member.id}}">
                                                                     <i class="ti ti-edit px-2"></i> <span> Edit</span>
                                                                 </a>
                                                             </li>
-                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">
-                                                                <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/' + ${serveTime.mass.url} + '/meal/time/delete/' + ${serveTime.identifier}}">
-                                                                    <i class="ti ti-trash px-2"></i> <span> Delete</span>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="mb-2">
-                                    <h5 class="mb-0">Mass Members - <span th:text="${massMemberList.size()}"></span></h5>
-                                </div>
-                                <div class="table-responsive pb-5">
-                                    <table id="default_order" class="table border table-striped table-bordered display text-nowrap"
-                                           style="width: 100%">
-                                        <thead>
-                                        <tr>
-                                            <th>Sl</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
-                                            <th>Mass Url</th>
-                                            <th>Meal Taken</th>
-                                            <th>User Name</th>
-                                            <th>Member Status</th>
-                                            <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">Actions</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr th:each="member, iterator : ${massMemberList}">
-                                                <td th:text="${iterator.index + 1}"></td>
-                                                <td th:text="${member.user.firstName}"></td>
-                                                <td th:text="${member.user.lastName}"></td>
-                                                <td th:text="${member.mass.url}"></td>
-                                                <td th:text="${member.user.calculateTotalMeal()}"></td>
-                                                <td th:text="${member.user.username}"></td>
-                                                <td th:text="${member.isEnabled()} ? 'Activated' : 'Deactivated'"></td>
-
-
-                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">
-                                                    <div class="dropdown">
-                                                        <a class="text-decoration-none" href="javascript:void(0)" id="nft2" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ti ti-dots fs-4"></i>
-                                                        </a>
-                                                        <ul class="dropdown-menu" aria-labelledby="nft2">
-                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">
-                                                                <a class="dropdown-item d-flex align-items-center" sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:href="@{'/mass/' + ${member.mass.url} + '/status/' + ${member.id}}">
-                                                                    <i class="ti ti-status-change px-2"></i> <span th:text="${member.isEnabled()} ? 'Deactivate' : 'Activate'"></span>
-                                                                </a>
-                                                            </li>
-                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')" th:if="${!member.isEnabled()}">
-                                                                <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/' + ${member.mass.url} + '/delete/' + ${member.id}}">
+                                                            <li>
+                                                                <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/' + ${session.mass.url} + '/member/' + ${session.user.id} + '/meal/delete/' + ${member.id}}">
                                                                     <i class="ti ti-trash px-2"></i> <span> Delete</span>
                                                                 </a>
                                                             </li>
@@ -221,97 +146,6 @@
 </div>
 
 <div th:replace="fragment :: mobilenav"></div>
-
-<!--  Search Bar -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content rounded-1">
-            <div class="modal-header border-bottom">
-                <input type="search" class="form-control fs-3" placeholder="Search here" id="search" />
-                <span data-bs-dismiss="modal" class="lh-1 cursor-pointer">
-                    <i class="ti ti-x fs-5 ms-3"></i>
-                </span>
-            </div>
-            <div class="modal-body message-body" data-simplebar="">
-                <h5 class="mb-0 fs-5 p-1">Quick Page Links</h5>
-                <ul class="list mb-0 py-2">
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Modern</span>
-                            <span class="fs-3 text-muted d-block">/dashboards/dashboard1</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Dashboard</span>
-                            <span class="fs-3 text-muted d-block">/dashboards/dashboard2</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Contacts</span>
-                            <span class="fs-3 text-muted d-block">/apps/contacts</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Posts</span>
-                            <span class="fs-3 text-muted d-block">/apps/blog/posts</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Detail</span>
-                            <span class="fs-3 text-muted d-block">/apps/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Shop</span>
-                            <span class="fs-3 text-muted d-block">/apps/ecommerce/shop</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Modern</span>
-                            <span class="fs-3 text-muted d-block">/dashboards/dashboard1</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Dashboard</span>
-                            <span class="fs-3 text-muted d-block">/dashboards/dashboard2</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Contacts</span>
-                            <span class="fs-3 text-muted d-block">/apps/contacts</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Posts</span>
-                            <span class="fs-3 text-muted d-block">/apps/blog/posts</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Detail</span>
-                            <span class="fs-3 text-muted d-block">/apps/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Shop</span>
-                            <span class="fs-3 text-muted d-block">/apps/ecommerce/shop</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
 
 <button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
     <i class="ti ti-settings fs-7" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Settings"></i>
