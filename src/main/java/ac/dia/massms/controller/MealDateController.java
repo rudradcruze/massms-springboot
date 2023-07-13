@@ -80,7 +80,7 @@ public class MealDateController {
     public ModelAndView showEditMealDatePage(@PathVariable("id") long id, Model model, @PathVariable String url) {
 
         ModelAndView modelAndView;
-        modelAndView = new ModelAndView("edit_meal_date_2");
+        modelAndView = new ModelAndView("edit_meal_date");
         MealDate mealDate = mealDateService.getById(id);
         mealDate.setMass(massService.getByUrl(url));
         modelAndView.addObject("mealDate", mealDate);
