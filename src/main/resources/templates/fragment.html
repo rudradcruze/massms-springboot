@@ -107,7 +107,7 @@
               </li>
             </ul>
           </li>
-          <li class="sidebar-item">
+          <li class="sidebar-item" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'CREATOR')">
             <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
                   <span class="d-flex">
                     <i class="ti ti-user-bolt"></i>

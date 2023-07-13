@@ -41,6 +41,36 @@ public class MassMemberController {
         return "mass_members";
     }
 
+    @PostMapping("/mass/{url}/member/{userId}/request")
+    public String memberRequest(@ModelAttribute("massMember") MassMember massMember, @PathVariable String url, @PathVariable String userId, Model model, Principal principal, RedirectAttributes attributes) {
+
+        if(principal == null){ return "redirect:/login"; }
+
+        massMember.setMass(massService.getByUrl(url));
+        massMember.setUser(userDetailsService.getById(Long.parseLong(userId)));
+        List<MassMember> massList = massMemberService.massMemberListByUserName(massMember.getUser().getUsername(), massMember.getMass().getId());
+        boolean exist = false;
+
+        for (MassMember massMemberEach : massList) {
+            exist = (massMemberEach.getUser().getUsername().equals(massMember.getUser().getUsername()));
+            break;
+        }
+
+        if (exist) {
+            attributes.addFlashAttribute("error", " You are already in " + massMember.getMass().getName() + " this mass.");
+        } else {
+            User user = userDetailsService.getById(massMember.getUser().getId());
+            massMember.setEnabled(false);
+            massMemberService.save(massMember);
+            user.getMassList().add(massMember.getMass());
+            userDetailsService.updateMassList(user);
+
+            attributes.addFlashAttribute("success", " Your request is successfully submitted into " + massMember.getMass().getName() + " mass, with for approval.");
+        }
+
+        return "redirect:/";
+    }
+
     @RequestMapping("/mass/{url}/new")
     public String addNewMemberIntoMass(@PathVariable("url") String url, Model model, Principal principal) {
         if(principal == null){ return "redirect:/login"; }
