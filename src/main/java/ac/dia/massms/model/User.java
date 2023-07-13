@@ -1,6 +1,5 @@
 package ac.dia.massms.model;
 
-import ac.dia.massms.model.Role;
 import lombok.*;
 
 import java.util.HashSet;
@@ -15,7 +14,6 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class User {
 	@Id
 	@Column(name = "user_id")

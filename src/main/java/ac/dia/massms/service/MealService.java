@@ -27,7 +27,6 @@ public class MealService {
         newMeal.setPrice(meal.getPrice());
         newMeal.setAllergens(meal.getAllergens());
         newMeal.setServingSize(meal.getServingSize());
-        newMeal.setDailyMeals(meal.getDailyMeals());
         newMeal.setServeTime(meal.getServeTime());
         mealRepository.save(newMeal);
     }
@@ -39,4 +38,8 @@ public class MealService {
 
     // Delete the time
     public void delete(long id) { mealRepository.delete(getById(id)); }
+
+    public List<Meal> listByMassUrl(String url) {
+        return mealRepository.getMealsByMass_Url(url);
+    }
 }

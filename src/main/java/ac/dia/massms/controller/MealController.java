@@ -2,6 +2,7 @@ package ac.dia.massms.controller;
 
 import ac.dia.massms.model.Mass;
 import ac.dia.massms.model.Meal;
+import ac.dia.massms.model.ServeTime;
 import ac.dia.massms.service.MassService;
 import ac.dia.massms.service.MealService;
 import ac.dia.massms.service.ServeTimeService;
@@ -29,13 +30,6 @@ public class MealController {
     @Autowired
     private MassService massService;
 
-    @GetMapping("/meal")
-    public String mealIndex(Model model) {
-        List<Meal> allMeals = mealService.listAll();
-        model.addAttribute("meals", allMeals);
-        return "meals";
-    }
-
     @RequestMapping(value = "/mass/{url}/meal/new")
     public String newMassMealPage(Model model, Principal principal, @PathVariable String url, HttpSession session) {
         if(principal == null){ return "redirect:/login"; }
@@ -48,11 +42,13 @@ public class MealController {
     }
 
     @GetMapping(value = "/mass/{url}/meal")
-    public String getMassByMeal(@PathVariable String url, Model model, Principal principal) {
+    public String getMassByMeal(@PathVariable String url, Model model, Principal principal, HttpSession session) {
+        if(principal == null){ return "redirect:/login"; }
+        List<Meal> massMealList = mealService.listByMassUrl(url);
         Mass mass = massService.getByUrl(url);
-        model.addAttribute("mealListByMass", mass.getMealList());
-        System.out.println(mass.getMealList());
-        return "Hi";
+        model.addAttribute("massMealList", massMealList);
+        session.setAttribute("mass", mass);
+        return "meals";
     }
 
     @PostMapping(value = "/mass/{url}/meal/new/save")
@@ -66,48 +62,49 @@ public class MealController {
         mealService.save(meal);
         massService.update(instanceofMass);
         attributes.addFlashAttribute("success", "Meal Successfully Created!");
-        return "redirect:/meal";
+        return "redirect:/mass/" + url + "/meal";
     }
 
-    @RequestMapping("/meal/edit/{id}")
-    public ModelAndView showEditMealPage(@PathVariable("id") long id, Model model) {
+    @RequestMapping(value = "/mass/{url}/meal/edit/{id}")
+    public ModelAndView showEditMealPage(@PathVariable("id") long id, Model model, @PathVariable String url, HttpSession session) {
         ModelAndView modelAndView;
-
         modelAndView = new ModelAndView("edit_meal");
         Meal meal = mealService.getById(id);
         if (meal != null) {
             modelAndView.addObject("meal", meal);
-            model.addAttribute("serveTimes", serveTimeService.listAll());
+            List<ServeTime> serveTimes = serveTimeService.listAll();
+            model.addAttribute("serveTimes", serveTimes);
         }
         else {
             modelAndView = new ModelAndView("meals");
-            model.addAttribute("meals", mealService.listAll());
+            model.addAttribute("meals", mealService.listByMassUrl(url));
         }
 
         return modelAndView;
     }
 
-    @PostMapping("/meal/edit/update")
-    public String updateMeal(Meal meal, RedirectAttributes attributes, Principal principal) {
+    @PostMapping("/mass/{url}/meal/edit/update")
+    public String updateMeal(Meal meal, RedirectAttributes attributes, Principal principal, @PathVariable String url) {
         if(principal == null){ return "redirect:/login"; }
-
+        meal.setMass(massService.getByUrl(url));
         try {
+            meal.setServeTime(serveTimeService.getById(meal.getServeTime().getId()));
             mealService.update(meal);
-            attributes.addFlashAttribute("success","Updated successfully");
+            attributes.addFlashAttribute("success","Meal Updated successfully");
         }catch (DataIntegrityViolationException e){
             e.printStackTrace();
             attributes.addFlashAttribute("error", "Failed to update because duplicate.");
-            return "redirect:/meal/edit/" + meal.getId();
+            return "redirect:/mass/" + url + "/meal/edit/" + meal.getId();
         }catch (Exception e){
             e.printStackTrace();
             attributes.addFlashAttribute("error", "Error server");
         }
 
-        return "redirect:/meal";
+        return "redirect:/mass/" + url + "/meal";
     }
 
-    @RequestMapping("/meal/delete/{id}")
-    public String deleteMeal(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal) {
+    @RequestMapping("/mass/{url}/meal/delete/{id}")
+    public String deleteMeal(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal, @PathVariable String url) {
         if(principal == null){ return "redirect:/login"; }
 
         try {
@@ -118,6 +115,6 @@ public class MealController {
             attributes.addFlashAttribute("failed", "Failed to delete");
         }
 
-        return "redirect:/meal/";
+        return "redirect:/mass/" + url + "/meal";
     }
 }
