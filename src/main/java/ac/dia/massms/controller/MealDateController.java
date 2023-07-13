@@ -76,18 +76,20 @@ public class MealDateController {
         return "redirect:/mass/" + url + "/meal/date/";
     }
 
-    @RequestMapping("/meal/date/edit/{id}")
-    public ModelAndView showEditMealDatePage(@PathVariable("id") long id, Model model) {
+    @RequestMapping("/mass/{url}/meal/date/edit/{id}")
+    public ModelAndView showEditMealDatePage(@PathVariable("id") long id, Model model, @PathVariable String url) {
 
         ModelAndView modelAndView;
-        modelAndView = new ModelAndView("edit_meal_date");
-        modelAndView.addObject("mealDate", mealDateService.getById(id));
-        model.addAttribute("meals", mealService.listAll());
+        modelAndView = new ModelAndView("edit_meal_date_2");
+        MealDate mealDate = mealDateService.getById(id);
+        mealDate.setMass(massService.getByUrl(url));
+        modelAndView.addObject("mealDate", mealDate);
+        model.addAttribute("meals", mealService.listByMassUrl(url));
         return modelAndView;
     }
 
-    @PostMapping("/meal/date/edit/update")
-    public String updateMealDate(@ModelAttribute("mealDate") MealDate mealDate, RedirectAttributes attributes, Principal principal, String str_mealDate) {
+    @PostMapping("/mass/{url}/meal/date/edit/update")
+    public String updateMealDate(@ModelAttribute("mealDate") MealDate mealDate, RedirectAttributes attributes, Principal principal, String str_mealDate, @PathVariable String url) {
         if (principal == null) { return "redirect:/login"; }
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -98,12 +100,13 @@ public class MealDateController {
             throw new RuntimeException(e);
         }
 
+        mealDate.setMass(massService.getByUrl(url));
         mealDate.setMeal(mealService.getById(mealDate.getMeal().getId()));
 
         mealDateService.update(mealDate);
         attributes.addFlashAttribute("success", "Meal date update successfully!");
 
-        return "redirect:/meal/date";
+        return "redirect:/mass/" + url + "/meal/date/";
     }
 
     @RequestMapping("/meal/date/delete/{id}")
