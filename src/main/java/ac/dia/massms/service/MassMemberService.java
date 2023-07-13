@@ -21,7 +21,7 @@ public class MassMemberService{
         massMemberRepository.save(massMember);
     }
 
-    public List<MassMember> massMemberListByUserName(String username) {
-        return massMemberRepository.getMassMemberByUserUsername(username);
+    public List<MassMember> massMemberListByUserName(String username, long id) {
+        return massMemberRepository.getMassMembersByUserUsernameAndMassId(username, id);
     }
 }

@@ -1,6 +1,9 @@
 package ac.dia.massms.controller;
 
+import ac.dia.massms.model.Mass;
+import ac.dia.massms.model.Meal;
 import ac.dia.massms.model.MealDate;
+import ac.dia.massms.service.MassService;
 import ac.dia.massms.service.MealDateService;
 import ac.dia.massms.service.MealService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -26,26 +30,32 @@ public class MealDateController {
     @Autowired
     private MealService mealService;
 
-    @GetMapping("/meal/date")
-    public String mealDateList(Model model) {
+    @Autowired
+    private MassService massService;
+
+    @GetMapping("/mass/{url}/meal/date")
+    public String mealDateList(Model model, @PathVariable String url) {
         List<MealDate> mealDateList = mealDateService.listAll();
         model.addAttribute("mealDateList", mealDateList);
 
         return "meal_date";
     }
 
-    @GetMapping("/meal/date/new")
-    public String newMealDatePage(Model model, Principal principal) {
+    @GetMapping("/mass/{url}/meal/date/new")
+    public String newMealDatePage(Model model, Principal principal, @PathVariable String url) {
         if(principal == null) { return "redirect:/login"; }
-        model.addAttribute("mealDate", new MealDate());
+        Mass mass = massService.getByUrl(url);
+        MealDate mealDate = new MealDate();
+        mealDate.setMass(mass);
+        model.addAttribute("mealDate", mealDate);
         model.addAttribute("meals", mealService.listAll());
 
-        return "new_meal_date";
+        return "new_meal_date_2";
     }
 
 
-    @PostMapping("/meal/date/new/save")
-    public String saveMealDate(@ModelAttribute("mealDate") MealDate mealDate, RedirectAttributes attributes, Principal principal, String str_mealDate) {
+    @PostMapping("/mass/{url}/meal/date/new/save")
+    public String saveMealDate(@ModelAttribute("mealDate") MealDate mealDate, RedirectAttributes attributes, Principal principal, String str_mealDate, @PathVariable String url) {
 
         if (principal == null) { return "redirect:/login"; }
 
@@ -59,11 +69,11 @@ public class MealDateController {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
+        mealDate.setMass(massService.getById(mealDate.getMass().getId()));
         mealDateService.save(mealDate);
         attributes.addFlashAttribute("success", mealDate.getMeal().getName() + " is successfully created.");
 
-        return "redirect:/meal/date/new";
+        return "redirect:/mass/" + url + "/meal/date/";
     }
 
     @RequestMapping("/meal/date/edit/{id}")

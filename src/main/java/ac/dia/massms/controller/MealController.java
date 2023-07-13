@@ -38,7 +38,7 @@ public class MealController {
         Mass mass = massService.getByUrl(url);
         session.setAttribute("mass", mass);
         model.addAttribute("title", mass.getName() + " New Meal");
-        return "new_meal_2";
+        return "new_meal";
     }
 
     @GetMapping(value = "/mass/{url}/meal")

@@ -34,4 +34,7 @@ public class Mass {
 
 	@OneToMany(mappedBy = "mass")
 	private List<MassMember> messMemberList;
+
+	@OneToMany(mappedBy = "mass")
+	private List<MealDate> mealDateList;
 }

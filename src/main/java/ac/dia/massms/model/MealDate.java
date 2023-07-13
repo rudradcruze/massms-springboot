@@ -23,4 +23,8 @@ public class MealDate {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date mealDate;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "mass_id", nullable = false)
+    private Mass mass;
 }

@@ -60,7 +60,7 @@ public class MassMemberController {
         if(principal == null){ return "redirect:/login"; }
 
         massMember.setMass(massService.getByUrl(url));
-        List<MassMember> massList = massMemberService.massMemberListByUserName(massMember.getUser().getUsername());
+        List<MassMember> massList = massMemberService.massMemberListByUserName(massMember.getUser().getUsername(), massMember.getMass().getId());
         boolean exist = false;
 
         for (MassMember massMemberEach : massList) {

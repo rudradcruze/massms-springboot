@@ -10,5 +10,6 @@ import java.util.List;
 public interface MassMemberRepository extends CrudRepository<MassMember, Long> {
     MassMember getMassMemberById(long id);
 
-    List<MassMember> getMassMemberByUserUsername(String username);
+//    List<MassMember> getMassMemberByUserUsername(String username);
+    List<MassMember> getMassMembersByUserUsernameAndMassId(String username, long id);
 }
