@@ -81,7 +81,7 @@
             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
             <span class="hide-menu">Apps</span>
           </li>
-          <li class="sidebar-item">
+          <li class="sidebar-item"  sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'CREATOR', 'MANAGER')">
             <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
                   <span class="d-flex">
                     <i class="ti ti-list-details"></i>
@@ -95,14 +95,6 @@
                     <i class="ti ti-circle"></i>
                   </div>
                   <span class="hide-menu">Mass List</span>
-                </a>
-              </li>
-              <li class="sidebar-item" >
-                <a th:href="@{/mass/new}" sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR', 'MANAGER')" class="sidebar-link">
-                  <div class="round-16 d-flex align-items-center justify-content-center">
-                    <i class="ti ti-circle"></i>
-                  </div>
-                  <span class="hide-menu">New Mass</span>
                 </a>
               </li>
             </ul>
@@ -121,14 +113,6 @@
                     <i class="ti ti-circle"></i>
                   </div>
                   <span class="hide-menu">User List</span>
-                </a>
-              </li>
-              <li class="sidebar-item" >
-                <a th:href="@{/user/new}" sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR')" class="sidebar-link">
-                  <div class="round-16 d-flex align-items-center justify-content-center">
-                    <i class="ti ti-circle"></i>
-                  </div>
-                  <span class="hide-menu">New User</span>
                 </a>
               </li>
             </ul>
@@ -157,164 +141,7 @@
 
   <!--  Mobile nav bar -->
   <div th:fragment="mobilenav" class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="mobilenavbar" aria-labelledby="offcanvasWithBothOptionsLabel">
-    <nav class="sidebar-nav scroll-sidebar">
-      <div class="offcanvas-header justify-content-between">
-        <img th:src="@{../../../../../../images/logos/favicon.ico}" alt="Favicon" class="img-fluid">
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body profile-dropdown mobile-navbar" data-simplebar="">
-        <ul id="sidebarnav">
-          <li class="sidebar-item">
-            <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                <span>
-                  <i class="ti ti-apps"></i>
-                </span>
-              <span class="hide-menu">Apps</span>
-            </a>
-            <ul aria-expanded="false" class="collapse first-level my-3">
-              <li class="sidebar-item py-2">
-                <a href="#" class="d-flex align-items-center">
-                  <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                    <img th:src="@{../../../../../../images/svgs/icon-dd-chat.svg}" alt="Chat" class="img-fluid" width="24" height="24">
-                  </div>
-                  <div class="d-inline-block">
-                    <h6 class="mb-1 bg-hover-primary">Chat Application</h6>
-                    <span class="fs-2 d-block fw-normal text-muted">New messages arrived</span>
-                  </div>
-                </a>
-              </li>
-              <li class="sidebar-item py-2">
-                <a href="#" class="d-flex align-items-center">
-                  <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                    <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/images/svgs/icon-dd-invoice.svg" alt="" class="img-fluid" width="24" height="24">
-                  </div>
-                  <div class="d-inline-block">
-                    <h6 class="mb-1 bg-hover-primary">Invoice App</h6>
-                    <span class="fs-2 d-block fw-normal text-muted">Get latest invoice</span>
-                  </div>
-                </a>
-              </li>
-              <li class="sidebar-item py-2">
-                <a href="#" class="d-flex align-items-center">
-                  <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                    <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/images/svgs/icon-dd-mobile.svg" alt="" class="img-fluid" width="24" height="24">
-                  </div>
-                  <div class="d-inline-block">
-                    <h6 class="mb-1 bg-hover-primary">Contact Application</h6>
-                    <span class="fs-2 d-block fw-normal text-muted">2 Unsaved Contacts</span>
-                  </div>
-                </a>
-              </li>
-              <li class="sidebar-item py-2">
-                <a href="#" class="d-flex align-items-center">
-                  <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                    <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/images/svgs/icon-dd-message-box.svg" alt="" class="img-fluid" width="24" height="24">
-                  </div>
-                  <div class="d-inline-block">
-                    <h6 class="mb-1 bg-hover-primary">Email App</h6>
-                    <span class="fs-2 d-block fw-normal text-muted">Get new emails</span>
-                  </div>
-                </a>
-              </li>
-              <li class="sidebar-item py-2">
-                <a href="#" class="d-flex align-items-center">
-                  <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                    <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/images/svgs/icon-dd-cart.svg" alt="" class="img-fluid" width="24" height="24">
-                  </div>
-                  <div class="d-inline-block">
-                    <h6 class="mb-1 bg-hover-primary">User Profile</h6>
-                    <span class="fs-2 d-block fw-normal text-muted">learn more information</span>
-                  </div>
-                </a>
-              </li>
-              <li class="sidebar-item py-2">
-                <a href="#" class="d-flex align-items-center">
-                  <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                    <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/images/svgs/icon-dd-date.svg" alt="" class="img-fluid" width="24" height="24">
-                  </div>
-                  <div class="d-inline-block">
-                    <h6 class="mb-1 bg-hover-primary">Calendar App</h6>
-                    <span class="fs-2 d-block fw-normal text-muted">Get dates</span>
-                  </div>
-                </a>
-              </li>
-              <li class="sidebar-item py-2">
-                <a href="#" class="d-flex align-items-center">
-                  <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                    <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/images/svgs/icon-dd-lifebuoy.svg" alt="" class="img-fluid" width="24" height="24">
-                  </div>
-                  <div class="d-inline-block">
-                    <h6 class="mb-1 bg-hover-primary">Contact List Table</h6>
-                    <span class="fs-2 d-block fw-normal text-muted">Add new contact</span>
-                  </div>
-                </a>
-              </li>
-              <li class="sidebar-item py-2">
-                <a href="#" class="d-flex align-items-center">
-                  <div class="bg-light rounded-1 me-3 p-6 d-flex align-items-center justify-content-center">
-                    <img src="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/images/svgs/icon-dd-application.svg" alt="" class="img-fluid" width="24" height="24">
-                  </div>
-                  <div class="d-inline-block">
-                    <h6 class="mb-1 bg-hover-primary">Notes Application</h6>
-                    <span class="fs-2 d-block fw-normal text-muted">To-do and Daily tasks</span>
-                  </div>
-                </a>
-              </li>
-              <ul class="px-8 mt-7 mb-4">
-                <li class="sidebar-item mb-3">
-                  <h5 class="fs-5 fw-semibold">Quick Links</h5>
-                </li>
-                <li class="sidebar-item py-2">
-                  <a class="fw-semibold text-dark" href="#">Pricing Page</a>
-                </li>
-                <li class="sidebar-item py-2">
-                  <a class="fw-semibold text-dark" href="#">Authentication Design</a>
-                </li>
-                <li class="sidebar-item py-2">
-                  <a class="fw-semibold text-dark" href="#">Register Now</a>
-                </li>
-                <li class="sidebar-item py-2">
-                  <a class="fw-semibold text-dark" href="#">404 Error Page</a>
-                </li>
-                <li class="sidebar-item py-2">
-                  <a class="fw-semibold text-dark" href="#">Notes App</a>
-                </li>
-                <li class="sidebar-item py-2">
-                  <a class="fw-semibold text-dark" href="#">User Application</a>
-                </li>
-                <li class="sidebar-item py-2">
-                  <a class="fw-semibold text-dark" href="#">Account Settings</a>
-                </li>
-              </ul>
-            </ul>
-          </li>
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="app-chat.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-message-dots"></i>
-                </span>
-              <span class="hide-menu">Chat</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="app-calendar.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-calendar"></i>
-                </span>
-              <span class="hide-menu">Calendar</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="app-email.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-mail"></i>
-                </span>
-              <span class="hide-menu">Email</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+
   </div>
 
   <header th:fragment="header" class="app-header">
@@ -337,9 +164,6 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <div class="d-flex align-items-center justify-content-between">
-          <a href="javascript:void(0)" class="nav-link d-flex d-lg-none align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobilenavbar" aria-controls="offcanvasWithBothOptions">
-            <i class="ti ti-align-justified fs-7"></i>
-          </a>
           <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-center">
             <li class="nav-item dropdown">
               <a class="nav-link pe-0" href="javascript:void(0)" id="drop1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -386,6 +210,19 @@
                           <div class="col-6">
                             <div class="m-n4">
                               <img th:src="@{../../../../../../images/backgrounds/unlimited-bg.png}" alt="Sign Up" class="w-100">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="upgrade-plan bg-light-primary position-relative overflow-hidden rounded-4 p-4 mb-9" sec:authorize="!isAuthenticated()">
+                        <div class="row">
+                          <div class="col-6">
+                            <h5 class="fs-4 mb-3 w-50 fw-semibold text-dark">Become Manager</h5>
+                            <a th:href="@{/manager/register}" class="btn btn-primary text-white">Sign Up</a>
+                          </div>
+                          <div class="col-6">
+                            <div class="m-n4">
+                              <img th:src="@{../../../../../../images/backgrounds/welcome-bg2.png}" alt="Sign Up" class="w-100">
                             </div>
                           </div>
                         </div>
@@ -448,6 +285,43 @@
             aria-label="Close">
     </button>
     <span th:text="${error}"></span>
+  </div>
+
+  <div th:fragment="adminMenu">
+    <div th:unless="${session.mass.user.username != session.user.username}" class="row" sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR', 'MANAGER')">
+      <div class="row">
+        <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
+          <a th:href="@{/mass/edit/{id} (id = ${session.mass.id})}" class="btn btn-info d-flex align-items-center me-7">
+            <i class="ti ti-edit text-white me-1 fs-5"></i> Edit <span class="px-2" th:text="${session.mass.name}"></span>
+          </a>
+          <a th:href="@{/mass/{url}/meal/time/new (url = ${session.mass.url})}" class="btn btn-secondary d-flex align-items-center me-7">
+            <i class="ti ti-clock-plus text-white me-1 fs-5"></i> Add Meal Time
+          </a>
+          <a th:href="@{/mass/{url}/meal (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-7">
+            <i class="ti ti-checkup-list text-white me-1 fs-5"></i> Meal List
+          </a>
+          <a th:href="@{/mass/{url}/meal/date (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center">
+            <i class="ti ti-clipboard-data text-white me-1 fs-5"></i> Meal Date List
+          </a>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
+          <a th:href="@{/mass/{url}/meal/date/new (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-7">
+            <i class="ti ti-file-time text-white me-1 fs-5"></i> Add Meal Date
+          </a>
+          <a th:href="@{/mass/{url}/meal/new (url = ${session.mass.url})}" class="btn btn-success d-flex align-items-center me-7">
+            <i class="ti ti-brand-deliveroo text-white me-1 fs-5"></i> Add Meal
+          </a>
+          <a sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR')" th:href="@{/mass/{url}/new (url = ${session.mass.url})}" class="btn btn-primary d-flex align-items-center">
+            <i class="ti ti-user-plus text-white me-1 fs-5"></i> Add New Member
+          </a>
+          <a th:href="@{/mass/{url}/meal/date/member (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center">
+            <i class="ti ti-brand-deliveroo text-white me-1 fs-5"></i> Meal Taken List
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div th:fragment="userAndMemberButtons">

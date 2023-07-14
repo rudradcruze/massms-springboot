@@ -50,7 +50,7 @@ public class ServeTimeController {
 
     // Save new
     @PostMapping("/mass/{url}/meal/time/new/save")
-    public String saveServeTime(@ModelAttribute("serveTime") ServeTime serveTime, RedirectAttributes attributes, Principal principal, @PathVariable String url) {
+    public String saveServeTime(@ModelAttribute("serveTime") ServeTime serveTime, RedirectAttributes attributes, Principal principal, @PathVariable String url, Model model) {
 
         if (principal == null) { return "redirect:/login"; }
 
@@ -58,7 +58,8 @@ public class ServeTimeController {
 
         if (dbServeTime != null) {
             attributes.addFlashAttribute("error", "Can't insert. This Identifier is already exist!");
-            return "redirect:/mass/"+ url +"meal/time/new";
+            model.addAttribute("serveTime", serveTime);
+            return "redirect:/mass/"+ url +"/meal/time/new";
         }
 
         Mass mass = massService.getByUrl(url);

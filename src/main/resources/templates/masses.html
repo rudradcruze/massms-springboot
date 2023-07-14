@@ -21,7 +21,7 @@
                 <div class="card-body px-4 py-3">
                     <div class="row align-items-center">
                         <div class="col-9">
-                            <h4 class="fw-semibold mb-8">All Mass - <span th:text="${massList.size()}"></span></h4>
+                            <h4 class="fw-semibold mb-8">All Mass - <span th:if="${massList != null}" th:text="${massList.size()}"></span></h4>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a class="text-muted " th:href="@{/}">Dashboard</a></li>
@@ -73,7 +73,7 @@
                                             <th>Contact</th>
                                             <th>Approved</th>
                                             <th>Manager</th>
-                                            <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Actions</th>
+                                            <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -95,27 +95,27 @@
                                                             <i class="ti ti-dots fs-4"></i>
                                                         </a>
                                                         <ul class="dropdown-menu" aria-labelledby="nft2">
-                                                            <li>
+                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">
                                                                 <a class="dropdown-item d-flex align-items-center" th:href="@{'/mass/edit/' + ${mass.id}}">
                                                                     <i class="ti ti-edit px-2"></i> <span> Edit</span>
                                                                 </a>
                                                             </li>
-                                                            <li>
+                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                                                                 <a class="dropdown-item d-flex align-items-center" th:href="@{/mass/{url}/new (url = ${mass.url})}">
                                                                     <i class="ti ti-user-plus px-2"></i> <span> Add Mess Member</span>
                                                                 </a>
                                                             </li>
-                                                            <li>
+                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                                                                 <a class="dropdown-item d-flex align-items-center" th:href="@{/mass/{url}/ (url = ${mass.url})}">
                                                                     <i class="ti ti-users px-2"></i> <span>Mass Members</span>
                                                                 </a>
                                                             </li>
-                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">
+                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">
                                                                 <a class="dropdown-item d-flex align-items-center" th:href="@{'/mass/status/' + ${mass.id}}">
                                                                     <i class="ti ti-status-change px-2"></i> <span th:text="${' ' + mass.isApproved() ? 'Deactivate' : 'Activate'}"></span>
                                                                 </a>
                                                             </li>
-                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">
+                                                            <li sec:authorize="hasAnyAuthority('ADMIN')">
                                                                 <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/delete/' + ${mass.id}}">
                                                                     <i class="ti ti-trash px-2"></i> <span> Delete</span>
                                                                 </a>

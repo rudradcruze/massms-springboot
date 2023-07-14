@@ -40,4 +40,8 @@ public class ServeTimeService {
 
     // Delete the time
     public void delete(String identifier) { serveTimeRepository.delete(getByIdentifier(identifier)); }
+
+    public List<ServeTime> getAllServeTimeByMassUrl(String url) {
+        return serveTimeRepository.findServeTimesByMassUrl(url);
+    }
 }

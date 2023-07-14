@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -43,11 +44,12 @@ public class User {
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Mass> massList;
 
-	public int calculateTotalMeal() {
+	public int calculateTotalMeal(String url) {
 		List<MemberMeal> list = getMemberMealList();
 		int count = 0;
 		for (MemberMeal memberMeal : list) {
-			count += memberMeal.getQuantity();
+			if (Objects.equals(memberMeal.getMealDate().getMass().getUrl(), url))
+				count += memberMeal.getQuantity();
 		}
 		return count;
 	}

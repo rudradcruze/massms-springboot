@@ -36,7 +36,7 @@ public class MassMemberController {
         Mass mass = massService.getByUrl(url);
         model.addAttribute("massMemberList", mass.getMessMemberList());
         model.addAttribute("title", mass.getName() + " Mass Members");
-        model.addAttribute("serveTimeList", serveTimeService.listAll());
+        model.addAttribute("serveTimeList", serveTimeService.getAllServeTimeByMassUrl(url));
         session.setAttribute("mass", mass);
         MassMember massMember = new MassMember();
         model.addAttribute("massMember", massMember);

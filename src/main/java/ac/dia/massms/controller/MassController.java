@@ -2,6 +2,7 @@ package ac.dia.massms.controller;
 
 import ac.dia.massms.model.Mass;
 import ac.dia.massms.model.MassMember;
+import ac.dia.massms.model.Role;
 import ac.dia.massms.model.User;
 import ac.dia.massms.repository.UserRepository;
 import ac.dia.massms.service.MassService;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Controller
 public class MassController {
@@ -36,7 +39,21 @@ public class MassController {
 
     @GetMapping("/mass")
     public String showMass(Model model, Principal principal, HttpSession session) {
-        List<Mass> massList = massService.listAll();
+        if(principal == null) { return "redirect:/login"; }
+        List<Mass> massList = null;
+        User user = userRepository.getUserByUsername(principal.getName());
+        Set<Role> roleList = user.getRoles();
+
+        for (Role role : roleList) {
+            if (Objects.equals(role.getName(), "ADMIN") || Objects.equals(role.getName(), "EDITOR") || Objects.equals(role.getName(), "CREATOR")) {
+                massList = massService.listAll();
+                break;
+            } else if (Objects.equals(role.getName(), "MANAGER")) {
+                massList = massService.getManagerMasses(principal.getName());
+                break;
+            }
+        }
+
         model.addAttribute("massList", massList);
         model.addAttribute("title", "MASSMS - Mass");
         messMethod(model, principal, session);
@@ -64,11 +81,40 @@ public class MassController {
     @RequestMapping("/mass/edit/{id}")
     public ModelAndView newMassEditPage(@PathVariable("id") long id, Model model, Principal principal, HttpSession session) {
         Mass mass = massService.getById(id);
-        ModelAndView modelAndView = new ModelAndView("edit_mass");
-        modelAndView.addObject("mass", mass);
-        messMethod(model, principal, session);
-        model.addAttribute("newMass", new Mass());
-        model.addAttribute("title", "Edit " + mass.getName() + " Mass");
+        ModelAndView modelAndView;
+        if (principal != null) {
+            List<Mass> massList = null;
+            if (Objects.equals(principal.getName(), mass.getUser().getUsername())) {
+                modelAndView = new ModelAndView("edit_mass");
+                modelAndView.addObject("mass", mass);
+                model.addAttribute("title", "Edit " + mass.getName() + " Mass");
+            }
+            else {
+                modelAndView = new ModelAndView("masses");
+                User user = userRepository.getUserByUsername(principal.getName());
+                Set<Role> roleList = user.getRoles();
+
+                for (Role role : roleList) {
+                    if (Objects.equals(role.getName(), "ADMIN") || Objects.equals(role.getName(), "EDITOR") || Objects.equals(role.getName(), "CREATOR")) {
+                        massList = massService.listAll();
+                        break;
+                    } else if (Objects.equals(role.getName(), "MANAGER")) {
+                        massList = massService.getManagerMasses(principal.getName());
+                        break;
+                    }
+                }
+            }
+            messMethod(model, principal, session);
+//            model.addAttribute("newMass", new Mass());
+            model.addAttribute("massList", massList);
+        }
+        else {
+            modelAndView = new ModelAndView("index");
+            session.removeAttribute("user");
+            model.addAttribute("title", "MASSMS - Home");
+            List<Mass> massList = massService.listAll();
+            model.addAttribute("massList", massList);
+        }
         return modelAndView;
     }
 

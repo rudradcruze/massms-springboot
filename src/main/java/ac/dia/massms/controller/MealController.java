@@ -34,7 +34,7 @@ public class MealController {
     public String newMassMealPage(Model model, Principal principal, @PathVariable String url, HttpSession session) {
         if(principal == null){ return "redirect:/login"; }
         model.addAttribute("meal", new Meal());
-        model.addAttribute("serveTimes", serveTimeService.listAll());
+        model.addAttribute("serveTimes", serveTimeService.getAllServeTimeByMassUrl(url));
         Mass mass = massService.getByUrl(url);
         session.setAttribute("mass", mass);
         model.addAttribute("title", mass.getName() + " New Meal");

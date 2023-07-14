@@ -43,8 +43,14 @@ public class AuthController {
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("user", new User());
-        model.addAttribute("title", "MASSMS - Register");
+        model.addAttribute("title", "MASSMS - Registration");
         return "sign_up";
+    }
+    @GetMapping("/manager/register")
+    public String registerManager(Model model) {
+        model.addAttribute("user", new User());
+        model.addAttribute("title", "MASSMS Manager Registration");
+        return "sign_up_manager";
     }
 
     @PostMapping("/do-register")
@@ -99,5 +105,59 @@ public class AuthController {
             System.out.println(e);
         }
         return "sign_up";
+    }
+
+    @PostMapping("/do-register-manager")
+    public String processRegisterManager(@Valid @ModelAttribute("user") User user,
+                                  BindingResult result,
+                                  Model model,
+                                  RedirectAttributes attributes) {
+        try {
+            if (result.hasErrors()) {
+                model.addAttribute("user", user);
+                return "sign_up_manager";
+            }
+            User userNew = userDetailsService.getByUserName(user.getUsername());
+            if(userNew != null){
+                model.addAttribute("username", "Email have already registered");
+                model.addAttribute("user", user);
+                return "sign_up_manager";
+            }
+            if(user.getFirstName() == null){
+                model.addAttribute("firstName", "First name cannot be null");
+                model.addAttribute("user", user);
+                return "sign_up_manager";
+            }
+            if(user.getLastName() == null){
+                model.addAttribute("lastName", "Last name cannot be null");
+                model.addAttribute("user", user);
+                return "sign_up_manager";
+            }
+            if (user.getPassword().length() >= 5 && user.getPassword().length() <= 20) {
+                if(user.getPassword().equals(user.getConfirmPassword())){
+                    user.setPassword(passwordEncoder.encode(user.getPassword()));
+                    user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
+                    user.setEnabled(false);
+                    Set<Role> rolesSet = user.getRoles();
+                    rolesSet.add(roleRepository.findRoleByName("MANAGER"));
+                    user.setRoles(rolesSet);
+                    userRepository.save(user);
+                    attributes.addFlashAttribute("success", "User is successfully registered.");
+                    return "redirect:/login";
+                }else{
+                    model.addAttribute("password", "Password is not same");
+                    model.addAttribute("user", user);
+                }
+            } else {
+                model.addAttribute("password", "Password should have 5-20 characters");
+                model.addAttribute("user", user);
+            }
+            return "sign_up_manager";
+        }catch (Exception e){
+            model.addAttribute("error", "Server have ran some problems");
+            model.addAttribute("user", user);
+            System.out.println(e);
+        }
+        return "sign_up_manager";
     }
 }

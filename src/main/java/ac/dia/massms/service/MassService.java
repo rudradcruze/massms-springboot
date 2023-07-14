@@ -46,4 +46,8 @@ public class MassService {
     }
 
     public void delete(long id) { massRepository.delete(getById(id)); }
+
+    public List<Mass> getManagerMasses(String username) {
+        return massRepository.getMassesByUserUsername(username);
+    }
 }

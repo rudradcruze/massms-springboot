@@ -61,26 +61,8 @@
                 <div th:replace="fragment :: errorAlertBg"></div>
             </div>
             <!-- Add new -->
-            <div class="card card-body mt-9" sec:authorize="isAuthenticated()">
-                <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR', 'MANAGER')">
-                    <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
-                        <a th:href="@{/mass/edit/{id} (id = ${session.mass.id})}" class="btn btn-info d-flex align-items-center me-7">
-                            <i class="ti ti-edit text-white me-1 fs-5"></i> Edit <span class="px-2" th:text="${session.mass.name}"></span>
-                        </a>
-                        <a th:href="@{/mass/{url}/meal/time/new (url = ${session.mass.url})}" class="btn btn-secondary d-flex align-items-center me-7">
-                            <i class="ti ti-clock-plus text-white me-1 fs-5"></i> Add Meal Time
-                        </a>
-                        <a th:href="@{/mass/{url}/meal (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-7">
-                            <i class="ti ti-checkup-list text-white me-1 fs-5"></i> Meal List
-                        </a>
-                        <a th:href="@{/mass/{url}/meal/new (url = ${session.mass.url})}" class="btn btn-success d-flex align-items-center me-7">
-                            <i class="ti ti-brand-deliveroo text-white me-1 fs-5"></i> Add Meal
-                        </a>
-                        <a th:href="@{/mass/{url}/new (url = ${session.mass.url})}" class="btn btn-primary d-flex align-items-center">
-                            <i class="ti ti-user-plus text-white me-1 fs-5"></i> Add New Member
-                        </a>
-                    </div>
-                </div>
+            <div class="card card-body mt-9" sec:authorize="isAuthenticated()" th:if="${session.mass.isApproved()}">
+                <div th:replace="fragment :: adminMenu"></div>
                 <div th:replace="fragment :: userAndMemberButtons"></div>
             </div>
         </div>
@@ -138,7 +120,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">
+                <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')" th:unless="${session.mass.user.username != session.user.username}">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
@@ -166,7 +148,7 @@
                                                 <td th:text="${member.user.firstName}"></td>
                                                 <td th:text="${member.user.lastName}"></td>
                                                 <td th:text="${member.mass.url}"></td>
-                                                <td th:text="${member.user.calculateTotalMeal()}"></td>
+                                                <td th:text="${member.user.calculateTotalMeal(member.mass.url)}"></td>
                                                 <td th:text="${member.user.username}"></td>
                                                 <td th:text="${member.isEnabled()} ? 'Activated' : 'Deactivated'"></td>
 
@@ -204,98 +186,6 @@
 </div>
 
 <div th:replace="fragment :: mobilenav"></div>
-
-<!--  Search Bar -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-        <div class="modal-content rounded-1">
-            <div class="modal-header border-bottom">
-                <input type="search" class="form-control fs-3" placeholder="Search here" id="search" />
-                <span data-bs-dismiss="modal" class="lh-1 cursor-pointer">
-                    <i class="ti ti-x fs-5 ms-3"></i>
-                </span>
-            </div>
-            <div class="modal-body message-body" data-simplebar="">
-                <h5 class="mb-0 fs-5 p-1">Quick Page Links</h5>
-                <ul class="list mb-0 py-2">
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Modern</span>
-                            <span class="fs-3 text-muted d-block">/dashboards/dashboard1</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Dashboard</span>
-                            <span class="fs-3 text-muted d-block">/dashboards/dashboard2</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Contacts</span>
-                            <span class="fs-3 text-muted d-block">/apps/contacts</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Posts</span>
-                            <span class="fs-3 text-muted d-block">/apps/blog/posts</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Detail</span>
-                            <span class="fs-3 text-muted d-block">/apps/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Shop</span>
-                            <span class="fs-3 text-muted d-block">/apps/ecommerce/shop</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Modern</span>
-                            <span class="fs-3 text-muted d-block">/dashboards/dashboard1</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Dashboard</span>
-                            <span class="fs-3 text-muted d-block">/dashboards/dashboard2</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Contacts</span>
-                            <span class="fs-3 text-muted d-block">/apps/contacts</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Posts</span>
-                            <span class="fs-3 text-muted d-block">/apps/blog/posts</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Detail</span>
-                            <span class="fs-3 text-muted d-block">/apps/blog/detail/streaming-video-way-before-it-was-cool-go-dark-tomorrow</span>
-                        </a>
-                    </li>
-                    <li class="p-1 mb-1 bg-hover-light-black">
-                        <a href="#">
-                            <span class="fs-3 text-black fw-normal d-block">Shop</span>
-                            <span class="fs-3 text-muted d-block">/apps/ecommerce/shop</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
 <button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
     <i class="ti ti-settings fs-7" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Settings"></i>
 </button>

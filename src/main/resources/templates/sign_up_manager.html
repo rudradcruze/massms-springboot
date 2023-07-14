@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment :: head_link_up"></head>
+<body>
+    <div th:replace="fragment :: preloader"></div>
+    <!--  Body Wrapper -->
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+      <div class="position-relative overflow-hidden radial-gradient min-vh-100">
+        <div class="position-relative z-index-5">
+          <div class="row">
+            <div class="col-xl-7 col-xxl-8">
+              <a th:href="@{/}" class="text-nowrap logo-img d-block px-4 py-9 w-100">
+                <img th:src="@{../images/logo/dark-logo.svg}" width="180" alt="Logo">
+              </a>
+              <div class="d-none d-xl-flex align-items-center justify-content-center" style="height: calc(100vh - 80px);">
+                <img th:src="@{../images/backgrounds/login-security.svg}" alt="" class="img-fluid" width="500">
+              </div>
+            </div>
+            <div class="col-xl-5 col-xxl-4">
+              <div class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
+                <div class="col-sm-8 col-md-6 col-xl-9">
+                  <h2 class="mb-3 fs-7 fw-bolder">Welcome to MASSMS</h2>
+                  <div class="position-relative text-start my-4">
+                    <p class="mb-0 fs-4 px-0 d-inline-block bg-white text-dark z-index-5 position-relative">Sign Up</p>
+                    <span class="border-top w-100 position-absolute top-50 start-50 translate-middle"></span>
+                  </div>
+
+                  <div th:if="${error}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Error - </strong> <span th:text="${error}"></span>
+                  </div>
+
+                  <div th:if="${username}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Error - </strong> <span th:text="${username}"></span>
+                  </div>
+
+                  <div th:if="${password}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Error - </strong> <span th:text="${password}"></span>
+                  </div>
+
+                  <div th:if="${firstName}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Error - </strong> <span th:text="${firstName}"></span>
+                  </div>
+
+                  <div th:if="${lastName}" class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert">
+                    <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="alert"
+                            aria-label="Close">
+                    </button>
+                    <strong>Error - </strong> <span th:text="${lastName}"></span>
+                  </div>
+
+                  <form th:action="@{/do-register-manager}" method="post" th:object="${user}">
+                    <div class="mb-4">
+                      <label for="firstName" class="form-label">First Name</label>
+                      <input type="text" th:field="*{firstName}" class="form-control" id="firstName" name="firstName" aria-describedby="textHelp" required>
+                      <div th:if="${#fields.hasErrors('firstName')}" class="alert customize-alert alert-dismissible alert-light-danger text-danger fade show remove-close-icon" role="alert">
+                        <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close">
+                        </button>
+                        <div class="d-flex align-items-center font-medium me-3 me-md-0">
+                          <i class="ti ti-info-circle fs-5 me-2 text-danger"></i>
+                          <span th:errors = "*{firstName}"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-4">
+                      <label for="lastname" class="form-label">Last Name</label>
+                      <input type="text" class="form-control" th:field="*{lastName}" required id="lastname" name="lastname" aria-describedby="textHelp">
+                      <div th:if="${#fields.hasErrors('lastName')}" class="alert customize-alert alert-dismissible alert-light-danger text-danger fade show remove-close-icon" role="alert">
+                        <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close">
+                        </button>
+                        <div class="d-flex align-items-center font-medium me-3 me-md-0">
+                          <i class="ti ti-info-circle fs-5 me-2 text-danger"></i>
+                          <span th:errors = "*{lastName}"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-4">
+                      <label for="username" class="form-label">Email address</label>
+                      <input type="email" th:field="*{username}" class="form-control" required id="username" name="username" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-4">
+                      <label for="password" class="form-label">Password</label>
+                      <input type="password" th:field="*{password}" class="form-control" required name="password" id="password">
+                      <div th:if="${#fields.hasErrors('password')}" class="alert customize-alert alert-dismissible alert-light-danger text-danger fade show remove-close-icon" role="alert">
+                        <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close">
+                        </button>
+                        <div class="d-flex align-items-center font-medium me-3 me-md-0">
+                          <i class="ti ti-info-circle fs-5 me-2 text-danger"></i>
+                          <span th:errors = "*{password}"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-4">
+                      <label for="confirmPassword" class="form-label">Confirm Password</label>
+                      <input type="password" th:field="*{confirmPassword}" class="form-control" required name="confirmPassword" id="confirmPassword">
+                    </div>
+                    <button class="btn btn-primary w-100 py-8 mb-4 rounded-2">
+                      <i class="ti ti-send fs-4 me-2"></i> Sign Up
+                    </button>
+                    <div class="d-flex align-items-center">
+                      <p class="fs-4 mb-0 text-dark">Already have an Account?</p>
+                      <a class="text-primary fw-medium ms-2" th:href="@{/login}">Sign In</a>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div th:replace="fragment :: scripts"></div>
+  </body>
+</html>

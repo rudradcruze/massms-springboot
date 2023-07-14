@@ -48,19 +48,20 @@
             </div>
             <!-- Add new -->
             <div class="card card-body mt-9" sec:authorize="isAuthenticated()">
-                <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR', 'MANAGER')">
-                    <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
-                        <a th:href="@{/mass/{url}/meal/new (url = ${session.mass.url})}" class="btn btn-success d-flex align-items-center me-7">
-                            <i class="ti ti-brand-deliveroo text-white me-1 fs-5"></i> Add Meal
-                        </a>
-                        <a th:href="@{/mass/{url}/meal/date/new (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-7">
-                            <i class="ti ti-file-time text-white me-1 fs-5"></i> Add Meal Date
-                        </a>
-                        <a th:href="@{/mass/{url}/meal/time/new (url = ${session.mass.url})}" class="btn btn-success d-flex align-items-center me-7">
-                            <i class="ti ti-clock-plus text-white me-1 fs-5"></i> Add Meal Time
-                        </a>
-                    </div>
-                </div>
+                <div th:replace="fragment :: adminMenu"></div>
+<!--                <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR', 'MANAGER')">-->
+<!--                    <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">-->
+<!--                        <a th:href="@{/mass/{url}/meal/new (url = ${session.mass.url})}" class="btn btn-success d-flex align-items-center me-7">-->
+<!--                            <i class="ti ti-brand-deliveroo text-white me-1 fs-5"></i> Add Meal-->
+<!--                        </a>-->
+<!--                        <a th:href="@{/mass/{url}/meal/date/new (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-7">-->
+<!--                            <i class="ti ti-file-time text-white me-1 fs-5"></i> Add Meal Date-->
+<!--                        </a>-->
+<!--                        <a th:href="@{/mass/{url}/meal/time/new (url = ${session.mass.url})}" class="btn btn-success d-flex align-items-center me-7">-->
+<!--                            <i class="ti ti-clock-plus text-white me-1 fs-5"></i> Add Meal Time-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div th:replace="fragment :: userAndMemberButtons"></div>
             </div>
         </div>

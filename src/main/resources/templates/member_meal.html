@@ -48,34 +48,8 @@
             </div>
             <!-- Add new -->
             <div class="card card-body mt-9" sec:authorize="isAuthenticated()">
-                <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'CREATOR', 'MANAGER')">
-                    <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
-                        <a th:href="@{/mass/{url}/meal/new (url = ${session.mass.url})}" class="btn btn-success d-flex align-items-center me-7">
-                            <i class="ti ti-brand-deliveroo text-white me-1 fs-5"></i> Add Meal
-                        </a>
-                        <a th:href="@{/mass/{url}/meal/date/new (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-7">
-                            <i class="ti ti-file-time text-white me-1 fs-5"></i> Add Meal Date
-                        </a>
-                        <a th:href="@{/mass/{url}/meal/time/new (url = ${session.mass.url})}" class="btn btn-success d-flex align-items-center me-7">
-                            <i class="ti ti-clock-plus text-white me-1 fs-5"></i> Add Meal Time
-                        </a>
-                    </div>
-                </div>
-                <div class="row" sec:authorize="hasAnyAuthority('USER', 'MEMBER')">
-                    <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
-                        <form class="me-3" th:object="${massMember}" th:action="@{'/mass/' + ${session.mass.url} + '/member/request'}" method="post">
-                            <button type="submit" class="btn waves-effect waves-light btn-primary w-100">
-                                <i class="ti ti-user-share mx-2"></i> Send Member Request
-                            </button>
-                        </form>
-                        <a th:href="@{/mass/{url}/meal (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-3">
-                            <i class="ti ti-checkup-list text-white me-1 fs-5"></i> All Meal List
-                        </a>
-                        <a th:href="@{/mass/{url}/meal/date (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-7">
-                            <i class="ti ti-calendar-stats text-white me-1 fs-5"></i> Meal Date List
-                        </a>
-                    </div>
-                </div>
+                <div th:replace="fragment :: adminMenu"></div>
+                <div th:replace="fragment :: userAndMemberButtons"></div>
             </div>
         </div>
         <div class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
@@ -93,25 +67,27 @@
                                         <thead>
                                             <tr>
                                                 <th>Sl</th>
+                                                <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">User</th>
                                                 <th>Quantity</th>
                                                 <th>Meal Name</th>
                                                 <th>Meal Size</th>
                                                 <th>Meal Price</th>
                                                 <th>Meal Total Price</th>
                                                 <th>Meal Date</th>
-                                                <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER', 'USER', 'MEMBER')">Actions</th>
+                                                <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'USER', 'MEMBER')">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr th:each="member, iterator : ${memberMealList}">
                                                 <td th:text="${iterator.index + 1}"></td>
+                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')" th:text="${member.user.firstName + ' ' + member.user.lastName}"></td>
                                                 <td th:text="${member.quantity}">Meal Quantity</td>
                                                 <td th:text="${member.mealDate.meal.name}">Meal Name</td>
                                                 <td th:text="${member.mealDate.meal.servingSize}">Meal Size</td>
                                                 <td th:text="${member.mealDate.meal.price}">Meal Price</td>
                                                 <td th:text="${member.mealDate.meal.price} * ${member.quantity}">Meal Price</td>
                                                 <td th:text="${#dates.format(member.mealDate.mealDate, 'dd-MM-yyyy')}">Meal Date</td>
-                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER', 'USER', 'MEMBER')">
+                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'USER', 'MEMBER')">
                                                     <div class="dropdown">
                                                         <a class="text-decoration-none" href="javascript:void(0)" id="nft3" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="ti ti-dots fs-4"></i>
@@ -122,7 +98,7 @@
                                                                     <i class="ti ti-edit px-2"></i> <span> Edit</span>
                                                                 </a>
                                                             </li>
-                                                            <li>
+                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'MEMBER')">
                                                                 <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/' + ${session.mass.url} + '/meal/date/member/delete/' + ${member.id}}">
                                                                     <i class="ti ti-trash px-2"></i> <span> Delete</span>
                                                                 </a>

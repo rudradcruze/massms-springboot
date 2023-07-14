@@ -48,7 +48,7 @@ public class MealDateController {
         MealDate mealDate = new MealDate();
         mealDate.setMass(mass);
         model.addAttribute("mealDate", mealDate);
-        model.addAttribute("meals", mealService.listAll());
+        model.addAttribute("meals", mealService.listByMassUrl(url));
 
         return "new_meal_date";
     }

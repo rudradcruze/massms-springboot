@@ -1,10 +1,7 @@
 package ac.dia.massms.controller;
 
 import ac.dia.massms.config.UserDetailsServiceImpl;
-import ac.dia.massms.model.Mass;
-import ac.dia.massms.model.MassMember;
-import ac.dia.massms.model.MemberMeal;
-import ac.dia.massms.model.User;
+import ac.dia.massms.model.*;
 import ac.dia.massms.service.MassService;
 import ac.dia.massms.service.MealDateService;
 import ac.dia.massms.service.MemberMealService;
@@ -20,6 +17,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Controller
 public class MemberMealController {
@@ -43,16 +41,43 @@ public class MemberMealController {
             return "redirect:/login";
         }
 
-        List<MemberMeal> getAllMealListByUser = memberMealService.getMemberMealListByUser(principal.getName());
+        User user = userDetailsService.getByUserName(principal.getName());
+
+        Set<Role> roleSet = user.getRoles();
+        boolean isAdmin = false;
+
+        for (Role role : roleSet) {
+            if (Objects.equals(role.getName(), "MANAGER")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        List<MemberMeal> getAllMealListByUser;
         List<MemberMeal> memberMealList = new ArrayList<>();
 
-        for (MemberMeal meal : getAllMealListByUser) {
-            if (Objects.equals(meal.getMealDate().getMass().getUrl(), url)) {
-                memberMealList.add(meal);
+
+        if (isAdmin) {
+            Mass mass = massService.getByUrl(url);
+            List<MassMember> massMemberList = mass.getMessMemberList();
+            for (MassMember massMember : massMemberList) {
+                getAllMealListByUser = memberMealService.getMemberMealListByUser(massMember.getUser().getUsername());
+                for (MemberMeal meal : getAllMealListByUser) {
+                    if (Objects.equals(meal.getMealDate().getMass().getUrl(), url)) {
+                        memberMealList.add(meal);
+                    }
+                }
+            }
+        } else {
+            getAllMealListByUser = memberMealService.getMemberMealListByUser(user.getUsername());
+
+            for (MemberMeal meal : getAllMealListByUser) {
+                if (Objects.equals(meal.getMealDate().getMass().getUrl(), url)) {
+                    memberMealList.add(meal);
+                }
             }
         }
 
-        session.setAttribute("user", userDetailsService.getByUserName(principal.getName()));
+        session.setAttribute("user", user);
         session.setAttribute("mass", massService.getByUrl(url));
 
         model.addAttribute("memberMealList", memberMealList);
