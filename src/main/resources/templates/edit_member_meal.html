@@ -1,32 +1,227 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-<meta charset="ISO-8859-1">
-<title>Edit Member Meal</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragment :: head_link_up"></head>
+
 <body>
-	<div sec:authorize="hasAnyAuthority('EDITOR', 'ADMIN')" align="center" >
-		<h1>Edit Member Meal</h1>
-		<br/>
-		<div th:if = "${error}">
-			<p th:text="${error}"></p>
-		</div>
-		<form th:action="@{/meal/member/edit/update}" method="post" th:object="${memberMeal}">
-			<table border="0" cellpadding="10">
-				<tr>
-					<td>Member Meal ID:</td>
-					<td><input type="text" th:field="*{id}" required readonly="readonly" /></td>
-				</tr>
-				<tr>
-					<td>Meal Quantity:</td>
-					<td><input type="number" name="quantity" th:field="*{quantity}" required /></td>
-				</tr>
-				<tr>
-					<td colspan="2"><button type="submit">Update</button></td>
-				</tr>
-			</table>
-		</form>
-	</div>
+    <div th:replace="fragment :: preloader"></div>
+
+<!-- Body Wrapper -->
+<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar -->
+    <aside th:replace="fragment :: sidebar" class="left-sidebar"></aside>
+    <!-- Main Wrapper -->
+    <div class="body-wrapper">
+        <!-- Header Start -->
+        <header th:replace="fragment :: header" class="app-header"></header>
+
+        <div class="container-fluid">
+            <div class="card bg-light-info shadow-none position-relative overflow-hidden mb-2">
+                <div class="card-body px-4 py-3">
+                    <div class="row align-items-center">
+                        <div class="col-9">
+                            <h4 class="fw-semibold mb-8">Edit - <span th:text="${session.mass.name + ' Mass'} + ' Meal'"></span></h4>
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/}">Dashboard</a></li>
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass}">All Mass</a></li>
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass/{url} (url = ${session.mass.url})}"><span th:text="${session.mass.name} + ' Mass'"></span></a></li>
+                                    <li class="breadcrumb-item"><a class="text-muted " th:href="@{/mass/{url}/meal (url = ${session.mass.url})}">Meals</a></li>
+                                    <li class="breadcrumb-item" aria-current="page">Edit Meal Time</li>
+                                </ol>
+                            </nav>
+                        </div>
+                        <div class="col-3">
+                            <div class="text-center mb-n5">
+                                <img th:src="@{../../../../../../images/breadcrumb/ChatBc.png}" alt="..." class="img-fluid mb-n4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 px-4 py-3" th:if="${error}">
+                <div th:replace="fragment :: errorAlertBg"></div>
+            </div>
+            <section class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form th:action="@{'/mass/' + ${session.mass.url} + '/meal/date/member/edit/update'}" th:object="${memberMeal}" method="post">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3 contact-name">
+                                                <h5><label for="mealDate">Meal Date User id</label></h5>
+                                                <input type="text" id="mealDate" th:field="*{id}" readonly required class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3 contact-name">
+                                                <h5><label for="mealDateDate">Meal Date</label></h5>
+                                                <input type="date" id="mealDateDate" th:value="${#dates.format(memberMeal.mealDate.mealDate, 'yyyy-MM-dd')}" readonly required class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3 contact-name">
+                                                <h5><label for="mealName">Meal Name</label></h5>
+                                                <input type="text" id="mealName" th:value="${memberMeal.mealDate.meal.name}" readonly required class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3 contact-name">
+                                                <h5><label for="mealDateId">Meal Date id</label></h5>
+                                                <input type="text" id="mealDateId" th:field="*{mealDate.id}" readonly required class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3 contact-occupation">
+                                                <h5><label for="userId">User Id</label></h5>
+                                                <input class="form-control" type="text" required id="userId" readonly th:field="*{user.id}">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3 contact-occupation">
+                                                <h5><label for="quantity">Meal Quantity</label></h5>
+                                                <input class="form-control" type="number" required id="quantity" th:field="*{quantity}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row my-6">
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary rounded-pill px-4 mx-3"><i class="ti ti-brand-deliveroo mx-2"></i> Save Meal Date </button>
+                                            <a th:href="@{/mass/{url}/member/{userId}/meal (url = ${session.user.id})}" class="btn btn-danger rounded-pill px-4"><i class="ti ti-arrow-back mx-2"></i> Discard </a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragment :: mobilenav"></div>
+<button class="btn btn-primary p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+    <i class="ti ti-settings fs-7" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Settings"></i>
+</button>
+<div class="offcanvas offcanvas-end customizer" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" data-simplebar="">
+    <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+        <h4 class="offcanvas-title fw-semibold" id="offcanvasExampleLabel">Settings</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-4">
+        <div class="theme-option pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Theme Option</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a href="javascript:void(0)"  onclick="toggleTheme('../../css/style.min.css')"  class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 light-theme text-dark">
+                    <i class="ti ti-brightness-up fs-7 text-primary"></i>
+                    <span class="text-dark">Light</span>
+                </a>
+                <a href="javascript:void(0)" onclick="toggleTheme('../../css/style-dark.min.css')" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 dark-theme text-dark">
+                    <i class="ti ti-moon fs-7 "></i>
+                    <span class="text-dark">Dark</span>
+                </a>
+            </div>
+        </div>
+        <div class="theme-direction pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Theme Direction</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a href="product.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">
+                    <i class="ti ti-text-direction-ltr fs-6 text-primary"></i>
+                    <span class="text-dark">LTR</span>
+                </a>
+                <a href="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/html/rtl/index.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">
+                    <i class="ti ti-text-direction-rtl fs-6 text-dark"></i>
+                    <span class="text-dark">RTL</span>
+                </a>
+            </div>
+        </div>
+        <div class="theme-colors pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Theme Colors</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <ul class="list-unstyled mb-0 d-flex gap-3 flex-wrap change-colors">
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin1-bluetheme-primary active-theme " onclick="toggleTheme('../../css/style.min.css')"  data-color="blue_theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="BLUE_THEME"><i class="ti ti-check text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)"  class="rounded-circle position-relative d-block customizer-bgcolor skin2-aquatheme-primary " onclick="toggleTheme('../../css/style-aqua.min.css')"  data-color="aqua_theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="AQUA_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin3-purpletheme-primary" onclick="toggleTheme('../../css/style-purple.min.css')"  data-color="purple_theme" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="PURPLE_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin4-greentheme-primary" onclick="toggleTheme('../../css/style-green.min.css')"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="GREEN_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin5-cyantheme-primary" onclick="toggleTheme('../../css/style-cyan.min.css')"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="CYAN_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                    <li class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center justify-content-center">
+                        <a href="javascript:void(0)" class="rounded-circle position-relative d-block customizer-bgcolor skin6-orangetheme-primary" onclick="toggleTheme('../../css/style-orange.min.css')"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="ORANGE_THEME"><i class="ti ti-check  text-white d-flex align-items-center justify-content-center fs-5"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="layout-type pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Layout Type</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a href="product.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">
+                    <i class="ti ti-layout-sidebar fs-6 text-primary"></i>
+                    <span class="text-dark">Vertical</span>
+                </a>
+                <a href="https://demos.adminmart.com/premium/bootstrap/modernize-bootstrap/package/html/horizontal/index.html" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2">
+                    <i class="ti ti-layout-navbar fs-6 text-dark"></i>
+                    <span class="text-dark">Horizontal</span>
+                </a>
+            </div>
+        </div>
+        <div class="container-option pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Container Option</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 boxed-width text-dark">
+                    <i class="ti ti-layout-distribute-vertical fs-7 text-primary"></i>
+                    <span class="text-dark">Boxed</span>
+                </a>
+                <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 full-width text-dark">
+                    <i class="ti ti-layout-distribute-horizontal fs-7"></i>
+                    <span class="text-dark">Full</span>
+                </a>
+            </div>
+        </div>
+        <div class="sidebar-type pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Sidebar Type</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a  href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 fullsidebar">
+                    <i class="ti ti-layout-sidebar-right fs-7"></i>
+                    <span class="text-dark">Full</span>
+                </a>
+                <a  href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center text-dark sidebartoggler gap-2">
+                    <i class="ti ti-layout-sidebar fs-7"></i>
+                    <span class="text-dark">Collapse</span>
+                </a>
+            </div>
+        </div>
+        <div class="card-with pb-4">
+            <h6 class="fw-semibold fs-4 mb-1">Card With</h6>
+            <div class="d-flex align-items-center gap-3 my-3">
+                <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 text-dark cardborder">
+                    <i class="ti ti-border-outer fs-7"></i>
+                    <span class="text-dark">Border</span>
+                </a>
+                <a href="javascript:void(0)" class="rounded-2 p-9 customizer-box hover-img d-flex align-items-center gap-2 cardshadow">
+                    <i class="ti ti-border-none fs-7"></i>
+                    <span class="text-dark">Shadow</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+    <div th:replace="fragment :: scripts"></div>
 </body>
 </html>

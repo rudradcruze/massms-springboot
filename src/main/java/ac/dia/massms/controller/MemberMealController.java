@@ -36,25 +36,14 @@ public class MemberMealController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    @GetMapping("/meal/member")
-    public String memberMealListAndAdd(Model model) {
-        List<MemberMeal> memberMealList = memberMealService.listAll();
-        model.addAttribute("memberMealList", memberMealList);
-        model.addAttribute("newMemberMeal", new MemberMeal());
-        model.addAttribute("mealDateService", mealDateService.listAll());
-        model.addAttribute("listUser", userDetailsService.listALl());
-
-        return "member_meal";
-    }
-
-    @RequestMapping(value = "/mass/{url}/member/{userId}/meal")
-    public String listMealsByMemberAndMass(Model model, @PathVariable String url, @PathVariable String userId, Principal principal, HttpSession session) {
+    @RequestMapping(value = "/mass/{url}/meal/date/member")
+    public String listMealsByMemberAndMass(Model model, @PathVariable String url, Principal principal, HttpSession session) {
 
         if (principal == null) {
             return "redirect:/login";
         }
 
-        List<MemberMeal> getAllMealListByUser = memberMealService.getMemberMealListByUser(String.valueOf(userDetailsService.getById(Long.parseLong(userId)).getUsername()));
+        List<MemberMeal> getAllMealListByUser = memberMealService.getMemberMealListByUser(principal.getName());
         List<MemberMeal> memberMealList = new ArrayList<>();
 
         for (MemberMeal meal : getAllMealListByUser) {
@@ -63,11 +52,11 @@ public class MemberMealController {
             }
         }
 
-        session.setAttribute("user", userDetailsService.getById(Long.parseLong(userId)));
+        session.setAttribute("user", userDetailsService.getByUserName(principal.getName()));
         session.setAttribute("mass", massService.getByUrl(url));
 
         model.addAttribute("memberMealList", memberMealList);
-        return "member_meal_2";
+        return "member_meal";
     }
 
     public boolean activateCheck(String massUrl, String userName) {
@@ -84,7 +73,7 @@ public class MemberMealController {
         return status;
     }
 
-    @RequestMapping(value = "mass/{url}/meal/date/{mealDateId}/member/new")
+    @RequestMapping(value = "mass/{url}/meal/date/member/new/{mealDateId}")
     public String addSelfIntoMealDate(Model model, @PathVariable String mealDateId, @PathVariable String url, RedirectAttributes attributes, Principal principal) {
 
         if (principal == null) {
@@ -109,15 +98,21 @@ public class MemberMealController {
         return "redirect:/mass/" + url + "/meal/date";
     }
 
-    @PostMapping("/meal/member/add")
-    public String addMemberIntoMealList(@ModelAttribute("newMemberMeal") MemberMeal memberMeal, Principal principal, RedirectAttributes attributes) {
-        if (principal == null) {
-            return "redirect:/login";
-        }
-        memberMealService.addCustomerSel(memberMeal.getUser().getId(), 1, memberMeal.getMealDate().getId());
-        attributes.addFlashAttribute("success", "Member successfully added into the meal");
+    @RequestMapping(value = "mass/{url}/meal/date/member/edit/{memberMealId}")
+    public ModelAndView editMealDatePage(Model model, @PathVariable String memberMealId, @PathVariable String url, HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView("edit_member_meal");
+        MemberMeal memberMeal = memberMealService.get(Long.parseLong(memberMealId));
+        modelAndView.addObject("memberMeal", memberMeal);
+        session.setAttribute("mass", massService.getByUrl(url));
+        return modelAndView;
+    }
 
-        return "redirect:/meal/member";
+
+    @PostMapping("mass/{url}/meal/date/member/edit/update")
+    public String saveMemberMealDate(@ModelAttribute("memberMeal") MemberMeal memberMeal, Model model, @PathVariable String url, RedirectAttributes attributes, Principal principal) {
+        memberMealService.updateQuantity(memberMeal);
+        attributes.addFlashAttribute("success", "Meal quantity is successfully updated");
+        return "redirect:/mass/" + url + "/meal/date/member";
     }
 
     @RequestMapping("/meal/member/edit/{id}")
@@ -138,12 +133,12 @@ public class MemberMealController {
         return "redirect:/meal/member/";
     }
 
-    @RequestMapping("/meal/member/delete/{id}")
-    public String deleteMealDate(@PathVariable("id") long id, RedirectAttributes attributes, Principal principal) {
+    @RequestMapping("mass/{url}/meal/date/member/delete/{memberMealId}")
+    public String deleteMealDate(@PathVariable("memberMealId") long memberMealId, RedirectAttributes attributes, Principal principal, @PathVariable String url) {
         if (principal == null) { return "redirect:/login"; }
 
-        memberMealService.delete(id);
-        attributes.addFlashAttribute("success", "Delete Successful!");
-        return "redirect:/meal/member/";
+        memberMealService.delete(memberMealId);
+        attributes.addFlashAttribute("success", "Meal is successfully deleted!");
+        return "redirect:/mass/" + url + "/meal/date/member";
     }
 }

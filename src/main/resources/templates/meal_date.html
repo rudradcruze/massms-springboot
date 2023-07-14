@@ -61,6 +61,7 @@
                         </a>
                     </div>
                 </div>
+                <div th:replace="fragment :: userAndMemberButtons"></div>
             </div>
         </div>
         <div class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
@@ -102,7 +103,7 @@
                                                                 </a>
                                                             </li>
                                                             <li sec:authorize="hasAnyAuthority('USER', 'MEMBER')">
-                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{'/mass/' + ${session.mass.url} + '/meal/date/' + ${mealDate.id} + '/member/new'}">
+                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{'/mass/' + ${session.mass.url} + '/meal/date/member/new/' + ${mealDate.id}}">
                                                                     <i class="ti ti-user-share px-2"></i> <span> Add Myself</span>
                                                                 </a>
                                                             </li>

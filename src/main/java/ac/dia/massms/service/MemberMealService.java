@@ -50,6 +50,14 @@ public class MemberMealService {
         memberMealRepository.save(newMemberMeal);
     }
 
+    public void updateQuantity(MemberMeal memberMeal) {
+        MemberMeal newMemberMeal = memberMealRepository.getMemberMealById(memberMeal.getId());
+        newMemberMeal.setUser(userRepository.getUserById(memberMeal.getUser().getId()));
+        newMemberMeal.setMealDate(mealDateRepository.findMealDateById(memberMeal.getMealDate().getId()));
+        newMemberMeal.setQuantity(memberMeal.getQuantity());
+        memberMealRepository.save(newMemberMeal);
+    }
+
     public void save(MemberMeal meal) {
         memberMealRepository.save(meal);
     }

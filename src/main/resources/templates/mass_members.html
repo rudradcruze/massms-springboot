@@ -81,24 +81,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="row" sec:authorize="hasAnyAuthority('USER', 'MEMBER')">
-                    <div class="col text-end d-flex justify-content-end mt-3 mt-md-0">
-                        <form class="me-3" th:object="${massMember}" th:action="@{'/mass/' + ${session.mass.url} + '/member/' + ${session.user.id} + '/request'}" method="post">
-                            <button type="submit" class="btn waves-effect waves-light btn-primary w-100">
-                                <i class="ti ti-user-share mx-2"></i> Send Member Request
-                            </button>
-                        </form>
-                        <a th:href="@{/mass/{url}/meal (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-3">
-                            <i class="ti ti-checkup-list text-white me-1 fs-5"></i> All Meal List
-                        </a>
-                        <a th:href="@{/mass/{url}/meal/date (url = ${session.mass.url})}" class="btn btn-info d-flex align-items-center me-7">
-                            <i class="ti ti-calendar-stats text-white me-1 fs-5"></i> Meal Date List
-                        </a>
-                        <a th:href="@{/mass/{url}/member/{userId}/meal (url = ${session.mass.url}, userId = ${session.user.id})}" class="btn btn-info d-flex align-items-center me-7">
-                            <i class="ti ti-brand-deliveroo text-white me-1 fs-5"></i> Meal Taken List
-                        </a>
-                    </div>
-                </div>
+                <div th:replace="fragment :: userAndMemberButtons"></div>
             </div>
         </div>
         <div class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
