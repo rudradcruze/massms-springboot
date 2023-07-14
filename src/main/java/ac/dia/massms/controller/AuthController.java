@@ -1,7 +1,9 @@
 package ac.dia.massms.controller;
 
 import ac.dia.massms.config.UserDetailsServiceImpl;
+import ac.dia.massms.model.Role;
 import ac.dia.massms.model.User;
+import ac.dia.massms.repository.RoleRepository;
 import ac.dia.massms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +15,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 public class AuthController {
@@ -24,6 +29,9 @@ public class AuthController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Principal principal, Model model) {
@@ -70,6 +78,9 @@ public class AuthController {
                     user.setPassword(passwordEncoder.encode(user.getPassword()));
                     user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
                     user.setEnabled(false);
+                    Set<Role> rolesSet = user.getRoles();
+                    rolesSet.add(roleRepository.findRoleByName("USER"));
+                    user.setRoles(rolesSet);
                     userRepository.save(user);
                     attributes.addFlashAttribute("success", "User is successfully registered.");
                     return "redirect:/login";
