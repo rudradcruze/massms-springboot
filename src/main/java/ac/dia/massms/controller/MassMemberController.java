@@ -43,13 +43,13 @@ public class MassMemberController {
         return "mass_members";
     }
 
-    @PostMapping("/mass/{url}/member/{userId}/request")
-    public String memberRequest(@ModelAttribute("massMember") MassMember massMember, @PathVariable String url, @PathVariable String userId, Model model, Principal principal, RedirectAttributes attributes) {
+    @PostMapping("/mass/{url}/member/request")
+    public String memberRequest(@ModelAttribute("massMember") MassMember massMember, @PathVariable String url, Model model, Principal principal, RedirectAttributes attributes) {
 
         if(principal == null){ return "redirect:/login"; }
 
         massMember.setMass(massService.getByUrl(url));
-        massMember.setUser(userDetailsService.getById(Long.parseLong(userId)));
+        massMember.setUser(userDetailsService.getByUserName(principal.getName()));
         List<MassMember> massList = massMemberService.massMemberListByUserName(massMember.getUser().getUsername(), massMember.getMass().getId());
         boolean exist = false;
 

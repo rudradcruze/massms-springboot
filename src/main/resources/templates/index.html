@@ -42,7 +42,7 @@
                 <div class="d-flex align-items-center gap-2"><i class="ti ti-users fs-5"></i><span th:text="${massEach.getMessMemberList().size()}"></span></div>
               </div>
               <div class="align-items-center mt-3" sec:authorize="isAuthenticated()">
-                <form th:object="${massMember}" th:action="@{'/mass/' + ${massEach.url} + '/member/' + ${session.user.id} + '/request'}" method="post">
+                <form th:object="${massMember}" th:action="@{'/mass/' + ${massEach.url} + '/member/request'}" method="post">
                   <button type="submit" class="btn waves-effect waves-light btn-primary w-100">
                     <i class="ti ti-user-share mx-2"></i> Send Member Request
                   </button>
