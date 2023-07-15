@@ -51,6 +51,11 @@
                 <div th:replace="fragment :: adminMenu"></div>
                 <div th:replace="fragment :: userAndMemberButtons"></div>
             </div>
+            <!-- Add new -->
+            <div class="card card-body mt-9" sec:authorize="hasAnyAuthority('USER', 'MEMBER')">
+                <h5 class="mb-3">Payment Paid: <span th:text="${paymentPaid}"></span></h5>
+                <h5 class="mb-3">Payment Paid: <span th:text="${paymentDue}"></span></h5>
+            </div>
         </div>
         <div class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
             <section class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">
@@ -74,7 +79,8 @@
                                                 <th>Meal Price</th>
                                                 <th>Meal Total Price</th>
                                                 <th>Meal Date</th>
-                                                <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'USER', 'MEMBER')">Actions</th>
+                                                <th>Payment</th>
+                                                <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'USER', 'MEMBER', 'MANAGER')">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -87,18 +93,24 @@
                                                 <td th:text="${member.mealDate.meal.price}">Meal Price</td>
                                                 <td th:text="${member.mealDate.meal.price} * ${member.quantity}">Meal Price</td>
                                                 <td th:text="${#dates.format(member.mealDate.mealDate, 'dd-MM-yyyy')}">Meal Date</td>
-                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'USER', 'MEMBER')">
+                                                <td th:text="${member.isPayment()} ? 'PAID' : 'DUE' ">Payment</td>
+                                                <td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'USER', 'MEMBER', 'MANAGER')">
                                                     <div class="dropdown">
                                                         <a class="text-decoration-none" href="javascript:void(0)" id="nft3" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="ti ti-dots fs-4"></i>
                                                         </a>
                                                         <ul class="dropdown-menu" aria-labelledby="nft3">
-                                                            <li>
+                                                            <li  sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'USER', 'MEMBER')" th:if="${!member.isPayment()}">
                                                                 <a class="dropdown-item d-flex align-items-center" th:href="@{'/mass/' + ${session.mass.url} + '/meal/date/member/edit/' + ${member.id}}">
                                                                     <i class="ti ti-edit px-2"></i> <span> Edit</span>
                                                                 </a>
                                                             </li>
-                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'MEMBER')">
+                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')" th:if="${!member.isPayment()}">
+                                                                <a class="dropdown-item d-flex align-items-center" th:href="@{'/mass/' + ${session.mass.url} + '/meal/date/member/status/' + ${member.id}}">
+                                                                    <i class="ti ti-status-change px-2"></i> <span> Marked Payment</span>
+                                                                </a>
+                                                            </li>
+                                                            <li sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')">
                                                                 <a class="dropdown-item d-flex text-danger align-items-center" th:href="@{'/mass/' + ${session.mass.url} + '/meal/date/member/delete/' + ${member.id}}">
                                                                     <i class="ti ti-trash px-2"></i> <span> Delete</span>
                                                                 </a>

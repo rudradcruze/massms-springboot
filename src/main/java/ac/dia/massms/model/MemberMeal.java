@@ -17,6 +17,7 @@ public class MemberMeal {
 	private Long id;
 
 	private int quantity;
+	private boolean payment;
 
 	@ManyToOne
 	@JoinColumn(name="meal_date_id")

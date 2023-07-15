@@ -53,4 +53,21 @@ public class User {
 		}
 		return count;
 	}
+
+	public double calculateAmount(String url, boolean paidOrDue) {
+		List<MemberMeal> list = getMemberMealList();
+		double amountPaid = 0, amountDue = 0;
+		for (MemberMeal memberMeal : list) {
+			if (Objects.equals(memberMeal.getMealDate().getMass().getUrl(), url)) {
+				if (paidOrDue && memberMeal.isPayment())
+					amountPaid += (memberMeal.getQuantity() * memberMeal.getMealDate().getMeal().getPrice());
+				else if (!memberMeal.isPayment())
+					amountDue += (memberMeal.getQuantity() * memberMeal.getMealDate().getMeal().getPrice());
+			}
+		}
+		if (paidOrDue)
+			return amountPaid;
+		else
+			return amountDue;
+	}
 }

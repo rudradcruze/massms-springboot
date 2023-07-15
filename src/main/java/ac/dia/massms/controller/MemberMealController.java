@@ -34,6 +34,24 @@ public class MemberMealController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @RequestMapping(value = "/mass/{url}/meal/date/member/status/{id}")
+    public String grantPayment(Principal principal, @PathVariable String id, @PathVariable String url, RedirectAttributes attributes) {
+        Mass mass = massService.getByUrl(url);
+        User user = userDetailsService.getByUserName(principal.getName());
+        if (Objects.equals(mass.getUser().getUsername(), user.getUsername())) {
+            MemberMeal memberMeal = memberMealService.get(Long.parseLong(id));
+            if (memberMeal.isPayment())
+                attributes.addFlashAttribute("error", "You already paid the amount for meal.");
+            else {
+                memberMeal.setPayment(true);
+                memberMealService.save(memberMeal);
+                attributes.addFlashAttribute("success", "Payment is completed.");
+            }
+        } else
+            attributes.addFlashAttribute("error", "You are not belong to this mass.");
+        return "redirect:/mass/" + url + "/meal/date/member";
+    }
+
     @RequestMapping(value = "/mass/{url}/meal/date/member")
     public String listMealsByMemberAndMass(Model model, @PathVariable String url, Principal principal, HttpSession session) {
 
@@ -55,6 +73,8 @@ public class MemberMealController {
         List<MemberMeal> getAllMealListByUser;
         List<MemberMeal> memberMealList = new ArrayList<>();
 
+        double paymentDue = 0, paymentPaid = 0;
+
 
         if (isAdmin) {
             Mass mass = massService.getByUrl(url);
@@ -73,12 +93,19 @@ public class MemberMealController {
             for (MemberMeal meal : getAllMealListByUser) {
                 if (Objects.equals(meal.getMealDate().getMass().getUrl(), url)) {
                     memberMealList.add(meal);
+                    if (meal.isPayment()) {
+                        paymentPaid += (meal.getQuantity() * meal.getMealDate().getMeal().getPrice());
+                    } else {
+                        paymentDue += (meal.getQuantity() * meal.getMealDate().getMeal().getPrice());
+                    }
                 }
             }
         }
 
         session.setAttribute("user", user);
         session.setAttribute("mass", massService.getByUrl(url));
+        model.addAttribute("paymentDue", paymentDue);
+        model.addAttribute("paymentPaid", paymentPaid);
 
         model.addAttribute("memberMealList", memberMealList);
         return "member_meal";

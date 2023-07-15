@@ -131,16 +131,18 @@
                                     <table id="default_order" class="table border table-striped table-bordered display text-nowrap"
                                            style="width: 100%">
                                         <thead>
-                                        <tr>
-                                            <th>Sl</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
-                                            <th>Mass Url</th>
-                                            <th>Meal Taken</th>
-                                            <th>User Name</th>
-                                            <th>Member Status</th>
-                                            <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">Actions</th>
-                                        </tr>
+                                            <tr>
+                                                <th>Sl</th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Mass Url</th>
+                                                <th>Meal Taken</th>
+                                                <th>Paid Amount</th>
+                                                <th>Due Amount</th>
+                                                <th>User Name</th>
+                                                <th>Member Status</th>
+                                                <th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR', 'MANAGER')">Actions</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
                                             <tr th:each="member, iterator : ${massMemberList}">
@@ -149,6 +151,8 @@
                                                 <td th:text="${member.user.lastName}"></td>
                                                 <td th:text="${member.mass.url}"></td>
                                                 <td th:text="${member.user.calculateTotalMeal(member.mass.url)}"></td>
+                                                <td th:text="${member.user.calculateAmount(member.mass.url, true)}"></td>
+                                                <td th:text="${member.user.calculateAmount(member.mass.url, false)}"></td>
                                                 <td th:text="${member.user.username}"></td>
                                                 <td th:text="${member.isEnabled()} ? 'Activated' : 'Deactivated'"></td>
 
