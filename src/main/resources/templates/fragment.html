@@ -112,6 +112,14 @@
               </li>
             </ul>
           </li>
+          <li class="sidebar-item" sec:authorize="isAuthenticated()">
+            <a class="sidebar-link" th:href="@{/account}" aria-expanded="false">
+                  <span>
+                    <i class="ti ti-user-circle"></i>
+                  </span>
+              <span class="hide-menu">User Profile</span>
+            </a>
+          </li>
         </ul>
       </nav>
 
@@ -123,7 +131,7 @@
           <div class="john-title">
             <h6 class="mb-0 fs-4 fw-semibold" th:text="${session.user.username + ' ' + session.user.lastName}"></h6>
             <span class="fs-2 text-dark" th:each="role : ${session.user.roles}"
-                  th:text="${role.name + ', '}"></span>
+                  th:text="${role.name + ' '}"></span>
             <p class="mb-0 d-flex text-dark align-items-center gap-2">
           </div>
           <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
@@ -178,16 +186,16 @@
                     <div class="ms-3" sec:authorize="isAuthenticated()">
                       <h5 class="mb-1 fs-3" th:text="${session.user.firstName + ' ' + session.user.lastName}"></h5>
                       <span class="mb-1 d-block text-dark" th:each="role : ${session.user.roles}"
-                                                           th:text="${role.name + ', '}"></span>
+                                                           th:text="${role.name + ' '}"></span>
                       <p class="mb-0 d-flex text-dark align-items-center gap-2">
                         <i class="ti ti-mail fs-4"></i> <span th:text="${session.user.username}"></span>
                       </p>
                     </div>
                   </div>
                   <div class="message-body" sec:authorize="isAuthenticated()">
-                    <a href="#" class="py-8 px-7 mt-8 d-flex align-items-center">
+                    <a th:href="@{/account}" class="py-8 px-7 mt-8 d-flex align-items-center">
                             <span class="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">
-                              <img th:src="@{../../../../../../images/svgs/icon-account.svg}" alt="" width="24" height="24">
+                              <img th:src="@{../../../../../../images/svgs/icon-account.svg}" alt="User Info" width="24" height="24">
                             </span>
                       <div class="w-75 d-inline-block v-middle ps-3">
                         <h6 class="mb-1 bg-hover-primary fw-semibold"> My Profile </h6>

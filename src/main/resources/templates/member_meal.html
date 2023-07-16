@@ -54,7 +54,7 @@
             <!-- Add new -->
             <div class="card card-body mt-9" sec:authorize="hasAnyAuthority('USER', 'MEMBER')">
                 <h5 class="mb-3">Payment Paid: <span th:text="${paymentPaid}"></span></h5>
-                <h5 class="mb-3">Payment Paid: <span th:text="${paymentDue}"></span></h5>
+                <h5 class="mb-3">Payment Due: <span th:text="${paymentDue}"></span></h5>
             </div>
         </div>
         <div class="mx-lg-9 mx-md-9 mx-xl-9 mx-xxl-9">

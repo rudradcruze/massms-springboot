@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Controller
@@ -136,7 +137,7 @@ public class AuthController {
             if (user.getPassword().length() >= 5 && user.getPassword().length() <= 20) {
                 if(user.getPassword().equals(user.getConfirmPassword())){
                     user.setPassword(passwordEncoder.encode(user.getPassword()));
-                    user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
+                    user.setConfirmPassword(passwordEncoder.encode(user.getPassword()));
                     user.setEnabled(false);
                     Set<Role> rolesSet = user.getRoles();
                     rolesSet.add(roleRepository.findRoleByName("MANAGER"));
@@ -159,5 +160,29 @@ public class AuthController {
             System.out.println(e);
         }
         return "sign_up_manager";
+    }
+
+    @PostMapping("/account/password/update")
+    public String updatePassword(@Valid @ModelAttribute("userPassChange") User userPassChange, String current_password, RedirectAttributes attributes, String user_id) {
+
+        User user = userDetailsService.getById(Long.parseLong(user_id));
+
+        if (userPassChange.getPassword() == null || userPassChange.getConfirmPassword() == null || current_password == null || userPassChange.getPassword().isEmpty() || userPassChange.getConfirmPassword().isEmpty() || current_password.isEmpty() || user_id.isEmpty())
+            attributes.addFlashAttribute("error", "Password changing field cannot be null");
+        else {
+            if (!userPassChange.getPassword().equals(userPassChange.getConfirmPassword()))
+                attributes.addFlashAttribute("error", "Password and confirm password must me equal or same.");
+            else {
+                if (passwordEncoder.matches(current_password, user.getPassword())) {
+                    attributes.addFlashAttribute("success", "Your password is successfully changed.");
+                    user.setConfirmPassword(user.getPassword());
+                    user.setPassword(passwordEncoder.encode(userPassChange.getPassword()));
+                    userDetailsService.save(user);
+                } else
+                    attributes.addFlashAttribute("success", "Your password doesn't match.");
+            }
+        }
+
+        return "redirect:/account";
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -47,6 +48,35 @@ public class UserController {
         model.addAttribute("userList", userList);
         model.addAttribute("title", "MASSMS - Users");
         return "users";
+    }
+
+    @GetMapping("/account")
+    public String userControl(Model model, Principal principal, RedirectAttributes attributes, HttpSession session) {
+        if (principal == null)
+            return "redirect:/login";
+
+        User user = userRepository.getUserByUsername(principal.getName());
+        session.setAttribute("user", user);
+        model.addAttribute("userEdit", user);
+        model.addAttribute("userPassChange", new User());
+        model.addAttribute("title", user.getFirstName() + " Profile");
+
+        return "user_profile";
+    }
+
+    @PostMapping("/account/info/update")
+    public String updateInfoData(@Valid @ModelAttribute("userEdit") User userEdit, RedirectAttributes attributes) {
+        if (userEdit.getFirstName() == null || userEdit.getLastName() == null || userEdit.getFirstName().isEmpty() || userEdit.getLastName().isEmpty())
+            attributes.addFlashAttribute("error", "First name and Last name cannot be null");
+        else {
+            User user = userRepository.getUserById(userEdit.getId());
+
+            user.setFirstName(userEdit.getFirstName());
+            user.setLastName(userEdit.getLastName());
+            userRepository.save(user);
+            attributes.addFlashAttribute("success", "User info has been updated");
+        }
+        return "redirect:/account";
     }
 
     @PostMapping( "/user/new/save")
